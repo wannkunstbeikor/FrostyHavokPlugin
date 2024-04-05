@@ -1,0 +1,15 @@
+using System;
+namespace hk;
+[Flags]
+public enum hknpConstraint_FlagsEnum : uint
+{
+    NO_FLAGS = 0,
+    IS_EXPORTABLE = 1,
+    IS_IMMEDIATE = 2,
+    IS_DISABLED = 4,
+    IS_DESTRUCTION_INTERNAL = 8,
+    AUTO_REMOVE_ON_DESTRUCTION_RESET = 16,
+    AUTO_REMOVE_ON_DESTRUCTION = 32,
+    RAISE_CONSTRAINT_FORCE_EVENTS = 64,
+    RAISE_CONSTRAINT_FORCE_EXCEEDED_EVENTS = 128,
+}

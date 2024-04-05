@@ -1,0 +1,10 @@
+using System;
+namespace hk;
+public enum hkpConstraintAtom_CallbackRequest : uint
+{
+    CALLBACK_REQUEST_NONE = 0,
+    CALLBACK_REQUEST_NEW_CONTACT_POINT = 1,
+    CALLBACK_REQUEST_SETUP_PPU_ONLY = 2,
+    CALLBACK_REQUEST_SETUP_CALLBACK = 4,
+    CALLBACK_REQUEST_CONTACT_POINT_CALLBACK = 8,
+}
