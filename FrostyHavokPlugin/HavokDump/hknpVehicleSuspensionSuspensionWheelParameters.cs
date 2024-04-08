@@ -20,6 +20,13 @@ public class hknpVehicleSuspensionSuspensionWheelParameters : IHavokObject, IEqu
         _length = br.ReadSingle();
         br.Position += 12; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _hardpointChassisSpace);
+        s.WriteVector4(bw, _directionChassisSpace);
+        bw.WriteSingle(_length);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_hardpointChassisSpace), _hardpointChassisSpace);

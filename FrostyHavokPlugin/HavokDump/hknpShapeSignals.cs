@@ -16,6 +16,10 @@ public class hknpShapeSignals : IHavokObject, IEquatable<hknpShapeSignals?>
     {
         br.Position += 16; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        for (int i = 0; i < 16; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
     }

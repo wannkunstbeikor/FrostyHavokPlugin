@@ -19,6 +19,13 @@ public class hkpSetLocalTranslationsConstraintAtom : hkpConstraintAtom, IEquatab
         _translationA = des.ReadVector4(br);
         _translationB = des.ReadVector4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 14; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _translationA);
+        s.WriteVector4(bw, _translationB);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

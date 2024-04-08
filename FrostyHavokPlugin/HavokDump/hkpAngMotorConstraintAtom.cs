@@ -28,6 +28,16 @@ public class hkpAngMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngMot
         _motor = des.ReadClassPointer<hkpConstraintMotor>(br);
         br.Position += 16; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteBoolean(_isEnabled);
+        bw.WriteByte(_motorAxis);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_targetAngle);
+        s.WriteClassPointer<hkpConstraintMotor>(bw, _motor);
+        for (int i = 0; i < 16; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

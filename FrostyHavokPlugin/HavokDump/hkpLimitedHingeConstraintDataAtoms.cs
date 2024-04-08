@@ -35,6 +35,17 @@ public class hkpLimitedHingeConstraintDataAtoms : IHavokObject, IEquatable<hkpLi
         _ballSocket.Read(des, br);
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _setupStabilization.Write(s, bw);
+        _angMotor.Write(s, bw);
+        _angFriction.Write(s, bw);
+        _angLimit.Write(s, bw);
+        _2dAng.Write(s, bw);
+        _ballSocket.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

@@ -16,6 +16,11 @@ public class hknpMaterialPalette : hkReferencedObject, IEquatable<hknpMaterialPa
         base.Read(des, br);
         _entries = des.ReadClassArray<hknpMaterialDescriptor>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hknpMaterialDescriptor>(bw, _entries);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -17,6 +17,12 @@ public class hknpStaticCompoundShape : hknpCompoundShape, IEquatable<hknpStaticC
         _boundingVolumeData = des.ReadClassPointer<hknpStaticCompoundShapeData>(br);
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hknpStaticCompoundShapeData>(bw, _boundingVolumeData);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

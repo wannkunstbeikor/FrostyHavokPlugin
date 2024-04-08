@@ -15,6 +15,10 @@ public class hkxVertexDescription : IHavokObject, IEquatable<hkxVertexDescriptio
     {
         _decls = des.ReadClassArray<hkxVertexDescriptionElementDecl>(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassArray<hkxVertexDescriptionElementDecl>(bw, _decls);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray<hkxVertexDescriptionElementDecl>(xe, nameof(_decls), _decls);

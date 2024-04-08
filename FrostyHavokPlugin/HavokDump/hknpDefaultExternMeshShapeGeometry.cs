@@ -17,6 +17,12 @@ public class hknpDefaultExternMeshShapeGeometry : hknpExternMeshShapeGeometry, I
         _geometry = des.ReadClassPointer<hkGeometry>(br);
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hkGeometry>(bw, _geometry);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

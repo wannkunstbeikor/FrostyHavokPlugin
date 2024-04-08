@@ -25,6 +25,16 @@ public class hkxIndexBuffer : hkReferencedObject, IEquatable<hkxIndexBuffer?>
         _vertexBaseOffset = br.ReadUInt32();
         _length = br.ReadUInt32();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSByte((sbyte)_indexType);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+        s.WriteUInt16Array(bw, _indices16);
+        s.WriteUInt32Array(bw, _indices32);
+        bw.WriteUInt32(_vertexBaseOffset);
+        bw.WriteUInt32(_length);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

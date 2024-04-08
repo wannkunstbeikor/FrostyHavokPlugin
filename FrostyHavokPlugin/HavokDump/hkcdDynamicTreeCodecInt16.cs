@@ -22,6 +22,13 @@ public class hkcdDynamicTreeCodecInt16 : IHavokObject, IEquatable<hkcdDynamicTre
         _children = des.ReadUInt32CStyleArray(br, 2);
         _pad = br.ReadUInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _aabb.Write(s, bw);
+        bw.WriteUInt32(_parent);
+        s.WriteUInt32CStyleArray(bw, _children);
+        bw.WriteUInt32(_pad);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_aabb), _aabb);

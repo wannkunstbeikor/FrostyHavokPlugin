@@ -35,6 +35,21 @@ public class hkMeshSection : IHavokObject, IEquatable<hkMeshSection?>
         _sectionIndex = br.ReadInt32();
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteByte((byte)_primitiveType);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_numPrimitives);
+        bw.WriteInt32(_numIndices);
+        bw.WriteInt32(_vertexStartIndex);
+        bw.WriteInt32(_transformIndex);
+        bw.WriteByte((byte)_indexType);
+        for (int i = 0; i < 11; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hkMeshVertexBuffer>(bw, _vertexBuffer);
+        s.WriteClassPointer<hkMeshMaterial>(bw, _material);
+        bw.WriteInt32(_sectionIndex);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteEnum<hkMeshSection_PrimitiveType, byte>(xe, nameof(_primitiveType), (byte)_primitiveType);

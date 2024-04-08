@@ -25,6 +25,13 @@ public class hkpRagdollLimitsDataAtoms : IHavokObject, IEquatable<hkpRagdollLimi
         _planesLimit = new hkpConeLimitConstraintAtom();
         _planesLimit.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _rotations.Write(s, bw);
+        _twistLimit.Write(s, bw);
+        _coneLimit.Write(s, bw);
+        _planesLimit.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_rotations), _rotations);

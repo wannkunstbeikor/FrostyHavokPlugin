@@ -17,6 +17,11 @@ public class hkVertexFormat : IHavokObject, IEquatable<hkVertexFormat?>
         _elements = des.ReadStructCStyleArray<hkVertexFormatElement>(br, 32);
         _numElements = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStructCStyleArray<hkVertexFormatElement>(bw, _elements);
+        bw.WriteInt32(_numElements);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray(xe, nameof(_elements), _elements);

@@ -19,6 +19,12 @@ public class hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters : IHavo
         _dampingCompression = br.ReadSingle();
         _dampingRelaxation = br.ReadSingle();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_strength);
+        bw.WriteSingle(_dampingCompression);
+        bw.WriteSingle(_dampingRelaxation);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_strength), _strength);

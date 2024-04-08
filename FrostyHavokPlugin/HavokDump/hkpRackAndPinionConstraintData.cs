@@ -18,6 +18,12 @@ public class hkpRackAndPinionConstraintData : hkpConstraintData, IEquatable<hkpR
         _atoms = new hkpRackAndPinionConstraintDataAtoms();
         _atoms.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        _atoms.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

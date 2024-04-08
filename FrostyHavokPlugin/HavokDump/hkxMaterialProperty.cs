@@ -17,6 +17,11 @@ public class hkxMaterialProperty : IHavokObject, IEquatable<hkxMaterialProperty?
         _key = br.ReadUInt32();
         _value = br.ReadUInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_key);
+        bw.WriteUInt32(_value);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_key), _key);

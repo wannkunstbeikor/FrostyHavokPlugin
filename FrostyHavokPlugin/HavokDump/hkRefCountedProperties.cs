@@ -15,6 +15,10 @@ public class hkRefCountedProperties : IHavokObject, IEquatable<hkRefCountedPrope
     {
         _entries = des.ReadClassArray<hkRefCountedPropertiesEntry>(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassArray<hkRefCountedPropertiesEntry>(bw, _entries);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray<hkRefCountedPropertiesEntry>(xe, nameof(_entries), _entries);

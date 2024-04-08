@@ -23,6 +23,15 @@ public class hkxTextureInplace : hkReferencedObject, IEquatable<hkxTextureInplac
         _name = des.ReadStringPointer(br);
         _originalFilename = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteSByteCStyleArray(bw, _fileType);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteByteArray(bw, _data);
+        s.WriteStringPointer(bw, _name);
+        s.WriteStringPointer(bw, _originalFilename);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

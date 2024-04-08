@@ -22,6 +22,14 @@ public class hknpMalleableConstraintData : hkpWrappedConstraintData, IEquatable<
         br.Position += 3; // padding
         _strength = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _atom.Write(s, bw);
+        bw.WriteBoolean(_wantsRuntime);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_strength);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

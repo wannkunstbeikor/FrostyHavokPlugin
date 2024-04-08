@@ -17,6 +17,11 @@ public class hkMultipleVertexBufferElementInfo : IHavokObject, IEquatable<hkMult
         _vertexBufferIndex = br.ReadByte();
         _elementIndex = br.ReadByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteByte(_vertexBufferIndex);
+        bw.WriteByte(_elementIndex);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_vertexBufferIndex), _vertexBufferIndex);

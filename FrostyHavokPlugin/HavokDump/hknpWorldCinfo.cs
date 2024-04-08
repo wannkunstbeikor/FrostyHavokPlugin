@@ -80,6 +80,44 @@ public class hknpWorldCinfo : IHavokObject, IEquatable<hknpWorldCinfo?>
         _unitScale = br.ReadSingle();
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteInt32(_bodyBufferCapacity);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_motionBufferCapacity);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_constraintBufferCapacity);
+        for (int i = 0; i < 20; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hknpMaterialLibrary>(bw, _materialLibrary);
+        s.WriteClassPointer<hknpMotionPropertiesLibrary>(bw, _motionPropertiesLibrary);
+        s.WriteClassPointer<hknpBodyQualityLibrary>(bw, _qualityLibrary);
+        _broadPhaseAabb.Write(s, bw);
+        bw.WriteByte((byte)_leavingBroadPhaseBehavior);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hknpBroadPhaseConfig>(bw, _broadPhaseConfig);
+        s.WriteClassPointer<hknpCollisionFilter>(bw, _collisionFilter);
+        s.WriteClassPointer<hknpShapeTagCodec>(bw, _shapeTagCodec);
+        bw.WriteSingle(_collisionTolerance);
+        bw.WriteSingle(_relativeCollisionAccuracy);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _gravity);
+        bw.WriteInt32(_solverIterations);
+        bw.WriteSingle(_solverTau);
+        bw.WriteSingle(_solverDamp);
+        bw.WriteInt32(_solverMicrosteps);
+        bw.WriteSingle(_defaultSolverTimestep);
+        bw.WriteSingle(_maxApproachSpeedForHighQualitySolver);
+        bw.WriteBoolean(_enableSolverDynamicScheduling);
+        bw.WriteByte((byte)_simulationType);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_numSplitterCells);
+        bw.WriteBoolean(_mergeEventsBeforeDispatch);
+        bw.WriteBoolean(_enableDeactivation);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_largeIslandSize);
+        bw.WriteSingle(_unitScale);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_bodyBufferCapacity), _bodyBufferCapacity);

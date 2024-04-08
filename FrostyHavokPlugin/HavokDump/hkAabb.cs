@@ -17,6 +17,11 @@ public class hkAabb : IHavokObject, IEquatable<hkAabb?>
         _min = des.ReadVector4(br);
         _max = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _min);
+        s.WriteVector4(bw, _max);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_min), _min);

@@ -12,7 +12,7 @@ public class hknpVehicleData : hkReferencedObject, IEquatable<hknpVehicleData?>
     public override uint Signature => 0;
     public Vector4 _gravity;
     public sbyte _numWheels;
-    public Matrix4 _chassisOrientation;
+    public Matrix3x4 _chassisOrientation;
     public float _torqueRollFactor;
     public float _torquePitchFactor;
     public float _torqueYawFactor;
@@ -55,6 +55,32 @@ public class hknpVehicleData : hkReferencedObject, IEquatable<hknpVehicleData?>
         _chassisFrictionInertiaInvDiag = des.ReadVector4(br);
         _alreadyInitialised = br.ReadBoolean();
         br.Position += 15; // padding
+    }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteVector4(bw, _gravity);
+        bw.WriteSByte(_numWheels);
+        for (int i = 0; i < 15; i++) bw.WriteByte(0); // padding
+        s.WriteMatrix3(bw, _chassisOrientation);
+        bw.WriteSingle(_torqueRollFactor);
+        bw.WriteSingle(_torquePitchFactor);
+        bw.WriteSingle(_torqueYawFactor);
+        bw.WriteSingle(_extraTorqueFactor);
+        bw.WriteSingle(_maxVelocityForPositionalFriction);
+        bw.WriteSingle(_chassisUnitInertiaYaw);
+        bw.WriteSingle(_chassisUnitInertiaRoll);
+        bw.WriteSingle(_chassisUnitInertiaPitch);
+        bw.WriteSingle(_frictionEqualizer);
+        bw.WriteSingle(_normalClippingAngleCos);
+        bw.WriteSingle(_maxFrictionSolverMassRatio);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteClassArray<hknpVehicleDataWheelComponentParams>(bw, _wheelParams);
+        s.WriteSByteArray(bw, _numWheelsPerAxle);
+        _frictionDescription.Write(s, bw);
+        s.WriteVector4(bw, _chassisFrictionInertiaInvDiag);
+        bw.WriteBoolean(_alreadyInitialised);
+        for (int i = 0; i < 15; i++) bw.WriteByte(0); // padding
     }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {

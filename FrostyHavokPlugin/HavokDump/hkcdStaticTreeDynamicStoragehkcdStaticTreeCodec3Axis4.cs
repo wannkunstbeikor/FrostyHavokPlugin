@@ -15,6 +15,10 @@ public class hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4 : IHavokObjec
     {
         _nodes = des.ReadClassArray<hkcdStaticTreeCodec3Axis4>(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassArray<hkcdStaticTreeCodec3Axis4>(bw, _nodes);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray<hkcdStaticTreeCodec3Axis4>(xe, nameof(_nodes), _nodes);

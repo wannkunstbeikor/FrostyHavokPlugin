@@ -17,6 +17,11 @@ public class hkcdStaticPvsBlockHeader : IHavokObject, IEquatable<hkcdStaticPvsBl
         _offset = br.ReadUInt32();
         _length = br.ReadUInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_offset);
+        bw.WriteUInt32(_length);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_offset), _offset);

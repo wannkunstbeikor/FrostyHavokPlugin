@@ -34,6 +34,16 @@ public class hkpWheelConstraintDataAtoms : IHavokObject, IEquatable<hkpWheelCons
         _2dAng = new hkp2dAngConstraintAtom();
         _2dAng.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _suspensionBase.Write(s, bw);
+        _lin0Limit.Write(s, bw);
+        _lin0Soft.Write(s, bw);
+        _lin1.Write(s, bw);
+        _lin2.Write(s, bw);
+        _steeringBase.Write(s, bw);
+        _2dAng.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_suspensionBase), _suspensionBase);

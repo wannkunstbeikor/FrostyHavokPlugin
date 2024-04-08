@@ -25,6 +25,15 @@ public class hkcdFourAabb : IHavokObject, IEquatable<hkcdFourAabb?>
         _lz = des.ReadVector4(br);
         _hz = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _lx);
+        s.WriteVector4(bw, _hx);
+        s.WriteVector4(bw, _ly);
+        s.WriteVector4(bw, _hy);
+        s.WriteVector4(bw, _lz);
+        s.WriteVector4(bw, _hz);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_lx), _lx);

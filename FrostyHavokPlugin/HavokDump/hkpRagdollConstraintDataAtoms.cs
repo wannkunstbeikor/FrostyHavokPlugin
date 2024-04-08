@@ -37,6 +37,17 @@ public class hkpRagdollConstraintDataAtoms : IHavokObject, IEquatable<hkpRagdoll
         _ballSocket = new hkpBallSocketConstraintAtom();
         _ballSocket.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _setupStabilization.Write(s, bw);
+        _ragdollMotors.Write(s, bw);
+        _angFriction.Write(s, bw);
+        _twistLimit.Write(s, bw);
+        _coneLimit.Write(s, bw);
+        _planesLimit.Write(s, bw);
+        _ballSocket.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

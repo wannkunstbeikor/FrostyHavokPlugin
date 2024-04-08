@@ -20,6 +20,13 @@ public class hknpMaterialDescriptor : IHavokObject, IEquatable<hknpMaterialDescr
         _materialId = br.ReadUInt16();
         br.Position += 6; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        s.WriteClassPointer<hknpRefMaterial>(bw, _material);
+        bw.WriteUInt16(_materialId);
+        for (int i = 0; i < 6; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

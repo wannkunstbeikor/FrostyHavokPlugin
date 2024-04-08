@@ -18,6 +18,12 @@ public class hkClassEnumItem : IHavokObject, IEquatable<hkClassEnumItem?>
         br.Position += 4; // padding
         _name = des.ReadStringPointer(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteInt32(_value);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteStringPointer(bw, _name);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_value), _value);

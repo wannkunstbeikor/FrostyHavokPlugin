@@ -18,6 +18,12 @@ public class hknpCapsuleShape : hknpConvexPolytopeShape, IEquatable<hknpCapsuleS
         _a = des.ReadVector4(br);
         _b = des.ReadVector4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteVector4(bw, _a);
+        s.WriteVector4(bw, _b);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

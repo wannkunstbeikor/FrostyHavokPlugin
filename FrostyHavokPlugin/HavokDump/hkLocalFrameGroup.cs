@@ -16,6 +16,11 @@ public class hkLocalFrameGroup : hkReferencedObject, IEquatable<hkLocalFrameGrou
         base.Read(des, br);
         _name = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _name);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

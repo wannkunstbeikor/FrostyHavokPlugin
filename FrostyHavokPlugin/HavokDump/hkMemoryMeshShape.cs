@@ -22,6 +22,14 @@ public class hkMemoryMeshShape : hkMeshShape, IEquatable<hkMemoryMeshShape?>
         _indices32 = des.ReadUInt32Array(br);
         _name = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hkMeshSectionCinfo>(bw, _sections);
+        s.WriteUInt16Array(bw, _indices16);
+        s.WriteUInt32Array(bw, _indices32);
+        s.WriteStringPointer(bw, _name);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

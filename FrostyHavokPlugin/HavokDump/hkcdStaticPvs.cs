@@ -27,6 +27,16 @@ public class hkcdStaticPvs : IHavokObject, IEquatable<hkcdStaticPvs?>
         _blocks = des.ReadClassArray<hkcdStaticPvsBlockHeader>(br);
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _cells.Write(s, bw);
+        bw.WriteInt32(_bytesPerCells);
+        bw.WriteInt32(_cellsPerBlock);
+        s.WriteByteArray(bw, _pvs);
+        s.WriteUInt16Array(bw, _map);
+        s.WriteClassArray<hkcdStaticPvsBlockHeader>(bw, _blocks);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_cells), _cells);

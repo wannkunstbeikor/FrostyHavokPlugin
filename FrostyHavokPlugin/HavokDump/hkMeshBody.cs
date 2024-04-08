@@ -14,6 +14,10 @@ public class hkMeshBody : hkReferencedObject, IEquatable<hkMeshBody?>
     {
         base.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

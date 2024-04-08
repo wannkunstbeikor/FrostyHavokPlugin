@@ -31,6 +31,18 @@ public class hkpVehicleFrictionStatusAxisStatus : IHavokObject, IEquatable<hkpVe
         _relativeSideForce = br.ReadSingle();
         _relativeForwardForce = br.ReadSingle();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_forward_slip_velocity);
+        bw.WriteSingle(_side_slip_velocity);
+        bw.WriteSingle(_skid_energy_density);
+        bw.WriteSingle(_side_force);
+        bw.WriteSingle(_delayed_forward_impulse);
+        bw.WriteSingle(_sideRhs);
+        bw.WriteSingle(_forwardRhs);
+        bw.WriteSingle(_relativeSideForce);
+        bw.WriteSingle(_relativeForwardForce);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_forward_slip_velocity), _forward_slip_velocity);

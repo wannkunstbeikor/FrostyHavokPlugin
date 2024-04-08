@@ -26,6 +26,17 @@ public class hknpLinearSurfaceVelocity : hknpSurfaceVelocity, IEquatable<hknpLin
         _velocityMeasurePlane = des.ReadVector4(br);
         _velocity = des.ReadVector4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteByte((byte)_space);
+        bw.WriteByte((byte)_projectMethod);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_maxVelocityScale);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _velocityMeasurePlane);
+        s.WriteVector4(bw, _velocity);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

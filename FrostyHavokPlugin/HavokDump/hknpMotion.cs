@@ -45,6 +45,25 @@ public class hknpMotion : IHavokObject, IEquatable<hknpMotion?>
         _previousStepLinearVelocity = des.ReadVector4(br);
         _previousStepAngularVelocity = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _centerOfMassAndMassFactor);
+        s.WriteQuaternion(bw, _orientation);
+        s.WriteHalfCStyleArray(bw, _inverseInertia);
+        bw.WriteUInt32(_firstAttachedBodyId);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteHalfCStyleArray(bw, _linearVelocityCage);
+        bw.WriteUInt16(_motionPropertiesId);
+        s.WriteHalf(bw, _maxLinearAccelerationDistancePerStep);
+        s.WriteHalf(bw, _maxRotationToPreventTunneling);
+        s.WriteHalf(bw, _integrationFactor);
+        bw.WriteByte(_cellIndex);
+        bw.WriteByte(_spaceSplitterWeight);
+        s.WriteVector4(bw, _linearVelocity);
+        s.WriteVector4(bw, _angularVelocity);
+        s.WriteVector4(bw, _previousStepLinearVelocity);
+        s.WriteVector4(bw, _previousStepAngularVelocity);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_centerOfMassAndMassFactor), _centerOfMassAndMassFactor);

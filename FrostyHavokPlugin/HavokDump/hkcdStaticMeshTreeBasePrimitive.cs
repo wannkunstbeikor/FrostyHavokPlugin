@@ -15,6 +15,10 @@ public class hkcdStaticMeshTreeBasePrimitive : IHavokObject, IEquatable<hkcdStat
     {
         _indices = des.ReadByteCStyleArray(br, 4);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteByteCStyleArray(bw, _indices);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_indices), _indices);

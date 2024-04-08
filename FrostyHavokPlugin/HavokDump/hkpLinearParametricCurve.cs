@@ -25,6 +25,16 @@ public class hkpLinearParametricCurve : hkpParametricCurve, IEquatable<hkpLinear
         _points = des.ReadVector4Array(br);
         _distance = des.ReadSingleArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_smoothingFactor);
+        bw.WriteBoolean(_closedLoop);
+        for (int i = 0; i < 11; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _dirNotParallelToTangentAlongWholePath);
+        s.WriteVector4Array(bw, _points);
+        s.WriteSingleArray(bw, _distance);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

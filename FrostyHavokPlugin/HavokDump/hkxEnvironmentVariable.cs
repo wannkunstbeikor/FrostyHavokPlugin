@@ -17,6 +17,11 @@ public class hkxEnvironmentVariable : IHavokObject, IEquatable<hkxEnvironmentVar
         _name = des.ReadStringPointer(br);
         _value = des.ReadStringPointer(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        s.WriteStringPointer(bw, _value);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

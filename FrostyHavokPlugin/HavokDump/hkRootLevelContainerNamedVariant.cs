@@ -19,6 +19,12 @@ public class hkRootLevelContainerNamedVariant : IHavokObject, IEquatable<hkRootL
         _className = des.ReadStringPointer(br);
         _variant = des.ReadClassPointer<hkReferencedObject>(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        s.WriteStringPointer(bw, _className);
+        s.WriteClassPointer<hkReferencedObject>(bw, _variant);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

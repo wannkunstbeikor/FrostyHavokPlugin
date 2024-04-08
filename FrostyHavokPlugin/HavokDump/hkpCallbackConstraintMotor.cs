@@ -25,6 +25,16 @@ public class hkpCallbackConstraintMotor : hkpLimitedForceConstraintMotor, IEquat
         _userData1 = br.ReadUInt64();
         _userData2 = br.ReadUInt64();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt32((uint)_callbackType);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt64(_userData0);
+        bw.WriteUInt64(_userData1);
+        bw.WriteUInt64(_userData2);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

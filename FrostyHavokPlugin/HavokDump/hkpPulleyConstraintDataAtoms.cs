@@ -19,6 +19,11 @@ public class hkpPulleyConstraintDataAtoms : IHavokObject, IEquatable<hkpPulleyCo
         _pulley = new hkpPulleyConstraintAtom();
         _pulley.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _translations.Write(s, bw);
+        _pulley.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_translations), _translations);

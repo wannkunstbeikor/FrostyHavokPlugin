@@ -24,6 +24,15 @@ public class hkxSplineControlPoint : IHavokObject, IEquatable<hkxSplineControlPo
         _outType = (hkxSpline_ControlType)br.ReadByte();
         br.Position += 14; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _position);
+        s.WriteVector4(bw, _tangentIn);
+        s.WriteVector4(bw, _tangentOut);
+        bw.WriteByte((byte)_inType);
+        bw.WriteByte((byte)_outType);
+        for (int i = 0; i < 14; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_position), _position);

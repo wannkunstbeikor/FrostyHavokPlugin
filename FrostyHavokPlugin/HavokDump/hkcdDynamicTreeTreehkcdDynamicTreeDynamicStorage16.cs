@@ -21,6 +21,14 @@ public class hkcdDynamicTreeTreehkcdDynamicTreeDynamicStorage16 : hkcdDynamicTre
         _root = br.ReadUInt16();
         br.Position += 6; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteUInt32(_numLeaves);
+        bw.WriteUInt32(_path);
+        bw.WriteUInt16(_root);
+        for (int i = 0; i < 6; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

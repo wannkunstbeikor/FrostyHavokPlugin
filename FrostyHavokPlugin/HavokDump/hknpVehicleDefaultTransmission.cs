@@ -29,6 +29,18 @@ public class hknpVehicleDefaultTransmission : hknpVehicleTransmission, IEquatabl
         _gearsRatio = des.ReadSingleArray(br);
         _wheelsTorqueRatio = des.ReadSingleArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_downshiftRPM);
+        bw.WriteSingle(_upshiftRPM);
+        bw.WriteSingle(_primaryTransmissionRatio);
+        bw.WriteSingle(_clutchDelayTime);
+        bw.WriteSingle(_reverseGearRatio);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteSingleArray(bw, _gearsRatio);
+        s.WriteSingleArray(bw, _wheelsTorqueRatio);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

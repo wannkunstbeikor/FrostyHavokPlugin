@@ -19,6 +19,12 @@ public class hknpDummyShape : hknpShape, IEquatable<hknpDummyShape?>
         _aabb.Read(des, br);
         br.Position += 16; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _aabb.Write(s, bw);
+        for (int i = 0; i < 16; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

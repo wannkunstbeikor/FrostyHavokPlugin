@@ -18,6 +18,12 @@ public class hknpPhysicsSceneData : hkReferencedObject, IEquatable<hknpPhysicsSc
         _systemDatas = des.ReadClassPointerArray<hknpPhysicsSystemData>(br);
         _worldCinfo = des.ReadClassPointer<hknpRefWorldCinfo>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointerArray<hknpPhysicsSystemData>(bw, _systemDatas);
+        s.WriteClassPointer<hknpRefWorldCinfo>(bw, _worldCinfo);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

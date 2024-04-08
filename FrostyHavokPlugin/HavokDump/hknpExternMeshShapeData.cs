@@ -20,6 +20,12 @@ public class hknpExternMeshShapeData : hkReferencedObject, IEquatable<hknpExtern
         _simdTree = new hkcdSimdTree();
         _simdTree.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _aabbTree.Write(s, bw);
+        _simdTree.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

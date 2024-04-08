@@ -35,6 +35,17 @@ public class hkpPrismaticConstraintDataAtoms : IHavokObject, IEquatable<hkpPrism
         _linLimit.Read(des, br);
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _motor.Write(s, bw);
+        _friction.Write(s, bw);
+        _ang.Write(s, bw);
+        _lin0.Write(s, bw);
+        _lin1.Write(s, bw);
+        _linLimit.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

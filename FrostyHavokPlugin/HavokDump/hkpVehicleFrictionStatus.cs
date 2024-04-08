@@ -15,6 +15,10 @@ public class hkpVehicleFrictionStatus : IHavokObject, IEquatable<hkpVehicleFrict
     {
         _axis = des.ReadStructCStyleArray<hkpVehicleFrictionStatusAxisStatus>(br, 2);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStructCStyleArray<hkpVehicleFrictionStatusAxisStatus>(bw, _axis);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray(xe, nameof(_axis), _axis);

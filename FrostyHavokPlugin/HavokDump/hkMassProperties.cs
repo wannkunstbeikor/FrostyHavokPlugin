@@ -13,7 +13,7 @@ public class hkMassProperties : IHavokObject, IEquatable<hkMassProperties?>
     public float _volume;
     public float _mass;
     public Vector4 _centerOfMass;
-    public Matrix4 _inertiaTensor;
+    public Matrix3x4 _inertiaTensor;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _volume = br.ReadSingle();
@@ -21,6 +21,14 @@ public class hkMassProperties : IHavokObject, IEquatable<hkMassProperties?>
         br.Position += 8; // padding
         _centerOfMass = des.ReadVector4(br);
         _inertiaTensor = des.ReadMatrix3(br);
+    }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_volume);
+        bw.WriteSingle(_mass);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _centerOfMass);
+        s.WriteMatrix3(bw, _inertiaTensor);
     }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {

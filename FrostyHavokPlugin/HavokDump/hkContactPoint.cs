@@ -17,6 +17,11 @@ public class hkContactPoint : IHavokObject, IEquatable<hkContactPoint?>
         _position = des.ReadVector4(br);
         _separatingNormal = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _position);
+        s.WriteVector4(bw, _separatingNormal);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_position), _position);

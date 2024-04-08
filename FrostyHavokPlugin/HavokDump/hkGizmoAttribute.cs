@@ -21,6 +21,14 @@ public class hkGizmoAttribute : IHavokObject, IEquatable<hkGizmoAttribute?>
         _type = (hkGizmoAttribute_GizmoType)br.ReadSByte();
         br.Position += 7; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteBoolean(_visible);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+        s.WriteStringPointer(bw, _label);
+        bw.WriteSByte((sbyte)_type);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteBoolean(xe, nameof(_visible), _visible);

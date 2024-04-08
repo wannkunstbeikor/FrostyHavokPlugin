@@ -18,6 +18,12 @@ public class hknpBodyQualityLibrary : hkReferencedObject, IEquatable<hknpBodyQua
         br.Position += 16; // padding
         _qualities = des.ReadStructCStyleArray<hknpBodyQuality>(br, 32);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 16; i++) bw.WriteByte(0); // padding
+        s.WriteStructCStyleArray<hknpBodyQuality>(bw, _qualities);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

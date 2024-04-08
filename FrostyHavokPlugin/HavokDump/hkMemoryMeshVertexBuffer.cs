@@ -34,6 +34,21 @@ public class hkMemoryMeshVertexBuffer : hkMeshVertexBuffer, IEquatable<hkMemoryM
         _isSharable = br.ReadBoolean();
         br.Position += 2; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _format.Write(s, bw);
+        s.WriteInt32CStyleArray(bw, _elementOffsets);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteByteArray(bw, _memory);
+        bw.WriteInt32(_vertexStride);
+        bw.WriteBoolean(_locked);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_numVertices);
+        bw.WriteBoolean(_isBigEndian);
+        bw.WriteBoolean(_isSharable);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -34,6 +34,21 @@ public class hkAlignSceneToNodeOptions : hkReferencedObject, IEquatable<hkAlignS
         br.Position += 4; // padding
         _nodeName = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteBoolean(_invert);
+        bw.WriteBoolean(_transformPositionX);
+        bw.WriteBoolean(_transformPositionY);
+        bw.WriteBoolean(_transformPositionZ);
+        bw.WriteBoolean(_transformRotation);
+        bw.WriteBoolean(_transformScale);
+        bw.WriteBoolean(_transformSkew);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_keyframe);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteStringPointer(bw, _nodeName);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -17,6 +17,12 @@ public class hknpVehicleRayCastWheelCollide : hknpVehicleWheelCollide, IEquatabl
         _wheelCollisionFilterInfo = br.ReadUInt32();
         br.Position += 4; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteUInt32(_wheelCollisionFilterInfo);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

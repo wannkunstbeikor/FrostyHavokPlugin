@@ -17,6 +17,11 @@ public class hkSkinnedMeshShapeBoneSet : IHavokObject, IEquatable<hkSkinnedMeshS
         _boneBufferOffset = br.ReadUInt16();
         _numBones = br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt16(_boneBufferOffset);
+        bw.WriteUInt16(_numBones);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_boneBufferOffset), _boneBufferOffset);

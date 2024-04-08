@@ -33,6 +33,19 @@ public class hkPackfileSectionHeader : IHavokObject, IEquatable<hkPackfileSectio
         _endOffset = br.ReadInt32();
         _pad = des.ReadInt32CStyleArray(br, 4);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteSByteCStyleArray(bw, _sectionTag);
+        bw.WriteSByte(_nullByte);
+        bw.WriteInt32(_absoluteDataStart);
+        bw.WriteInt32(_localFixupsOffset);
+        bw.WriteInt32(_globalFixupsOffset);
+        bw.WriteInt32(_virtualFixupsOffset);
+        bw.WriteInt32(_exportsOffset);
+        bw.WriteInt32(_importsOffset);
+        bw.WriteInt32(_endOffset);
+        s.WriteInt32CStyleArray(bw, _pad);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_sectionTag), _sectionTag);

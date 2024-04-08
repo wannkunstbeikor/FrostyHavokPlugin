@@ -25,6 +25,15 @@ public class hknpCompoundShape : hknpCompositeShape, IEquatable<hknpCompoundShap
         _isMutable = br.ReadBoolean();
         br.Position += 31; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _instances.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        _aabb.Write(s, bw);
+        bw.WriteBoolean(_isMutable);
+        for (int i = 0; i < 31; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

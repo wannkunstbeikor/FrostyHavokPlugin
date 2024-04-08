@@ -21,6 +21,13 @@ public class hkGeometryTriangle : IHavokObject, IEquatable<hkGeometryTriangle?>
         _c = br.ReadInt32();
         _material = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteInt32(_a);
+        bw.WriteInt32(_b);
+        bw.WriteInt32(_c);
+        bw.WriteInt32(_material);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_a), _a);

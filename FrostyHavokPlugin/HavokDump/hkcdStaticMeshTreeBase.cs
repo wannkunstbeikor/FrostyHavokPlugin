@@ -27,6 +27,17 @@ public class hkcdStaticMeshTreeBase : hkcdStaticTreeTreehkcdStaticTreeDynamicSto
         _primitives = des.ReadClassArray<hkcdStaticMeshTreeBasePrimitive>(br);
         _sharedVerticesIndex = des.ReadUInt16Array(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteInt32(_numPrimitiveKeys);
+        bw.WriteInt32(_bitsPerKey);
+        bw.WriteUInt32(_maxKeyValue);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteClassArray<hkcdStaticMeshTreeBaseSection>(bw, _sections);
+        s.WriteClassArray<hkcdStaticMeshTreeBasePrimitive>(bw, _primitives);
+        s.WriteUInt16Array(bw, _sharedVerticesIndex);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

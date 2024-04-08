@@ -39,6 +39,24 @@ public class hkxLight : hkReferencedObject, IEquatable<hkxLight?>
         _shadowCaster = br.ReadBoolean();
         br.Position += 3; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSByte((sbyte)_type);
+        for (int i = 0; i < 15; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _position);
+        s.WriteVector4(bw, _direction);
+        bw.WriteUInt32(_color);
+        bw.WriteSingle(_angle);
+        bw.WriteSingle(_range);
+        bw.WriteSingle(_fadeStart);
+        bw.WriteSingle(_fadeEnd);
+        bw.WriteInt16(_decayRate);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_intensity);
+        bw.WriteBoolean(_shadowCaster);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

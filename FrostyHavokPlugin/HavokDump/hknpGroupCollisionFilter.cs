@@ -20,6 +20,14 @@ public class hknpGroupCollisionFilter : hknpCollisionFilter, IEquatable<hknpGrou
         _collisionLookupTable = des.ReadUInt32CStyleArray(br, 32);
         br.Position += 12; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_nextFreeSystemGroup);
+        s.WriteUInt32CStyleArray(bw, _collisionLookupTable);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

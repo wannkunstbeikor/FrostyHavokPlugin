@@ -22,6 +22,12 @@ public class hkpBallAndSocketConstraintDataAtoms : IHavokObject, IEquatable<hkpB
         _ballSocket = new hkpBallSocketConstraintAtom();
         _ballSocket.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _pivots.Write(s, bw);
+        _setupStabilization.Write(s, bw);
+        _ballSocket.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_pivots), _pivots);

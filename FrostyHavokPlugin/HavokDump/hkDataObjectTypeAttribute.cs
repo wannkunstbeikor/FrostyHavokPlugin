@@ -15,6 +15,10 @@ public class hkDataObjectTypeAttribute : IHavokObject, IEquatable<hkDataObjectTy
     {
         _typeName = des.ReadStringPointer(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _typeName);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_typeName), _typeName);

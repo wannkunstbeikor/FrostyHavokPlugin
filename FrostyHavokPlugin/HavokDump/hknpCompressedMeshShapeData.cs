@@ -20,6 +20,12 @@ public class hknpCompressedMeshShapeData : hkReferencedObject, IEquatable<hknpCo
         _simdTree = new hkcdSimdTree();
         _simdTree.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _meshTree.Write(s, bw);
+        _simdTree.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

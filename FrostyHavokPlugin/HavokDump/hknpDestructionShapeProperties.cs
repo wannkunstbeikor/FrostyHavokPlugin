@@ -21,6 +21,14 @@ public class hknpDestructionShapeProperties : hkReferencedObject, IEquatable<hkn
         _hasDestructionShapes = br.ReadBoolean();
         br.Position += 14; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteTransform(bw, _worldFromShape);
+        bw.WriteBoolean(_isHierarchicalCompound);
+        bw.WriteBoolean(_hasDestructionShapes);
+        for (int i = 0; i < 14; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

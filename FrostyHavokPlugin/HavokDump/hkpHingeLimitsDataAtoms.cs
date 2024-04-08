@@ -22,6 +22,12 @@ public class hkpHingeLimitsDataAtoms : IHavokObject, IEquatable<hkpHingeLimitsDa
         _2dAng = new hkp2dAngConstraintAtom();
         _2dAng.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _rotations.Write(s, bw);
+        _angLimit.Write(s, bw);
+        _2dAng.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_rotations), _rotations);

@@ -15,6 +15,10 @@ public class hkRootLevelContainer : IHavokObject, IEquatable<hkRootLevelContaine
     {
         _namedVariants = des.ReadClassArray<hkRootLevelContainerNamedVariant>(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassArray<hkRootLevelContainerNamedVariant>(bw, _namedVariants);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray<hkRootLevelContainerNamedVariant>(xe, nameof(_namedVariants), _namedVariants);

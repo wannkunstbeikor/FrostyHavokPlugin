@@ -21,6 +21,13 @@ public class hkcdSimdTree : IHavokObject, IEquatable<hkcdSimdTree?>
         _root = br.ReadUInt32();
         br.Position += 12; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassArray<hkcdSimdTreeNode>(bw, _nodes);
+        _domain.Write(s, bw);
+        bw.WriteUInt32(_root);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray<hkcdSimdTreeNode>(xe, nameof(_nodes), _nodes);

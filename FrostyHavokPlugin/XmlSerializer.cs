@@ -37,7 +37,7 @@ public class XmlSerializer
         _header = header;
         _serializedObjectsLookup = new Dictionary<IHavokObject, string>(ReferenceEqualityComparer.Instance);
 
-        var index = GetIndex();
+        string? index = GetIndex();
 
         _document = new XDocument(
             new XDeclaration("1.0", "ascii", null),
@@ -50,7 +50,7 @@ public class XmlSerializer
 
         _dataSection = _document.Element("hkpackfile").Element("hksection");
 
-        var hkrootcontainer = WriteNode(rootObject, index);
+        XElement? hkrootcontainer = WriteNode(rootObject, index);
         rootObject.WriteXml(this, hkrootcontainer);
 
         _document.Save(stream);
@@ -75,25 +75,25 @@ public class XmlSerializer
         }
         if (_serializedObjectsLookup.ContainsKey(value))
         {
-            var index = _serializedObjectsLookup[value];
-            var hkparam = WriteString(xe, paramName, index);
+            string? index = _serializedObjectsLookup[value];
+            XElement? hkparam = WriteString(xe, paramName, index);
         }
         else
         {
-            var index = GetIndex();
+            string? index = GetIndex();
             _serializedObjectsLookup.Add(value, index);
             WriteString(xe, paramName, index);
-            var node = WriteNode(value, index);
+            XElement? node = WriteNode(value, index);
             value.WriteXml(this, node);
         }
     }
 
     public void WriteClassPointerArray<T>(XElement xe, string paramName, IList<T?> values) where T : IHavokObject
     {
-        var indexs = new List<string>();
-        var hkparam = WriteParam(xe, paramName);
+        List<string>? indexs = new();
+        XElement? hkparam = WriteParam(xe, paramName);
         hkparam.Add(new XAttribute("numelements", values.Count));
-        foreach (var item in values)
+        foreach (T? item in values)
         {
             if (item is null)
             {
@@ -105,10 +105,10 @@ public class XmlSerializer
                 indexs.Add(_serializedObjectsLookup[item]);
                 continue;
             }
-            var index = GetIndex();
+            string? index = GetIndex();
             _serializedObjectsLookup.Add(item, index);
             indexs.Add(index);
-            var node = WriteNode(item, index);
+            XElement? node = WriteNode(item, index);
             item.WriteXml(this, node);
         }
         hkparam.Add(new XText(string.Join(" ", indexs)));
@@ -116,18 +116,18 @@ public class XmlSerializer
 
     public void WriteClass<T>(XElement xe, string paramName, T value) where T : IHavokObject
     {
-        var hkobject = new XElement("hkobject");
+        XElement? hkobject = new("hkobject");
         WriteObject(xe, paramName, hkobject);
         value.WriteXml(this, hkobject);
     }
 
     public void WriteClassArray<T>(XElement xe, string paramName, IList<T> values) where T : IHavokObject
     {
-        var hkparam = WriteParam(xe, paramName);
+        XElement? hkparam = WriteParam(xe, paramName);
         hkparam.Add(new XAttribute("numelements", values.Count));
-        foreach (var item in values)
+        foreach (T? item in values)
         {
-            var hkobject = new XElement("hkobject");
+            XElement? hkobject = new("hkobject");
             hkparam.Add(hkobject);
             item.WriteXml(this, hkobject);
         }
@@ -154,7 +154,7 @@ public class XmlSerializer
         {
             paramName = paramName[2..];
         }
-        var hkparam = new XElement("hkparam", new XAttribute("name", paramName), value);
+        XElement? hkparam = new("hkparam", new XAttribute("name", paramName), value);
         xe.Add(hkparam);
         return hkparam;
     }
@@ -176,7 +176,7 @@ public class XmlSerializer
 
     public XElement WriteBooleanArray(XElement xe, string paramName, IList<bool> value)
     {
-        var formated = value.Select(x => x ? "true" : "false")
+        IEnumerable<string>? formated = value.Select(x => x ? "true" : "false")
                             .Chunk(16)
                             .Select(x => string.Join(" ", x));
 
@@ -190,7 +190,7 @@ public class XmlSerializer
 
     public XElement WriteNumberArray<T>(XElement xe, string paramName, IList<T> value) where T : IBinaryInteger<T>
     {
-        var formated = value.Chunk(16)
+        IEnumerable<string>? formated = value.Chunk(16)
                             .Select(x => string.Join(" ", x));
 
         return WriteParam(xe, paramName, string.Join(" ", formated), new XAttribute("numelements", value.Count));
@@ -203,7 +203,7 @@ public class XmlSerializer
 
     public XElement WriteFloatArray<T>(XElement xe, string paramName, IList<T> value) where T : IFloatingPoint<T>
     {
-        var formated = value.Select(x => x.ToString("F6", null))
+        IEnumerable<string>? formated = value.Select(x => x.ToString("F6", null))
                             .Chunk(16)
                             .Select(x => string.Join(" ", x));
 
@@ -217,7 +217,7 @@ public class XmlSerializer
 
     public XElement WriteVector4Array(XElement xe, string paramName, IList<Vector4> value)
     {
-        var formated = value.Select(x => $"({x.X:F6} {x.Y:F6} {x.Z:F6} {x.W:F6})")
+        IEnumerable<string>? formated = value.Select(x => $"({x.X:F6} {x.Y:F6} {x.Z:F6} {x.W:F6})")
                             .Select(x => string.Join(" ", x));
         return WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
     }
@@ -229,31 +229,31 @@ public class XmlSerializer
 
     public XElement WriteQuaternionArray(XElement xe, string paramName, IList<Quaternion> value)
     {
-        var formated = value.Select(x => $"({x.X:F6} {x.Y:F6} {x.Z:F6} {x.W:F6})")
+        IEnumerable<string>? formated = value.Select(x => $"({x.X:F6} {x.Y:F6} {x.Z:F6} {x.W:F6})")
                             .Select(x => string.Join(" ", x));
         return WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
     }
 
-    public XElement WriteMatrix3(XElement xe, string paramName, Matrix4 value)
+    public XElement WriteMatrix3(XElement xe, string paramName, Matrix3x4 value)
     {
         return WriteParam(xe, paramName, $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})");
     }
 
-    public XElement WriteMatrix3Array(XElement xe, string paramName, IList<Matrix4> value)
+    public XElement WriteMatrix3Array(XElement xe, string paramName, IList<Matrix3x4> value)
     {
-        var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
+        IEnumerable<string>? formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
                             .Select(x => string.Join(" ", x));
         return WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
     }
 
-    public XElement WriteRotation(XElement xe, string paramName, Matrix4 value)
+    public XElement WriteRotation(XElement xe, string paramName, Matrix3x4 value)
     {
         return WriteMatrix3(xe, paramName, value);
     }
 
     public XElement WriteRotationArray(XElement xe, string paramName, IList<Matrix4> value)
     {
-        var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
+        IEnumerable<string>? formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
                             .Select(x => string.Join(" ", x));
         return WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
     }
@@ -265,7 +265,7 @@ public class XmlSerializer
 
     public XElement WriteQSTransformArray(XElement xe, string paramName, IList<Matrix4> value)
     {
-        var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6} {value.M24:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
+        IEnumerable<string>? formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6} {value.M24:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
                             .Select(x => string.Join(" ", x));
         return WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
     }
@@ -279,7 +279,7 @@ public class XmlSerializer
     public XElement WriteMatrix4Array(XElement xe, string paramName, IList<Matrix4> value)
     {
         // TODO: verify
-        var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6} {value.M14:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6} {value.M24:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6} {value.M34:F6})({value.M41:F6} {value.M42:F6} {value.M43:F6} {value.M44:F6})")
+        IEnumerable<string>? formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6} {value.M14:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6} {value.M24:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6} {value.M34:F6})({value.M41:F6} {value.M42:F6} {value.M43:F6} {value.M44:F6})")
                             .Select(x => string.Join(" ", x));
         return WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
     }
@@ -291,7 +291,7 @@ public class XmlSerializer
 
     public XElement WriteTransformArray(XElement xe, string paramName, IList<Matrix4> value)
     {
-        var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})({value.M41:F6} {value.M42:F6} {value.M43:F6})")
+        IEnumerable<string>? formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})({value.M41:F6} {value.M42:F6} {value.M43:F6})")
                             .Select(x => string.Join(" ", x));
         return WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
     }
@@ -303,9 +303,9 @@ public class XmlSerializer
 
     public XElement WriteStringArray(XElement xe, string paramName, IList<string> values)
     {
-        var hkparam = WriteParam(xe, paramName);
+        XElement? hkparam = WriteParam(xe, paramName);
         hkparam.Add(new XAttribute("numelements", values.Count));
-        foreach (var item in values)
+        foreach (string? item in values)
         {
             hkparam.Add(new XElement("hkcstring", item));
         }

@@ -18,6 +18,12 @@ public class hkcdDynamicAabbTree : hkReferencedObject, IEquatable<hkcdDynamicAab
         br.Position += 8; // padding
         _treePtr = des.ReadClassPointer<hkcdDynamicTreeDefaultTree48Storage>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hkcdDynamicTreeDefaultTree48Storage>(bw, _treePtr);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

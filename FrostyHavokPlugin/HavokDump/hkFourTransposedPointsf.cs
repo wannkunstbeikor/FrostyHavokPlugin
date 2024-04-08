@@ -15,6 +15,10 @@ public class hkFourTransposedPointsf : IHavokObject, IEquatable<hkFourTransposed
     {
         _vertices = des.ReadVector4CStyleArray(br, 3);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4CStyleArray(bw, _vertices);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4Array(xe, nameof(_vertices), _vertices);

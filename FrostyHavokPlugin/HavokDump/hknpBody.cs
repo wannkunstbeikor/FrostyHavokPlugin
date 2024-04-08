@@ -54,6 +54,29 @@ public class hknpBody : IHavokObject, IEquatable<hknpBody?>
         _motionToBodyRotation = des.ReadInt16CStyleArray(br, 4);
         _userData = br.ReadUInt64();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteTransform(bw, _transform);
+        _aabb.Write(s, bw);
+        s.WriteClassPointer<hknpShape>(bw, _shape);
+        bw.WriteUInt32((uint)_flags);
+        bw.WriteUInt32(_collisionFilterInfo);
+        bw.WriteUInt32(_id);
+        bw.WriteUInt32(_nextAttachedBodyId);
+        bw.WriteUInt32(_motionId);
+        bw.WriteUInt16(_materialId);
+        bw.WriteByte(_qualityId);
+        bw.WriteByte(_shapeSizeDiv16);
+        bw.WriteUInt32(_broadPhaseId);
+        bw.WriteUInt32(_indexIntoActiveListOrDeactivatedIslandId);
+        s.WriteHalf(bw, _radiusOfComCenteredBoundingSphere);
+        bw.WriteUInt16(_maxContactDistance);
+        bw.WriteUInt16(_maxTimDistance);
+        bw.WriteByte(_timAngle);
+        bw.WriteByte((byte)_spuFlags);
+        s.WriteInt16CStyleArray(bw, _motionToBodyRotation);
+        bw.WriteUInt64(_userData);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteTransform(xe, nameof(_transform), _transform);

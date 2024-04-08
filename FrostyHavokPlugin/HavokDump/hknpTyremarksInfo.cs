@@ -20,6 +20,13 @@ public class hknpTyremarksInfo : hkReferencedObject, IEquatable<hknpTyremarksInf
         _maxTyremarkEnergy = br.ReadSingle();
         _tyremarksWheel = des.ReadClassPointerArray<hknpTyremarksWheel>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_minTyremarkEnergy);
+        bw.WriteSingle(_maxTyremarkEnergy);
+        s.WriteClassPointerArray<hknpTyremarksWheel>(bw, _tyremarksWheel);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

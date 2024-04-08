@@ -51,6 +51,30 @@ public class hkxMaterial : hkxAttributeHolder, IEquatable<hkxMaterial?>
         _properties = des.ReadClassArray<hkxMaterialProperty>(br);
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _name);
+        s.WriteClassArray<hkxMaterialTextureStage>(bw, _stages);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _diffuseColor);
+        s.WriteVector4(bw, _ambientColor);
+        s.WriteVector4(bw, _specularColor);
+        s.WriteVector4(bw, _emissiveColor);
+        s.WriteClassPointerArray<hkxMaterial>(bw, _subMaterials);
+        s.WriteClassPointer<hkReferencedObject>(bw, _extraData);
+        s.WriteSingleCStyleArray(bw, _uvMapScale);
+        s.WriteSingleCStyleArray(bw, _uvMapOffset);
+        bw.WriteSingle(_uvMapRotation);
+        bw.WriteUInt32((uint)_uvMapAlgorithm);
+        bw.WriteSingle(_specularMultiplier);
+        bw.WriteSingle(_specularExponent);
+        bw.WriteByte((byte)_transparency);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt64(_userData);
+        s.WriteClassArray<hkxMaterialProperty>(bw, _properties);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

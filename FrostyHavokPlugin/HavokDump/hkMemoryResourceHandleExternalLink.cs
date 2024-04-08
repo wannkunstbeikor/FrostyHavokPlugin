@@ -17,6 +17,11 @@ public class hkMemoryResourceHandleExternalLink : IHavokObject, IEquatable<hkMem
         _memberName = des.ReadStringPointer(br);
         _externalId = des.ReadStringPointer(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _memberName);
+        s.WriteStringPointer(bw, _externalId);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_memberName), _memberName);

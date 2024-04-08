@@ -23,6 +23,15 @@ public class hkcdShape : hkReferencedObject, IEquatable<hkcdShape?>
         _shapeInfoCodecType = (hkcdShapeInfoCodecType_ShapeInfoCodecTypeEnum)br.ReadByte();
         br.Position += 4; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+        bw.WriteByte((byte)_dispatchType);
+        bw.WriteByte(_bitsPerKey);
+        bw.WriteByte((byte)_shapeInfoCodecType);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

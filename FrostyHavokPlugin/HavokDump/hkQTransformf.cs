@@ -17,6 +17,11 @@ public class hkQTransformf : IHavokObject, IEquatable<hkQTransformf?>
         _rotation = des.ReadQuaternion(br);
         _translation = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteQuaternion(bw, _rotation);
+        s.WriteVector4(bw, _translation);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteQuaternion(xe, nameof(_rotation), _rotation);

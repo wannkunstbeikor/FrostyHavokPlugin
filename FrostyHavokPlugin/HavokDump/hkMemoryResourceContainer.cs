@@ -22,6 +22,14 @@ public class hkMemoryResourceContainer : hkResourceContainer, IEquatable<hkMemor
         _resourceHandles = des.ReadClassPointerArray<hkMemoryResourceHandle>(br);
         _children = des.ReadClassPointerArray<hkMemoryResourceContainer>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _name);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointerArray<hkMemoryResourceHandle>(bw, _resourceHandles);
+        s.WriteClassPointerArray<hkMemoryResourceContainer>(bw, _children);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

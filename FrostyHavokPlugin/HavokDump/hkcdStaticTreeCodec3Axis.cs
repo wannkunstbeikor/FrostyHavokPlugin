@@ -15,6 +15,10 @@ public class hkcdStaticTreeCodec3Axis : IHavokObject, IEquatable<hkcdStaticTreeC
     {
         _xyz = des.ReadByteCStyleArray(br, 3);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteByteCStyleArray(bw, _xyz);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_xyz), _xyz);

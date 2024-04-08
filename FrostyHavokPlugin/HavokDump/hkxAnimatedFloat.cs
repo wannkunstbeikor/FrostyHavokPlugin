@@ -19,6 +19,13 @@ public class hkxAnimatedFloat : hkReferencedObject, IEquatable<hkxAnimatedFloat?
         _hint = (hkxAttribute_Hint)br.ReadByte();
         br.Position += 7; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteSingleArray(bw, _floats);
+        bw.WriteByte((byte)_hint);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -21,6 +21,13 @@ public class hknpSparseCompactMapunsignedshort : IHavokObject, IEquatable<hknpSp
         _primaryKeyToIndex = des.ReadUInt16Array(br);
         _valueAndSecondaryKeys = des.ReadUInt16Array(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_secondaryKeyMask);
+        bw.WriteUInt32(_sencondaryKeyBits);
+        s.WriteUInt16Array(bw, _primaryKeyToIndex);
+        s.WriteUInt16Array(bw, _valueAndSecondaryKeys);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_secondaryKeyMask), _secondaryKeyMask);

@@ -21,6 +21,11 @@ public class HKXHeader
     public byte PointerSize;
     public int SectionCount;
     public short SectionOffset;
+    public short Unk40;
+    public short Unk42;
+    public uint Unk44;
+    public uint Unk48;
+    public uint Unk4C;
     public int UserTag;
 
     private HKXHeader()
@@ -47,6 +52,16 @@ public class HKXHeader
         Flags = br.ReadInt32();
         MaxPredicate = br.ReadInt16();
         SectionOffset = br.ReadInt16();
+        if (SectionOffset != 16)
+        {
+            return;
+        }
+
+        Unk40 = br.ReadInt16();
+        Unk42 = br.ReadInt16();
+        Unk44 = br.ReadUInt32();
+        Unk48 = br.ReadUInt32();
+        Unk4C = br.ReadUInt32();
     }
 
     internal void Write(DataStream bw)
@@ -70,5 +85,16 @@ public class HKXHeader
         bw.WriteInt32(Flags);
         bw.WriteInt16(MaxPredicate);
         bw.WriteInt16(SectionOffset);
+
+        if (SectionOffset != 16)
+        {
+            return;
+        }
+
+        bw.WriteInt16(Unk40);
+        bw.WriteInt16(Unk42);
+        bw.WriteUInt32(Unk44);
+        bw.WriteUInt32(Unk48);
+        bw.WriteUInt32(Unk4C);
     }
 }

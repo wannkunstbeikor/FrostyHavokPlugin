@@ -15,6 +15,10 @@ public class hkFloat16 : IHavokObject, IEquatable<hkFloat16?>
     {
         _value = br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt16(_value);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_value), _value);

@@ -16,6 +16,11 @@ public class hknpVehicleDefaultSuspension : hknpVehicleSuspension, IEquatable<hk
         base.Read(des, br);
         _wheelSpringParams = des.ReadClassArray<hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters>(bw, _wheelSpringParams);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

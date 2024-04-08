@@ -15,6 +15,10 @@ public class hkTraceStreamTitle : IHavokObject, IEquatable<hkTraceStreamTitle?>
     {
         _value = des.ReadSByteCStyleArray(br, 32);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteSByteCStyleArray(bw, _value);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_value), _value);

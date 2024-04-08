@@ -31,6 +31,18 @@ public class hkClassMember : IHavokObject, IEquatable<hkClassMember?>
         _offset = br.ReadUInt16();
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        s.WriteClassPointer<hkClass>(bw, _class);
+        s.WriteClassPointer<hkClassEnum>(bw, _enum);
+        bw.WriteByte((byte)_type);
+        bw.WriteByte((byte)_subtype);
+        bw.WriteInt16(_cArraySize);
+        bw.WriteUInt16((ushort)_flags);
+        bw.WriteUInt16(_offset);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

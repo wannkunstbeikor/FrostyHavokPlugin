@@ -17,6 +17,11 @@ public class hkxAttributeGroup : IHavokObject, IEquatable<hkxAttributeGroup?>
         _name = des.ReadStringPointer(br);
         _attributes = des.ReadClassArray<hkxAttribute>(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        s.WriteClassArray<hkxAttribute>(bw, _attributes);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

@@ -51,6 +51,30 @@ public class hknpCharacterRigidBodyCinfo : hkReferencedObject, IEquatable<hknpCh
         _hardSupportDistance = br.ReadSingle();
         br.Position += 12; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteUInt32(_collisionFilterInfo);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hknpShape>(bw, _shape);
+        for (int i = 0; i < 16; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _position);
+        s.WriteQuaternion(bw, _orientation);
+        bw.WriteSingle(_mass);
+        bw.WriteSingle(_dynamicFriction);
+        bw.WriteSingle(_staticFriction);
+        bw.WriteSingle(_weldingTolerance);
+        bw.WriteUInt32(_reservedBodyId);
+        bw.WriteByte(_additionFlags);
+        for (int i = 0; i < 11; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _up);
+        bw.WriteSingle(_maxSlope);
+        bw.WriteSingle(_maxForce);
+        bw.WriteSingle(_maxSpeedForSimplexSolver);
+        bw.WriteSingle(_supportDistance);
+        bw.WriteSingle(_hardSupportDistance);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

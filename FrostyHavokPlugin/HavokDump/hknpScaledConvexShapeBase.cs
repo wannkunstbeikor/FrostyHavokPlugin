@@ -23,6 +23,15 @@ public class hknpScaledConvexShapeBase : hknpShape, IEquatable<hknpScaledConvexS
         _scale = des.ReadVector4(br);
         _translation = des.ReadVector4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hknpConvexShape>(bw, _childShape);
+        bw.WriteInt32(_childShapeSize);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _scale);
+        s.WriteVector4(bw, _translation);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

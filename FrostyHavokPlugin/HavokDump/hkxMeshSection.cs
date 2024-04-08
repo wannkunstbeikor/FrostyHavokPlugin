@@ -26,6 +26,16 @@ public class hkxMeshSection : hkReferencedObject, IEquatable<hkxMeshSection?>
         _vertexAnimations = des.ReadClassPointerArray<hkxVertexAnimation>(br);
         _linearKeyFrameHints = des.ReadSingleArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hkxVertexBuffer>(bw, _vertexBuffer);
+        s.WriteClassPointerArray<hkxIndexBuffer>(bw, _indexBuffers);
+        s.WriteClassPointer<hkxMaterial>(bw, _material);
+        s.WriteClassPointerArray<hkReferencedObject>(bw, _userChannels);
+        s.WriteClassPointerArray<hkxVertexAnimation>(bw, _vertexAnimations);
+        s.WriteSingleArray(bw, _linearKeyFrameHints);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

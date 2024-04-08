@@ -33,6 +33,20 @@ public class hkxNode : hkxAttributeHolder, IEquatable<hkxNode?>
         _bone = br.ReadBoolean();
         br.Position += 6; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _name);
+        s.WriteClassPointer<hkReferencedObject>(bw, _object);
+        s.WriteMatrix4Array(bw, _keyFrames);
+        s.WriteClassPointerArray<hkxNode>(bw, _children);
+        s.WriteClassArray<hkxNodeAnnotationData>(bw, _annotations);
+        s.WriteSingleArray(bw, _linearKeyFrameHints);
+        s.WriteStringPointer(bw, _userProperties);
+        bw.WriteBoolean(_selected);
+        bw.WriteBoolean(_bone);
+        for (int i = 0; i < 6; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

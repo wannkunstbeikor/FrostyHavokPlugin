@@ -15,6 +15,10 @@ public class hkMeshBoneIndexMapping : IHavokObject, IEquatable<hkMeshBoneIndexMa
     {
         _mapping = des.ReadInt16Array(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteInt16Array(bw, _mapping);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_mapping), _mapping);

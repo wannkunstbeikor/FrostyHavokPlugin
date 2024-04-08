@@ -15,6 +15,10 @@ public class hkUuid : IHavokObject, IEquatable<hkUuid?>
     {
         _data = des.ReadUInt32CStyleArray(br, 4);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteUInt32CStyleArray(bw, _data);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_data), _data);

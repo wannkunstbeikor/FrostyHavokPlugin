@@ -23,6 +23,15 @@ public class hknpVehicleDefaultAnalogDriverInput : hknpVehicleDriverInput, IEqua
         _autoReverse = br.ReadBoolean();
         br.Position += 3; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_slopeChangePointX);
+        bw.WriteSingle(_initialSlope);
+        bw.WriteSingle(_deadZone);
+        bw.WriteBoolean(_autoReverse);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

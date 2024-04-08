@@ -18,6 +18,12 @@ public class hkxNodeAnnotationData : IHavokObject, IEquatable<hkxNodeAnnotationD
         br.Position += 4; // padding
         _description = des.ReadStringPointer(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_time);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteStringPointer(bw, _description);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_time), _time);

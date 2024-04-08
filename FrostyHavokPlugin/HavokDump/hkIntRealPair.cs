@@ -17,6 +17,11 @@ public class hkIntRealPair : IHavokObject, IEquatable<hkIntRealPair?>
         _key = br.ReadInt32();
         _value = br.ReadSingle();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteInt32(_key);
+        bw.WriteSingle(_value);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_key), _key);

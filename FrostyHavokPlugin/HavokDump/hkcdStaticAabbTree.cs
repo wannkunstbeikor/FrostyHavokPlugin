@@ -18,6 +18,12 @@ public class hkcdStaticAabbTree : hkReferencedObject, IEquatable<hkcdStaticAabbT
         br.Position += 8; // padding
         _treePtr = des.ReadClassPointer<hkcdStaticTreeDefaultTreeStorage6>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hkcdStaticTreeDefaultTreeStorage6>(bw, _treePtr);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -16,6 +16,11 @@ public class hkxAnimatedQuaternion : hkReferencedObject, IEquatable<hkxAnimatedQ
         base.Read(des, br);
         _quaternions = des.ReadSingleArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteSingleArray(bw, _quaternions);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

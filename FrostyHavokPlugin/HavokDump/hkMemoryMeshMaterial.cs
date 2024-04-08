@@ -33,6 +33,20 @@ public class hkMemoryMeshMaterial : hkMeshMaterial, IEquatable<hkMemoryMeshMater
         _tesselationFactor = br.ReadSingle();
         _displacementAmount = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _materialName);
+        s.WriteClassPointerArray<hkMeshTexture>(bw, _textures);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _diffuseColor);
+        s.WriteVector4(bw, _ambientColor);
+        s.WriteVector4(bw, _specularColor);
+        s.WriteVector4(bw, _emissiveColor);
+        bw.WriteUInt64(_userData);
+        bw.WriteSingle(_tesselationFactor);
+        bw.WriteSingle(_displacementAmount);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

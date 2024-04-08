@@ -17,6 +17,11 @@ public class hknpShapeMassProperties : hkReferencedObject, IEquatable<hknpShapeM
         _compressedMassProperties = new hkCompressedMassProperties();
         _compressedMassProperties.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _compressedMassProperties.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

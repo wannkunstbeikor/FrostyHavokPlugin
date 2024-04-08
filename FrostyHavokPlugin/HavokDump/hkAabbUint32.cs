@@ -25,6 +25,15 @@ public class hkAabbUint32 : IHavokObject, IEquatable<hkAabbUint32?>
         _expansionMax = des.ReadByteCStyleArray(br, 3);
         _shapeKeyByte = br.ReadByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteUInt32CStyleArray(bw, _min);
+        s.WriteByteCStyleArray(bw, _expansionMin);
+        bw.WriteByte(_expansionShift);
+        s.WriteUInt32CStyleArray(bw, _max);
+        s.WriteByteCStyleArray(bw, _expansionMax);
+        bw.WriteByte(_shapeKeyByte);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_min), _min);

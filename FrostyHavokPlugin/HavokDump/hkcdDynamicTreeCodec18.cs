@@ -18,6 +18,11 @@ public class hkcdDynamicTreeCodec18 : IHavokObject, IEquatable<hkcdDynamicTreeCo
         _aabb.Read(des, br);
         _parent = br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _aabb.Write(s, bw);
+        bw.WriteUInt16(_parent);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_aabb), _aabb);

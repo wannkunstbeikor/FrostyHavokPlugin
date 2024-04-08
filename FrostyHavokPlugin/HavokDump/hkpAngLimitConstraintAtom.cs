@@ -24,6 +24,15 @@ public class hkpAngLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngLim
         _maxAngle = br.ReadSingle();
         _angularLimitsTauFactor = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteByte(_isEnabled);
+        bw.WriteByte(_limitAxis);
+        bw.WriteSingle(_minAngle);
+        bw.WriteSingle(_maxAngle);
+        bw.WriteSingle(_angularLimitsTauFactor);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

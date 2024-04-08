@@ -34,6 +34,21 @@ public class hkpWheelFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpW
         br.Position += 4; // padding
         _axle = des.ReadClassPointer<hkpWheelFrictionConstraintAtomAxle>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteByte(_isEnabled);
+        bw.WriteByte(_forwardAxis);
+        bw.WriteByte(_sideAxis);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_maxFrictionForce);
+        bw.WriteSingle(_torque);
+        bw.WriteSingle(_radius);
+        s.WriteSingleCStyleArray(bw, _frictionImpulse);
+        s.WriteSingleCStyleArray(bw, _slipImpulse);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hkpWheelFrictionConstraintAtomAxle>(bw, _axle);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

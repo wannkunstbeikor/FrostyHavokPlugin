@@ -22,6 +22,12 @@ public class hkpDeformableFixedConstraintDataAtoms : IHavokObject, IEquatable<hk
         _ang = new hkpDeformableAngConstraintAtom();
         _ang.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _lin.Write(s, bw);
+        _ang.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

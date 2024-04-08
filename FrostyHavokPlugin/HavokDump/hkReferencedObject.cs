@@ -16,6 +16,11 @@ public class hkReferencedObject : hkBaseObject, IEquatable<hkReferencedObject?>
         base.Read(des, br);
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

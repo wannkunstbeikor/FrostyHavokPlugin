@@ -19,6 +19,12 @@ public class hkxBlobMeshShape : hkMeshShape, IEquatable<hkxBlobMeshShape?>
         _blob.Read(des, br);
         _name = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _blob.Write(s, bw);
+        s.WriteStringPointer(bw, _name);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

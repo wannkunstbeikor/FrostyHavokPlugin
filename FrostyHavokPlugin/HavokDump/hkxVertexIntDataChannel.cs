@@ -16,6 +16,11 @@ public class hkxVertexIntDataChannel : hkReferencedObject, IEquatable<hkxVertexI
         base.Read(des, br);
         _perVertexInts = des.ReadInt32Array(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteInt32Array(bw, _perVertexInts);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -33,6 +33,19 @@ public class hknpVehicleFrictionDescriptionAxisDescription : IHavokObject, IEqua
         _wheelDownForceFactor = br.ReadSingle();
         _wheelDownForceSumFactor = br.ReadSingle();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteSingleCStyleArray(bw, _frictionCircleYtab);
+        bw.WriteSingle(_xStep);
+        bw.WriteSingle(_xStart);
+        bw.WriteSingle(_wheelSurfaceInertia);
+        bw.WriteSingle(_wheelSurfaceInertiaInv);
+        bw.WriteSingle(_wheelChassisMassRatio);
+        bw.WriteSingle(_wheelRadius);
+        bw.WriteSingle(_wheelRadiusInv);
+        bw.WriteSingle(_wheelDownForceFactor);
+        bw.WriteSingle(_wheelDownForceSumFactor);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloatArray(xe, nameof(_frictionCircleYtab), _frictionCircleYtab);

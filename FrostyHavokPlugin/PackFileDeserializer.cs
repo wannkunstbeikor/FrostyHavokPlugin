@@ -28,16 +28,16 @@ public class PackFileDeserializer
             return m_deserializedObjects[offset];
         }
 
-        var fixup = m_dataSection._virtualMap[offset];
-        var hkClassName = m_classnames.OffsetClassNamesMap[fixup.Dst].ClassName;
+        VirtualFixup? fixup = m_dataSection._virtualMap[offset];
+        string? hkClassName = m_classnames.OffsetClassNamesMap[fixup.Dst].ClassName;
 
-        var hkClass = System.Type.GetType($"hk.{hkClassName}");
+        Type? hkClass = System.Type.GetType($"hk.{hkClassName}");
         if (hkClass is null)
         {
             throw new Exception($"Havok class type '{hkClassName}' not found!");
         }
 
-        var ret = (IHavokObject)Activator.CreateInstance(hkClass)!;
+        IHavokObject? ret = (IHavokObject)Activator.CreateInstance(hkClass)!;
         if (ret is null)
         {
             throw new Exception($"Failed to Activator.CreateInstance({hkClass})");
@@ -55,12 +55,6 @@ public class PackFileDeserializer
     {
         long startOffset = br.Position;
         m_header = new HKXHeader(br);
-
-        // Read the 3 sections in the file
-        if (m_header.SectionOffset != -1)
-        {
-            br.Position += m_header.SectionOffset;
-        }
 
         m_classSection = new HKXSection(br, m_header.ContentsVersionString, startOffset, fixupTableOffset) { SectionID = 0 };
         m_typeSection = new HKXSection(br, m_header.ContentsVersionString, startOffset, fixupTableOffset) { SectionID = 1 };
@@ -113,7 +107,7 @@ public class PackFileDeserializer
     public void ReadEmptyArray(DataStream br)
     {
         ReadEmptyPointer(br);
-        var size = br.ReadUInt32();
+        uint size = br.ReadUInt32();
         br.AssertUInt32(size | ((uint)0x80 << 24));
     }
 
@@ -135,14 +129,14 @@ public class PackFileDeserializer
 
         PadToPointerSizeIfPaddingOption(br);
 
-        var key = (uint)br.Position;
+        uint key = (uint)br.Position;
 
         AssertUSize(br, 0);
 
         if (!map.ContainsKey(key))
         {
             // If the read type is an array, continue like normal
-            var oType = typeof(T);
+            Type? oType = typeof(T);
             if (oType.IsGenericType && oType.GetGenericTypeDefinition() == typeof(List<>))
             {
                 return func(br, new F());
@@ -151,7 +145,7 @@ public class PackFileDeserializer
             return default;
         }
 
-        var f = map[key];
+        F? f = map[key];
         return func(br, f);
     }
 
@@ -159,10 +153,10 @@ public class PackFileDeserializer
     {
         return ReadPointerBase((DataStream _br, LocalFixup f) =>
         {
-            var size = _br.ReadInt32();
+            int size = _br.ReadInt32();
             _br.AssertInt32(size | (0x80 << 24)); // Capacity and flags
 
-            var res = new List<T>(size);
+            List<T>? res = new(size);
 
             if (size <= 0)
             {
@@ -170,7 +164,7 @@ public class PackFileDeserializer
             }
 
             _br.StepIn(f.Dst);
-            for (var i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
                 res.Add(func(_br));
             }
@@ -183,13 +177,13 @@ public class PackFileDeserializer
 
     private List<T> ReadRelArrayBase<T>(Func<DataStream, T> func, DataStream br)
     {
-        var size = br.ReadUInt16();
-        var offset = br.ReadUInt16();
+        ushort size = br.ReadUInt16();
+        ushort offset = br.ReadUInt16();
 
-        var res = new List<T>(size);
+        List<T>? res = new(size);
 
         br.StepIn(br.Position - 4 + offset);
-        for (var i = 0; i < size; i++)
+        for (int i = 0; i < size; i++)
         {
             res.Add(func(br));
         }
@@ -203,7 +197,7 @@ public class PackFileDeserializer
     {
         return ReadArrayBase(_br =>
         {
-            var cls = new T();
+            T? cls = new();
             cls.Read(this, _br);
             return cls;
         }, br);
@@ -213,7 +207,7 @@ public class PackFileDeserializer
     {
         return ReadRelArrayBase(_br =>
         {
-            var cls = new T();
+            T? cls = new();
             cls.Read(this, _br);
             return cls;
         }, br);
@@ -223,7 +217,7 @@ public class PackFileDeserializer
     {
         PadToPointerSizeIfPaddingOption(br);
 
-        var key = (uint)br.Position;
+        uint key = (uint)br.Position;
 
         // Consume pointer
         AssertUSize(br, 0);
@@ -234,8 +228,8 @@ public class PackFileDeserializer
             return default;
         }
 
-        var f = m_dataSection._globalMap[key];
-        var klass = ConstructVirtualClass(br, f.Dst);
+        GlobalFixup? f = m_dataSection._globalMap[key];
+        IHavokObject? klass = ConstructVirtualClass(br, f.Dst);
 
         if (klass.GetType().IsAssignableTo(typeof(T)))
         {
@@ -259,7 +253,7 @@ public class PackFileDeserializer
     {
         PadToPointerSizeIfPaddingOption(br);
 
-        var key = (uint)br.Position;
+        uint key = (uint)br.Position;
 
         // Consume pointer
         AssertUSize(br, 0);
@@ -270,9 +264,9 @@ public class PackFileDeserializer
             return string.Empty;
         }
 
-        var f = m_dataSection._localMap[key];
+        LocalFixup? f = m_dataSection._localMap[key];
         br.StepIn(f.Dst);
-        var ret = br.ReadNullTerminatedString();
+        string? ret = br.ReadNullTerminatedString();
         br.StepOut();
         return ret.Trim();
     }
@@ -291,7 +285,7 @@ public class PackFileDeserializer
     {
         PadToPointerSizeIfPaddingOption(br);
 
-        var key = (uint)br.Position;
+        uint key = (uint)br.Position;
 
         // Consume pointer
         AssertUSize(br, 0);
@@ -302,9 +296,9 @@ public class PackFileDeserializer
             return null;
         }
 
-        var f = m_dataSection._localMap[key];
+        LocalFixup? f = m_dataSection._localMap[key];
         br.StepIn(f.Dst);
-        var ret = br.ReadNullTerminatedString();
+        string? ret = br.ReadNullTerminatedString();
         br.StepOut();
         if (ret == "")
         {
@@ -504,27 +498,21 @@ public class PackFileDeserializer
         return ReadRelArrayBase(ReadVector4, br);
     }
 
-    public Matrix4 ReadMatrix3(DataStream br)
+    public Matrix3x4 ReadMatrix3(DataStream br)
     {
-        var mat3 = new Matrix4(
+        Matrix3x4 mat3 = new(
             br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
             br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
-            br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
-            0, 0, 0, 0)
-        {
-            M14 = 0,
-            M24 = 0,
-            M34 = 0
-        };
+            br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
         return mat3;
     }
 
-    public List<Matrix4> ReadMatrix3Array(DataStream br)
+    public List<Matrix3x4> ReadMatrix3Array(DataStream br)
     {
         return ReadArrayBase(ReadMatrix3, br);
     }
 
-    public List<Matrix4> ReadMatrix3RelArray(DataStream br)
+    public List<Matrix3x4> ReadMatrix3RelArray(DataStream br)
     {
         return ReadRelArrayBase(ReadMatrix3, br);
     }
@@ -550,17 +538,11 @@ public class PackFileDeserializer
 
     public Matrix4 ReadTransform(DataStream br)
     {
-        var transform = new Matrix4(
+        Matrix4 transform = new(
             br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
             br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
             br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
-            br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle())
-        {
-            M14 = 0,
-            M24 = 0,
-            M34 = 0,
-            M44 = 1
-        };
+            br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
 
         return transform;
     }
@@ -575,27 +557,22 @@ public class PackFileDeserializer
         return ReadRelArrayBase(ReadTransform, br);
     }
 
-    public Matrix4 ReadQSTransform(DataStream br)
+    public Matrix3x4 ReadQSTransform(DataStream br)
     {
-        var qsTransform = new Matrix4(
+        Matrix3x4 qsTransform = new(
             br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
             br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
-            br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
-            0, 0, 0, 0)
-        {
-            M14 = 0,
-            M34 = 0,
-        };
+            br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
 
         return qsTransform;
     }
 
-    public List<Matrix4> ReadQSTransformArray(DataStream br)
+    public List<Matrix3x4> ReadQSTransformArray(DataStream br)
     {
         return ReadArrayBase(ReadQSTransform, br);
     }
 
-    public List<Matrix4> ReadQSTransformRelArray(DataStream br)
+    public List<Matrix3x4> ReadQSTransformRelArray(DataStream br)
     {
         return ReadRelArrayBase(ReadQSTransform, br);
     }
@@ -619,7 +596,7 @@ public class PackFileDeserializer
     #region C Style Array
     private T[] ReadCStyleArrayBase<T>(Func<DataStream, T> func, DataStream br, short length)
     {
-        var res = new T[length];
+        T[]? res = new T[length];
         for (int i = 0; i < length; i++)
         {
             res[i] = (func(br));
@@ -689,17 +666,17 @@ public class PackFileDeserializer
     {
         return ReadCStyleArrayBase(ReadQuaternion, br, length);
     }
-    public Matrix4[] ReadMatrix3CStyleArray(DataStream br, short length)
+    public Matrix3x4[] ReadMatrix3CStyleArray(DataStream br, short length)
     {
         return ReadCStyleArrayBase(ReadMatrix3, br, length);
     }
 
-    public Matrix4[] ReadRotationCStyleArray(DataStream br, short length)
+    public Matrix3x4[] ReadRotationCStyleArray(DataStream br, short length)
     {
         return ReadCStyleArrayBase(ReadMatrix3, br, length);
     }
 
-    public Matrix4[] ReadQSTransformCStyleArray(DataStream br, short length)
+    public Matrix3x4[] ReadQSTransformCStyleArray(DataStream br, short length)
     {
         return ReadCStyleArrayBase(ReadQSTransform, br, length);
     }
@@ -729,10 +706,10 @@ public class PackFileDeserializer
 
     public T[] ReadStructCStyleArray<T>(DataStream br, short length) where T : IHavokObject, new()
     {
-        var res = new T[length];
+        T[]? res = new T[length];
         for (int i = 0; i < length; i++)
         {
-            var s = new T();
+            T? s = new();
             s.Read(this, br);
             res[i] = s;
         }

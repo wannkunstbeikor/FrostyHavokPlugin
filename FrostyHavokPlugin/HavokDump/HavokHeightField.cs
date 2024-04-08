@@ -15,6 +15,11 @@ public class HavokHeightField : hknpHeightFieldShape, IEquatable<HavokHeightFiel
         base.Read(des, br);
         br.Position += 32; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 32; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -20,6 +20,13 @@ public class hknpVehicleDefaultBrakeWheelBrakingProperties : IHavokObject, IEqua
         _isConnectedToHandbrake = br.ReadBoolean();
         br.Position += 3; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_maxBreakingTorque);
+        bw.WriteSingle(_minPedalInputToBlock);
+        bw.WriteBoolean(_isConnectedToHandbrake);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_maxBreakingTorque), _maxBreakingTorque);

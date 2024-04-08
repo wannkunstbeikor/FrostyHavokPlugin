@@ -19,6 +19,11 @@ public class hkpWheelFrictionConstraintDataAtoms : IHavokObject, IEquatable<hkpW
         _friction = new hkpWheelFrictionConstraintAtom();
         _friction.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _friction.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

@@ -16,6 +16,11 @@ public class hkxMaterialShaderSet : hkReferencedObject, IEquatable<hkxMaterialSh
         base.Read(des, br);
         _shaders = des.ReadClassPointerArray<hkxMaterialShader>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointerArray<hkxMaterialShader>(bw, _shaders);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

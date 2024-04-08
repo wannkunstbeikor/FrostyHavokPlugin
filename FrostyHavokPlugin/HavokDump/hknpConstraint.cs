@@ -43,6 +43,24 @@ public class hknpConstraint : IHavokObject, IEquatable<hknpConstraint?>
         br.Position += 8; // padding
         _userData = br.ReadUInt64();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_bodyIdA);
+        bw.WriteUInt32(_bodyIdB);
+        s.WriteClassPointer<hkpConstraintData>(bw, _data);
+        bw.WriteUInt32(_id);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteByte((byte)_flags);
+        bw.WriteByte((byte)_type);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt16(_sizeOfAtoms);
+        bw.WriteUInt16(_sizeOfSchemas);
+        bw.WriteByte(_numSolverResults);
+        bw.WriteByte(_numSolverElemTemps);
+        bw.WriteUInt16(_runtimeSize);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt64(_userData);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_bodyIdA), _bodyIdA);

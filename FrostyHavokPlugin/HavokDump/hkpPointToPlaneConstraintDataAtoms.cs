@@ -19,6 +19,11 @@ public class hkpPointToPlaneConstraintDataAtoms : IHavokObject, IEquatable<hkpPo
         _lin = new hkpLinConstraintAtom();
         _lin.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _lin.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

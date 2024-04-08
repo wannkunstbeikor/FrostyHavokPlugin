@@ -20,6 +20,13 @@ public class hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr : hkcdDynamicTr
         _path = br.ReadUInt32();
         _root = br.ReadUInt64();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteUInt32(_numLeaves);
+        bw.WriteUInt32(_path);
+        bw.WriteUInt64(_root);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

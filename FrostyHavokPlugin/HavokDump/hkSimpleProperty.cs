@@ -20,6 +20,12 @@ public class hkSimpleProperty : IHavokObject, IEquatable<hkSimpleProperty?>
         _value = new hkSimplePropertyValue();
         _value.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_key);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        _value.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_key), _key);

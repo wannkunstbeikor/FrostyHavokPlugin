@@ -15,6 +15,10 @@ public class hkSphere : IHavokObject, IEquatable<hkSphere?>
     {
         _pos = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _pos);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_pos), _pos);

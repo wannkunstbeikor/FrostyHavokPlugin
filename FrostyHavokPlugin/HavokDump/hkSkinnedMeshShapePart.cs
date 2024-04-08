@@ -28,6 +28,17 @@ public class hkSkinnedMeshShapePart : IHavokObject, IEquatable<hkSkinnedMeshShap
         br.Position += 12; // padding
         _boundingSphere = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteInt32(_startVertex);
+        bw.WriteInt32(_numVertices);
+        bw.WriteInt32(_startIndex);
+        bw.WriteInt32(_numIndices);
+        bw.WriteUInt16(_boneSetId);
+        bw.WriteUInt16(_meshSectionIndex);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _boundingSphere);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_startVertex), _startVertex);

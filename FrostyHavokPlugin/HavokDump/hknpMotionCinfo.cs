@@ -37,6 +37,22 @@ public class hknpMotionCinfo : IHavokObject, IEquatable<hknpMotionCinfo?>
         _linearVelocity = des.ReadVector4(br);
         _angularVelocity = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt16(_motionPropertiesId);
+        bw.WriteBoolean(_enableDeactivation);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_inverseMass);
+        bw.WriteSingle(_massFactor);
+        bw.WriteSingle(_maxLinearAccelerationDistancePerStep);
+        bw.WriteSingle(_maxRotationToPreventTunneling);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _inverseInertiaLocal);
+        s.WriteVector4(bw, _centerOfMassWorld);
+        s.WriteQuaternion(bw, _orientation);
+        s.WriteVector4(bw, _linearVelocity);
+        s.WriteVector4(bw, _angularVelocity);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_motionPropertiesId), _motionPropertiesId);

@@ -35,6 +35,20 @@ public class hkxVertexBufferVertexData : IHavokObject, IEquatable<hkxVertexBuffe
         _uint16Stride = br.ReadUInt32();
         _uint8Stride = br.ReadUInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteSingleArray(bw, _vectorData);
+        s.WriteSingleArray(bw, _floatData);
+        s.WriteUInt32Array(bw, _uint32Data);
+        s.WriteUInt16Array(bw, _uint16Data);
+        s.WriteByteArray(bw, _uint8Data);
+        bw.WriteUInt32(_numVerts);
+        bw.WriteUInt32(_vectorStride);
+        bw.WriteUInt32(_floatStride);
+        bw.WriteUInt32(_uint32Stride);
+        bw.WriteUInt32(_uint16Stride);
+        bw.WriteUInt32(_uint8Stride);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloatArray(xe, nameof(_vectorData), _vectorData);

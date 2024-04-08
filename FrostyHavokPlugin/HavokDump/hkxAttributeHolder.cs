@@ -16,6 +16,11 @@ public class hkxAttributeHolder : hkReferencedObject, IEquatable<hkxAttributeHol
         base.Read(des, br);
         _attributeGroups = des.ReadClassArray<hkxAttributeGroup>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hkxAttributeGroup>(bw, _attributeGroups);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

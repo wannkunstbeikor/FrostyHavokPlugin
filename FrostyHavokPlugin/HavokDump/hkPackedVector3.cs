@@ -15,6 +15,10 @@ public class hkPackedVector3 : IHavokObject, IEquatable<hkPackedVector3?>
     {
         _values = des.ReadInt16CStyleArray(br, 4);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteInt16CStyleArray(bw, _values);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_values), _values);

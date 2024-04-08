@@ -32,6 +32,18 @@ public class hkClass : IHavokObject, IEquatable<hkClass?>
         _flags = (hkClass_FlagValues)br.ReadUInt32();
         _describedVersion = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        s.WriteClassPointer<hkClass>(bw, _parent);
+        bw.WriteInt32(_objectSize);
+        bw.WriteInt32(_numImplementedInterfaces);
+        // Write TYPE_SIMPLEARRAY
+        // Write TYPE_SIMPLEARRAY
+        for (int i = 0; i < 16; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt32((uint)_flags);
+        bw.WriteInt32(_describedVersion);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

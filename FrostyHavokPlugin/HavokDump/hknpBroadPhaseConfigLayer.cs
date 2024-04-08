@@ -18,6 +18,12 @@ public class hknpBroadPhaseConfigLayer : IHavokObject, IEquatable<hknpBroadPhase
         _isVolatile = br.ReadBoolean();
         br.Position += 3; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_collideWithLayerMask);
+        bw.WriteBoolean(_isVolatile);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_collideWithLayerMask), _collideWithLayerMask);

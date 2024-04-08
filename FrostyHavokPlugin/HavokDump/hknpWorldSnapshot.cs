@@ -25,6 +25,15 @@ public class hknpWorldSnapshot : hkReferencedObject, IEquatable<hknpWorldSnapsho
         _motions = des.ReadClassArray<hknpMotion>(br);
         _constraints = des.ReadClassArray<hknpConstraintCinfo>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _worldCinfo.Write(s, bw);
+        s.WriteClassArray<hknpBody>(bw, _bodies);
+        s.WriteStringPointerArray(bw, _bodyNames);
+        s.WriteClassArray<hknpMotion>(bw, _motions);
+        s.WriteClassArray<hknpConstraintCinfo>(bw, _constraints);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

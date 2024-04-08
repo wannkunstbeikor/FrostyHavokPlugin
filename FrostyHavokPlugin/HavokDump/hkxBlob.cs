@@ -16,6 +16,11 @@ public class hkxBlob : hkReferencedObject, IEquatable<hkxBlob?>
         base.Read(des, br);
         _data = des.ReadByteArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteByteArray(bw, _data);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -24,6 +24,15 @@ public class hkxVertexAnimation : hkReferencedObject, IEquatable<hkxVertexAnimat
         _vertexIndexMap = des.ReadInt32Array(br);
         _componentMap = des.ReadClassArray<hkxVertexAnimationUsageMap>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_time);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        _vertData.Write(s, bw);
+        s.WriteInt32Array(bw, _vertexIndexMap);
+        s.WriteClassArray<hkxVertexAnimationUsageMap>(bw, _componentMap);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

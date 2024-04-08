@@ -24,6 +24,15 @@ public class hknpConstraintCinfo : IHavokObject, IEquatable<hknpConstraintCinfo?
         br.Position += 3; // padding
         _additionalRuntimeSize = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassPointer<hkpConstraintData>(bw, _constraintData);
+        bw.WriteUInt32(_bodyA);
+        bw.WriteUInt32(_bodyB);
+        bw.WriteByte((byte)_flags);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_additionalRuntimeSize);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassPointer(xe, nameof(_constraintData), _constraintData);

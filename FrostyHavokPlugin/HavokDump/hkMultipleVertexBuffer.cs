@@ -40,6 +40,24 @@ public class hkMultipleVertexBuffer : hkMeshVertexBuffer, IEquatable<hkMultipleV
         _constructionComplete = br.ReadBoolean();
         br.Position += 1; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _vertexFormat.Write(s, bw);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteClassArray<hkMultipleVertexBufferLockedElement>(bw, _lockedElements);
+        s.WriteClassPointer<hkMemoryMeshVertexBuffer>(bw, _lockedBuffer);
+        s.WriteClassArray<hkMultipleVertexBufferElementInfo>(bw, _elementInfos);
+        s.WriteClassArray<hkMultipleVertexBufferVertexBufferInfo>(bw, _vertexBufferInfos);
+        bw.WriteInt32(_numVertices);
+        bw.WriteBoolean(_isLocked);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt32(_updateCount);
+        bw.WriteBoolean(_writeLock);
+        bw.WriteBoolean(_isSharable);
+        bw.WriteBoolean(_constructionComplete);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

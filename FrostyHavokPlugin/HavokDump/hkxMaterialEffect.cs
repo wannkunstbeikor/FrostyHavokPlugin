@@ -21,6 +21,14 @@ public class hkxMaterialEffect : hkReferencedObject, IEquatable<hkxMaterialEffec
         br.Position += 7; // padding
         _data = des.ReadByteArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _name);
+        bw.WriteByte((byte)_type);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+        s.WriteByteArray(bw, _data);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

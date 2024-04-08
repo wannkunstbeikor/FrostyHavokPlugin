@@ -10,14 +10,21 @@ namespace hk;
 public class hkpSetLocalRotationsConstraintAtom : hkpConstraintAtom, IEquatable<hkpSetLocalRotationsConstraintAtom?>
 {
     public override uint Signature => 0;
-    public Matrix4 _rotationA;
-    public Matrix4 _rotationB;
+    public Matrix3x4 _rotationA;
+    public Matrix3x4 _rotationB;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
         br.Position += 14; // padding
         _rotationA = des.ReadMatrix3(br);
         _rotationB = des.ReadMatrix3(br);
+    }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 14; i++) bw.WriteByte(0); // padding
+        s.WriteMatrix3(bw, _rotationA);
+        s.WriteMatrix3(bw, _rotationB);
     }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {

@@ -34,6 +34,20 @@ public class hknpVehicleDefaultEngine : hknpVehicleEngine, IEquatable<hknpVehicl
         _resistanceFactorAtMaxRPM = br.ReadSingle();
         _clutchSlipRPM = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_minRPM);
+        bw.WriteSingle(_optRPM);
+        bw.WriteSingle(_maxRPM);
+        bw.WriteSingle(_maxTorque);
+        bw.WriteSingle(_torqueFactorAtMinRPM);
+        bw.WriteSingle(_torqueFactorAtMaxRPM);
+        bw.WriteSingle(_resistanceFactorAtMinRPM);
+        bw.WriteSingle(_resistanceFactorAtOptRPM);
+        bw.WriteSingle(_resistanceFactorAtMaxRPM);
+        bw.WriteSingle(_clutchSlipRPM);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

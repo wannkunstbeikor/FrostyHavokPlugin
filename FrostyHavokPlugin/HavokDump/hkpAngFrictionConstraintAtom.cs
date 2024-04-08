@@ -25,6 +25,16 @@ public class hkpAngFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpAng
         _maxFrictionTorque = br.ReadSingle();
         br.Position += 4; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteByte(_isEnabled);
+        bw.WriteByte(_firstFrictionAxis);
+        bw.WriteByte(_numFrictionAxes);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_maxFrictionTorque);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

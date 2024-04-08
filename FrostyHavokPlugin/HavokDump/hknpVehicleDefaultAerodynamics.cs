@@ -24,6 +24,15 @@ public class hknpVehicleDefaultAerodynamics : hknpVehicleAerodynamics, IEquatabl
         _liftCoefficient = br.ReadSingle();
         _extraGravityws = des.ReadVector4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_airDensity);
+        bw.WriteSingle(_frontalArea);
+        bw.WriteSingle(_dragCoefficient);
+        bw.WriteSingle(_liftCoefficient);
+        s.WriteVector4(bw, _extraGravityws);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

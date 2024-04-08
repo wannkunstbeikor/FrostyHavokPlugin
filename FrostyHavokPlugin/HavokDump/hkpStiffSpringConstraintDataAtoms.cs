@@ -23,6 +23,13 @@ public class hkpStiffSpringConstraintDataAtoms : IHavokObject, IEquatable<hkpSti
         _spring.Read(des, br);
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _pivots.Write(s, bw);
+        _setupStabilization.Write(s, bw);
+        _spring.Write(s, bw);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_pivots), _pivots);

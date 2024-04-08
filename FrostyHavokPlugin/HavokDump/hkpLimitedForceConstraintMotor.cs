@@ -18,6 +18,12 @@ public class hkpLimitedForceConstraintMotor : hkpConstraintMotor, IEquatable<hkp
         _minForce = br.ReadSingle();
         _maxForce = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_minForce);
+        bw.WriteSingle(_maxForce);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

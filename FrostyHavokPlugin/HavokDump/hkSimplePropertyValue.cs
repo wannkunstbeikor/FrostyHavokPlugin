@@ -15,6 +15,10 @@ public class hkSimplePropertyValue : IHavokObject, IEquatable<hkSimplePropertyVa
     {
         _data = br.ReadUInt64();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt64(_data);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_data), _data);

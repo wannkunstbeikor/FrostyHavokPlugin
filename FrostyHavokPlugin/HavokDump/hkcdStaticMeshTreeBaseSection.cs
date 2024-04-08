@@ -41,6 +41,22 @@ public class hkcdStaticMeshTreeBaseSection : hkcdStaticTreeTreehkcdStaticTreeDyn
         _layerData = br.ReadByte();
         _unusedData = br.ReadByte();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteSingleCStyleArray(bw, _codecParms);
+        bw.WriteUInt32(_firstPackedVertex);
+        _sharedVertices.Write(s, bw);
+        _primitives.Write(s, bw);
+        _dataRuns.Write(s, bw);
+        bw.WriteByte(_numPackedVertices);
+        bw.WriteByte(_numSharedIndices);
+        bw.WriteUInt16(_leafIndex);
+        bw.WriteByte(_page);
+        bw.WriteByte(_flags);
+        bw.WriteByte(_layerData);
+        bw.WriteByte(_unusedData);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

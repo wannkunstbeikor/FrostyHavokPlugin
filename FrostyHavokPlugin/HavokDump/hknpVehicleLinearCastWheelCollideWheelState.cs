@@ -23,6 +23,14 @@ public class hknpVehicleLinearCastWheelCollideWheelState : IHavokObject, IEquata
         _transform = des.ReadTransform(br);
         _to = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _aabb.Write(s, bw);
+        s.WriteClassPointer<hknpShape>(bw, _shape);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteTransform(bw, _transform);
+        s.WriteVector4(bw, _to);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_aabb), _aabb);

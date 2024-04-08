@@ -20,6 +20,13 @@ public class hkpBridgeConstraintAtom : hkpConstraintAtom, IEquatable<hkpBridgeCo
         _constraintData = des.ReadClassPointer<hkpConstraintData>(br);
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 14; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hkpConstraintData>(bw, _constraintData);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -16,6 +16,10 @@ public class hkpBridgeAtoms : IHavokObject, IEquatable<hkpBridgeAtoms?>
         _bridgeAtom = new hkpBridgeConstraintAtom();
         _bridgeAtom.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _bridgeAtom.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_bridgeAtom), _bridgeAtom);

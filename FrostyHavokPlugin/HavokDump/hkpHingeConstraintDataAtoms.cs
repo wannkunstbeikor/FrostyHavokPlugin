@@ -25,6 +25,13 @@ public class hkpHingeConstraintDataAtoms : IHavokObject, IEquatable<hkpHingeCons
         _ballSocket = new hkpBallSocketConstraintAtom();
         _ballSocket.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _setupStabilization.Write(s, bw);
+        _2dAng.Write(s, bw);
+        _ballSocket.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

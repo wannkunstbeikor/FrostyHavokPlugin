@@ -16,6 +16,11 @@ public class HavokPhysicsContainer : hkReferencedObject, IEquatable<HavokPhysics
         base.Read(des, br);
         _shapes = des.ReadClassPointerArray<hknpShape>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointerArray<hknpShape>(bw, _shapes);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

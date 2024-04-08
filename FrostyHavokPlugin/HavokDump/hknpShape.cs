@@ -27,6 +27,17 @@ public class hknpShape : hkReferencedObject, IEquatable<hknpShape?>
         _properties = des.ReadClassPointer<hkRefCountedProperties>(br);
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteUInt16((ushort)_flags);
+        bw.WriteByte(_numShapeKeyBits);
+        bw.WriteByte((byte)_dispatchType);
+        bw.WriteSingle(_convexRadius);
+        bw.WriteUInt64(_userData);
+        s.WriteClassPointer<hkRefCountedProperties>(bw, _properties);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

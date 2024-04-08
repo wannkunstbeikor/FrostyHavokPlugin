@@ -22,6 +22,14 @@ public class hkpWheelConstraintData : hkpConstraintData, IEquatable<hkpWheelCons
         _initialAxleInB = des.ReadVector4(br);
         _initialSteeringAxisInB = des.ReadVector4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        _atoms.Write(s, bw);
+        s.WriteVector4(bw, _initialAxleInB);
+        s.WriteVector4(bw, _initialSteeringAxisInB);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

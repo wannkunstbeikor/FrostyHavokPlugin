@@ -26,6 +26,17 @@ public class hknpCompressedHeightFieldShape : hknpHeightFieldShape, IEquatable<h
         _scale = br.ReadSingle();
         br.Position += 4; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteUInt16Array(bw, _storage);
+        s.WriteUInt16Array(bw, _shapeTags);
+        bw.WriteBoolean(_triangleFlip);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_offset);
+        bw.WriteSingle(_scale);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

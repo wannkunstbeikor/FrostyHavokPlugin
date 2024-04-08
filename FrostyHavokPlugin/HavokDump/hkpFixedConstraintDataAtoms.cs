@@ -25,6 +25,13 @@ public class hkpFixedConstraintDataAtoms : IHavokObject, IEquatable<hkpFixedCons
         _ang = new hkp3dAngConstraintAtom();
         _ang.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _setupStabilization.Write(s, bw);
+        _ballSocket.Write(s, bw);
+        _ang.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

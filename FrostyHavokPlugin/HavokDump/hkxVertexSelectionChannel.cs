@@ -16,6 +16,11 @@ public class hkxVertexSelectionChannel : hkReferencedObject, IEquatable<hkxVerte
         base.Read(des, br);
         _selectedVertices = des.ReadInt32Array(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteInt32Array(bw, _selectedVertices);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

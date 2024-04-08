@@ -20,6 +20,13 @@ public class hkpVehicleFrictionDescription : hkReferencedObject, IEquatable<hkpV
         _chassisMassInv = br.ReadSingle();
         _axleDescr = des.ReadStructCStyleArray<hkpVehicleFrictionDescriptionAxisDescription>(br, 2);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_wheelDistance);
+        bw.WriteSingle(_chassisMassInv);
+        s.WriteStructCStyleArray<hkpVehicleFrictionDescriptionAxisDescription>(bw, _axleDescr);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

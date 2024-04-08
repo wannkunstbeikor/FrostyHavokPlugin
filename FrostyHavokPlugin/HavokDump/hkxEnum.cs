@@ -16,6 +16,11 @@ public class hkxEnum : hkReferencedObject, IEquatable<hkxEnum?>
         base.Read(des, br);
         _items = des.ReadClassArray<hkxEnumItem>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hkxEnumItem>(bw, _items);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

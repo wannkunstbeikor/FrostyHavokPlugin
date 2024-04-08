@@ -15,6 +15,10 @@ public class hkArrayTypeAttribute : IHavokObject, IEquatable<hkArrayTypeAttribut
     {
         _type = (hkArrayTypeAttribute_ArrayType)br.ReadSByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSByte((sbyte)_type);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteEnum<hkArrayTypeAttribute_ArrayType, sbyte>(xe, nameof(_type), (sbyte)_type);

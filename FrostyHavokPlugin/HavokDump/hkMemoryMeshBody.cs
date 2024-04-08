@@ -25,6 +25,16 @@ public class hkMemoryMeshBody : hkMeshBody, IEquatable<hkMemoryMeshBody?>
         _name = des.ReadStringPointer(br);
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteMatrix4(bw, _transform);
+        s.WriteClassPointer<hkIndexedTransformSet>(bw, _transformSet);
+        s.WriteClassPointer<hkMeshShape>(bw, _shape);
+        s.WriteClassPointerArray<hkMeshVertexBuffer>(bw, _vertexBuffers);
+        s.WriteStringPointer(bw, _name);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

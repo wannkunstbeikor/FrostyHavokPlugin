@@ -27,6 +27,17 @@ public class hkpRackAndPinionConstraintAtom : hkpConstraintAtom, IEquatable<hkpR
         _memOffsetToRevolutionCounter = br.ReadSByte();
         br.Position += 4; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_pinionRadiusOrScrewPitch);
+        bw.WriteBoolean(_isScrew);
+        bw.WriteSByte(_memOffsetToInitialAngleOffset);
+        bw.WriteSByte(_memOffsetToPrevAngle);
+        bw.WriteSByte(_memOffsetToRevolutionCounter);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

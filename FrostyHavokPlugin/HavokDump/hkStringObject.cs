@@ -16,6 +16,11 @@ public class hkStringObject : hkReferencedObject, IEquatable<hkStringObject?>
         base.Read(des, br);
         _string = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _string);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

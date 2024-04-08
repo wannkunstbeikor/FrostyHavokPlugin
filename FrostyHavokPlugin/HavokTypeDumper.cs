@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using Frosty.Sdk.IO;
 
@@ -122,7 +125,7 @@ public class HavokTypeDumper
         {
             if (pParent != 0)
             {
-                Debug.Assert(Classes.TryGetValue(pParent, out var parent));
+                Debug.Assert(Classes.TryGetValue(pParent, out hkClass? parent));
                 Parent = parent.Name;
             }
 
@@ -197,6 +200,30 @@ public class HavokTypeDumper
             if (ObjectSize - offset > 0)
             {
                 WriteLine($"br.Position += {ObjectSize - offset}; // padding");
+            }
+
+            PopIndent();
+            WriteLine("}");
+
+            WriteLine(
+                $"public {(isBase ? "virtual" : "override")} void Write(PackFileSerializer s, DataStream bw)");
+            WriteLine("{");
+            PushIndent();
+
+            if (!isBase)
+            {
+                WriteLine("base.Write(s, bw);");
+            }
+
+            offset = pParent != 0 ? Classes[pParent].ObjectSize : 0;
+            foreach (hkClassMember member in Members)
+            {
+                member.CreateWrite(ref offset);
+            }
+
+            if (ObjectSize - offset > 0)
+            {
+                WriteLine($"for (int i = 0; i < {ObjectSize - offset}; i++) bw.WriteByte(0); // padding");
             }
 
             PopIndent();
@@ -314,13 +341,13 @@ public class HavokTypeDumper
             Name = "_" + Name;
             if (pClass != 0)
             {
-                Debug.Assert(hkClass.Classes.TryGetValue(pClass, out var c));
+                Debug.Assert(hkClass.Classes.TryGetValue(pClass, out hkClass? c));
                 Class = c.Name;
             }
 
             if (pEnum != 0)
             {
-                Debug.Assert(hkClassEnum.Enums.TryGetValue(pEnum, out var e));
+                Debug.Assert(hkClassEnum.Enums.TryGetValue(pEnum, out hkClassEnum? e));
                 Enum = e.Name;
             }
 
@@ -333,10 +360,6 @@ public class HavokTypeDumper
                 else if (className == "hkcdShape")
                 {
                     Enum = "ShapeTypeEnum";
-                }
-                else
-                {
-
                 }
             }
         }
@@ -388,12 +411,13 @@ public class HavokTypeDumper
                         WriteLine($"{Name} = des.Read{primitive}Array(br);");
                         break;
                     }
-                    else if ((VTYPE)SubType == VTYPE.TYPE_STRUCT)
+
+                    if ((VTYPE)SubType == VTYPE.TYPE_STRUCT)
                     {
                         WriteLine($"{Name} = des.ReadClassArray<{Class}>(br);");
                         break;
                     }
-                    else if ((VTYPE)SubType == VTYPE.TYPE_POINTER)
+                    if ((VTYPE)SubType == VTYPE.TYPE_POINTER)
                     {
                         WriteLine($"{Name} = des.ReadClassPointerArray<{Class}>(br);");
                         break;
@@ -410,12 +434,13 @@ public class HavokTypeDumper
                         WriteLine($"{Name} = des.Read{primitive}RelArray(br);");
                         break;
                     }
-                    else if ((VTYPE)SubType == VTYPE.TYPE_STRUCT)
+
+                    if ((VTYPE)SubType == VTYPE.TYPE_STRUCT)
                     {
                         WriteLine($"{Name} = des.ReadClassRelArray<{Class}>(br);");
                         break;
                     }
-                    else if ((VTYPE)SubType == VTYPE.TYPE_POINTER)
+                    if ((VTYPE)SubType == VTYPE.TYPE_POINTER)
                     {
                         WriteLine($"{Name} = des.ReadClassPointerRelArray<{Class}>(br);");
                         break;
@@ -489,6 +514,146 @@ public class HavokTypeDumper
                     }
 
                     WriteLine($"// Read {(VTYPE)Type}");
+                    break;
+                }
+            }
+
+
+            offset += MemberSize(this, (VTYPE)Type);
+        }
+
+        public void CreateWrite(ref int offset)
+        {
+            if (((FlagValues)Flags).HasFlag(FlagValues.SERIALIZE_IGNORED))
+            {
+                return;
+            }
+
+            if ((Padding = Offset - offset) > 0)
+            {
+                WriteLine($"for (int i = 0; i < {Padding}; i++) bw.WriteByte(0); // padding");
+                offset += Padding;
+            }
+
+            string? primitive;
+
+            switch ((VTYPE)Type)
+            {
+                case VTYPE.TYPE_ARRAY:
+                {
+                    primitive = GetSimpleType((VTYPE)SubType);
+                    if (primitive is null)
+                    {
+                        primitive = GetComplexType((VTYPE)SubType);
+                    }
+                    if (primitive is not null)
+                    {
+                        WriteLine($"s.Write{primitive}Array(bw, {Name});");
+                        break;
+                    }
+
+                    if ((VTYPE)SubType == VTYPE.TYPE_STRUCT)
+                    {
+                        WriteLine($"s.WriteClassArray<{Class}>(bw, {Name});");
+                        break;
+                    }
+                    if ((VTYPE)SubType == VTYPE.TYPE_POINTER)
+                    {
+                        WriteLine($"s.WriteClassPointerArray<{Class}>(bw, {Name});");
+                        break;
+                    }
+
+                    WriteLine($"// Write {(VTYPE)SubType} array");
+                    break;
+                }
+                case VTYPE.TYPE_RELARRAY:
+                {
+                    primitive = GetSimpleType((VTYPE)SubType) ?? GetComplexType((VTYPE)SubType);
+                    if (primitive is not null)
+                    {
+                        WriteLine($"s.Write{primitive}RelArray(bw, {Name});");
+                        break;
+                    }
+
+                    if ((VTYPE)SubType == VTYPE.TYPE_STRUCT)
+                    {
+                        WriteLine($"s.WriteClassRelArray<{Class}>(bw, {Name});");
+                        break;
+                    }
+                    if ((VTYPE)SubType == VTYPE.TYPE_POINTER)
+                    {
+                        WriteLine($"s.WriteClassPointerRelArray<{Class}>(bw, {Name});");
+                        break;
+                    }
+
+                    WriteLine($"// Write {(VTYPE)SubType} rel array");
+                    break;
+                }
+                case VTYPE.TYPE_ENUM:
+                case VTYPE.TYPE_FLAGS:
+                {
+                    if (string.IsNullOrEmpty(Enum))
+                    {
+                        throw new Exception();
+                    }
+                    primitive = GetEnumType((VTYPE)SubType, Enum);
+
+                    WriteLine($"bw.Write{primitive}(({ReduceType(this, (VTYPE)SubType)}){Name});");
+                    break;
+                }
+                // Read inline class
+                case VTYPE.TYPE_STRUCT when ArraySize > 0:
+                {
+                    WriteLine($"s.WriteStructCStyleArray<{Class}>(bw, {Name});");
+                    break;
+                }
+                case VTYPE.TYPE_STRUCT:
+                    WriteLine($"{Name}.Write(s, bw);");
+                    break;
+                // Read class pointer
+                case VTYPE.TYPE_POINTER when (VTYPE)SubType != VTYPE.TYPE_STRUCT:
+                    throw new Exception("bruh");
+                case VTYPE.TYPE_POINTER when ArraySize > 0:
+                {
+                    WriteLine($"s.WriteClassPointerCStyleArray<{Class}>(bw, {Name});");
+                    break;
+                }
+                case VTYPE.TYPE_POINTER:
+                    WriteLine($"s.WriteClassPointer<{Class}>(bw, {Name});");
+                    break;
+                default:
+                {
+                    primitive = GetSimpleType((VTYPE)Type);
+                    if (primitive is not null)
+                    {
+                        if (ArraySize > 0)
+                        {
+                            WriteLine($"s.Write{primitive}CStyleArray(bw, {Name});");
+                        }
+                        else
+                        {
+                            WriteLine($"bw.Write{primitive}({Name});");
+                        }
+
+                        break;
+                    }
+
+                    primitive = GetComplexType((VTYPE)Type);
+                    if (primitive is not null)
+                    {
+                        if (ArraySize > 0)
+                        {
+                            WriteLine($"s.Write{primitive}CStyleArray(bw, {Name});");
+                        }
+                        else
+                        {
+                            WriteLine($"s.Write{primitive}(bw, {Name});");
+                        }
+
+                        break;
+                    }
+
+                    WriteLine($"// Write {(VTYPE)Type}");
                     break;
                 }
             }
@@ -698,7 +863,7 @@ public class HavokTypeDumper
 
     public static int MemberSize(hkClassMember m, VTYPE t, bool v = false)
     {
-        var adjarrsize = m.ArraySize;
+        short adjarrsize = m.ArraySize;
         if (v || adjarrsize == 0)
         {
             adjarrsize = 1;
@@ -825,10 +990,12 @@ public class HavokTypeDumper
             case VTYPE.TYPE_VECTOR4:
                 r = "Vector4";
                 break;
-            case VTYPE.TYPE_MATRIX4:
             case VTYPE.TYPE_MATRIX3:
-            case VTYPE.TYPE_TRANSFORM:
             case VTYPE.TYPE_QSTRANSFORM:
+                r = "Matrix3x4";
+                break;
+            case VTYPE.TYPE_MATRIX4:
+            case VTYPE.TYPE_TRANSFORM:
                 r = "Matrix4";
                 break;
             case VTYPE.TYPE_POINTER when v:
@@ -996,7 +1163,7 @@ public class HavokTypeDumper
 
     public static void Dump()
     {
-        MemoryReader reader = new(Process.GetProcessById(24258)) { Position = 0x1430dec60 };
+        MemoryReader reader = new(Process.GetProcessById(23628)) { Position = 0x1430dec60 };
 
         long offset = reader.ReadLong();
         do

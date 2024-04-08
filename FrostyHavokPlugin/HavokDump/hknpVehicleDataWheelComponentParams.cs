@@ -34,6 +34,20 @@ public class hknpVehicleDataWheelComponentParams : IHavokObject, IEquatable<hknp
         _axle = br.ReadSByte();
         br.Position += 3; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_radius);
+        bw.WriteSingle(_mass);
+        bw.WriteSingle(_width);
+        bw.WriteSingle(_friction);
+        bw.WriteSingle(_viscosityFriction);
+        bw.WriteSingle(_maxFriction);
+        bw.WriteSingle(_slipAngle);
+        bw.WriteSingle(_forceFeedbackMultiplier);
+        bw.WriteSingle(_maxContactBodyAcceleration);
+        bw.WriteSByte(_axle);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_radius), _radius);

@@ -18,6 +18,12 @@ public class hknpExternMeshShape : hknpCompositeShape, IEquatable<hknpExternMesh
         _geometry = des.ReadClassPointer<hknpExternMeshShapeGeometry>(br);
         _boundingVolumeData = des.ReadClassPointer<hknpExternMeshShapeData>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hknpExternMeshShapeGeometry>(bw, _geometry);
+        s.WriteClassPointer<hknpExternMeshShapeData>(bw, _boundingVolumeData);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

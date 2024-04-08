@@ -18,6 +18,12 @@ public class hknpBinaryAction : hknpAction, IEquatable<hknpBinaryAction?>
         _bodyA = br.ReadUInt32();
         _bodyB = br.ReadUInt32();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteUInt32(_bodyA);
+        bw.WriteUInt32(_bodyB);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

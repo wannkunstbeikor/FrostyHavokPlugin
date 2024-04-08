@@ -27,6 +27,17 @@ public class hkxMaterialShader : hkReferencedObject, IEquatable<hkxMaterialShade
         _pixelEntryName = des.ReadStringPointer(br);
         _data = des.ReadByteArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _name);
+        bw.WriteByte((byte)_type);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+        s.WriteStringPointer(bw, _vertexEntryName);
+        s.WriteStringPointer(bw, _geomEntryName);
+        s.WriteStringPointer(bw, _pixelEntryName);
+        s.WriteByteArray(bw, _data);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -17,6 +17,11 @@ public class hknpStaticCompoundShapeData : hkReferencedObject, IEquatable<hknpSt
         _aabbTree = new hknpStaticCompoundShapeTree();
         _aabbTree.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _aabbTree.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

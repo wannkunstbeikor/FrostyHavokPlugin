@@ -16,6 +16,11 @@ public class hkxEnvironment : hkReferencedObject, IEquatable<hkxEnvironment?>
         base.Read(des, br);
         _variables = des.ReadClassArray<hkxEnvironmentVariable>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hkxEnvironmentVariable>(bw, _variables);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

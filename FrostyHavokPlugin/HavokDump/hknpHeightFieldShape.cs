@@ -37,6 +37,21 @@ public class hknpHeightFieldShape : hknpCompositeShape, IEquatable<hknpHeightFie
         _includeShapeKeyInSdfContacts = br.ReadBoolean();
         br.Position += 11; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _aabb.Write(s, bw);
+        s.WriteVector4(bw, _floatToIntScale);
+        s.WriteVector4(bw, _intToFloatScale);
+        bw.WriteInt32(_intSizeX);
+        bw.WriteInt32(_intSizeZ);
+        bw.WriteInt32(_numBitsX);
+        bw.WriteInt32(_numBitsZ);
+        _minMaxTree.Write(s, bw);
+        bw.WriteInt32(_minMaxTreeCoarseness);
+        bw.WriteBoolean(_includeShapeKeyInSdfContacts);
+        for (int i = 0; i < 11; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

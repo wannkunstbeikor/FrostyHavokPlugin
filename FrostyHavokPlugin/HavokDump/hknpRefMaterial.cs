@@ -17,6 +17,11 @@ public class hknpRefMaterial : hkReferencedObject, IEquatable<hknpRefMaterial?>
         _material = new hknpMaterial();
         _material.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _material.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

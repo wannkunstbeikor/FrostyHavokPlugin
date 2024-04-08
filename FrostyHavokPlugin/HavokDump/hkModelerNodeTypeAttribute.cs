@@ -15,6 +15,10 @@ public class hkModelerNodeTypeAttribute : IHavokObject, IEquatable<hkModelerNode
     {
         _type = (hkModelerNodeTypeAttribute_ModelerType)br.ReadSByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSByte((sbyte)_type);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteEnum<hkModelerNodeTypeAttribute_ModelerType, sbyte>(xe, nameof(_type), (sbyte)_type);

@@ -41,6 +41,19 @@ public class hkpLinearClearanceConstraintDataAtoms : IHavokObject, IEquatable<hk
         _linLimit2.Read(des, br);
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _motor.Write(s, bw);
+        _friction0.Write(s, bw);
+        _friction1.Write(s, bw);
+        _friction2.Write(s, bw);
+        _ang.Write(s, bw);
+        _linLimit0.Write(s, bw);
+        _linLimit1.Write(s, bw);
+        _linLimit2.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

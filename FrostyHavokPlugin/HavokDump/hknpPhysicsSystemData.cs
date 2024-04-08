@@ -28,6 +28,17 @@ public class hknpPhysicsSystemData : hkReferencedObject, IEquatable<hknpPhysicsS
         _referencedObjects = des.ReadClassPointerArray<hkReferencedObject>(br);
         _name = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hknpMaterial>(bw, _materials);
+        s.WriteClassArray<hknpMotionProperties>(bw, _motionProperties);
+        s.WriteClassArray<hknpMotionCinfo>(bw, _motionCinfos);
+        s.WriteClassArray<hknpBodyCinfo>(bw, _bodyCinfos);
+        s.WriteClassArray<hknpConstraintCinfo>(bw, _constraintCinfos);
+        s.WriteClassPointerArray<hkReferencedObject>(bw, _referencedObjects);
+        s.WriteStringPointer(bw, _name);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

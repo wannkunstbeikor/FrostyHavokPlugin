@@ -27,6 +27,17 @@ public class hkpCogWheelConstraintAtom : hkpConstraintAtom, IEquatable<hkpCogWhe
         _memOffsetToPrevAngle = br.ReadSByte();
         _memOffsetToRevolutionCounter = br.ReadSByte();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_cogWheelRadiusA);
+        bw.WriteSingle(_cogWheelRadiusB);
+        bw.WriteBoolean(_isScrew);
+        bw.WriteSByte(_memOffsetToInitialAngleOffset);
+        bw.WriteSByte(_memOffsetToPrevAngle);
+        bw.WriteSByte(_memOffsetToRevolutionCounter);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

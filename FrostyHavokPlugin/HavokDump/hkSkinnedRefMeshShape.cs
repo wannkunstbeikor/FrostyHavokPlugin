@@ -22,6 +22,14 @@ public class hkSkinnedRefMeshShape : hkMeshShape, IEquatable<hkSkinnedRefMeshSha
         _localFromRootTransforms = des.ReadVector4Array(br);
         _name = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hkSkinnedMeshShape>(bw, _skinnedMeshShape);
+        s.WriteInt16Array(bw, _bones);
+        s.WriteVector4Array(bw, _localFromRootTransforms);
+        s.WriteStringPointer(bw, _name);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

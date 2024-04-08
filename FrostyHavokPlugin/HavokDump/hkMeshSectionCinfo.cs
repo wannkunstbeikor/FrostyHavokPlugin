@@ -30,6 +30,18 @@ public class hkMeshSectionCinfo : IHavokObject, IEquatable<hkMeshSectionCinfo?>
         _vertexStartIndex = br.ReadInt32();
         _transformIndex = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassPointer<hkMeshVertexBuffer>(bw, _vertexBuffer);
+        s.WriteClassPointer<hkMeshMaterial>(bw, _material);
+        bw.WriteByte((byte)_primitiveType);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_numPrimitives);
+        bw.WriteByte((byte)_indexType);
+        for (int i = 0; i < 15; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_vertexStartIndex);
+        bw.WriteInt32(_transformIndex);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassPointer(xe, nameof(_vertexBuffer), _vertexBuffer);

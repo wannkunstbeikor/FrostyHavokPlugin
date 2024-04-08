@@ -27,6 +27,17 @@ public class hkpPointToPathConstraintData : hkpConstraintData, IEquatable<hkpPoi
         br.Position += 3; // padding
         _transform_OS_KS = des.ReadTransformCStyleArray(br, 2);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        _atoms.Write(s, bw);
+        s.WriteClassPointer<hkpParametricCurve>(bw, _path);
+        bw.WriteSingle(_maxFrictionForce);
+        bw.WriteSByte((sbyte)_angularConstrainedDOF);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        s.WriteTransformCStyleArray(bw, _transform_OS_KS);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

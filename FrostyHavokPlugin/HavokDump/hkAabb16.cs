@@ -21,6 +21,13 @@ public class hkAabb16 : IHavokObject, IEquatable<hkAabb16?>
         _max = des.ReadUInt16CStyleArray(br, 3);
         _key1 = br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteUInt16CStyleArray(bw, _min);
+        bw.WriteUInt16(_key);
+        s.WriteUInt16CStyleArray(bw, _max);
+        bw.WriteUInt16(_key1);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_min), _min);

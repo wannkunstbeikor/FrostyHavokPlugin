@@ -16,6 +16,10 @@ public class hkcdStaticTreeCodecRaw : IHavokObject, IEquatable<hkcdStaticTreeCod
         _aabb = new hkAabb();
         _aabb.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _aabb.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_aabb), _aabb);

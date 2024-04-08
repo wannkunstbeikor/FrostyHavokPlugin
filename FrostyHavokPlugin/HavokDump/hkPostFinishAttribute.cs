@@ -15,6 +15,10 @@ public class hkPostFinishAttribute : IHavokObject, IEquatable<hkPostFinishAttrib
     {
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
     }

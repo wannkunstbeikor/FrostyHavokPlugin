@@ -15,6 +15,10 @@ public class hkpConstraintAtom : IHavokObject, IEquatable<hkpConstraintAtom?>
     {
         _type = (hkpConstraintAtom_AtomType)br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt16((ushort)_type);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteEnum<hkpConstraintAtom_AtomType, ushort>(xe, nameof(_type), (ushort)_type);

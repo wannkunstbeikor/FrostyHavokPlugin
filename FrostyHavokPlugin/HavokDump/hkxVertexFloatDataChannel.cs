@@ -19,6 +19,13 @@ public class hkxVertexFloatDataChannel : hkReferencedObject, IEquatable<hkxVerte
         _dimensions = (hkxVertexFloatDataChannel_VertexFloatDimensions)br.ReadByte();
         br.Position += 7; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteSingleArray(bw, _perVertexFloats);
+        bw.WriteByte((byte)_dimensions);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

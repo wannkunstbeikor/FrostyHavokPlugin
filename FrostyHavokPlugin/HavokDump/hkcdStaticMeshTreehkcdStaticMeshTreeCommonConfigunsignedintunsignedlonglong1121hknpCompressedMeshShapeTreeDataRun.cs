@@ -20,6 +20,13 @@ public class hkcdStaticMeshTreehkcdStaticMeshTreeCommonConfigunsignedintunsigned
         _sharedVertices = des.ReadUInt64Array(br);
         _primitiveDataRuns = des.ReadClassArray<hknpCompressedMeshShapeTreeDataRun>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteUInt32Array(bw, _packedVertices);
+        s.WriteUInt64Array(bw, _sharedVertices);
+        s.WriteClassArray<hknpCompressedMeshShapeTreeDataRun>(bw, _primitiveDataRuns);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -16,6 +16,11 @@ public class hkxEdgeSelectionChannel : hkReferencedObject, IEquatable<hkxEdgeSel
         base.Read(des, br);
         _selectedEdges = des.ReadInt32Array(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteInt32Array(bw, _selectedEdges);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -27,6 +27,16 @@ public class hkMultipleVertexBufferLockedElement : IHavokObject, IEquatable<hkMu
         _outputBufferIndex = br.ReadByte();
         _emulatedIndex = br.ReadSByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteByte(_vertexBufferIndex);
+        bw.WriteByte(_elementIndex);
+        bw.WriteByte(_lockedBufferIndex);
+        bw.WriteByte(_vertexFormatIndex);
+        bw.WriteByte(_lockFlags);
+        bw.WriteByte(_outputBufferIndex);
+        bw.WriteSByte(_emulatedIndex);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_vertexBufferIndex), _vertexBufferIndex);

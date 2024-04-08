@@ -20,6 +20,13 @@ public class hkpAngConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngConstrai
         _numConstrainedAxes = br.ReadByte();
         br.Position += 12; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteByte(_firstConstrainedAxis);
+        bw.WriteByte(_numConstrainedAxes);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

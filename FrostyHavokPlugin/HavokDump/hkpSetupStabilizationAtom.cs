@@ -23,6 +23,15 @@ public class hkpSetupStabilizationAtom : hkpConstraintAtom, IEquatable<hkpSetupS
         _maxAngImpulse = br.ReadSingle();
         _maxAngle = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteBoolean(_enabled);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_maxLinImpulse);
+        bw.WriteSingle(_maxAngImpulse);
+        bw.WriteSingle(_maxAngle);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

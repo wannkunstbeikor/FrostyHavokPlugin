@@ -24,6 +24,15 @@ public class hkStorageSkinnedMeshShape : hkSkinnedMeshShape, IEquatable<hkStorag
         _parts = des.ReadClassArray<hkSkinnedMeshShapePart>(br);
         _name = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteInt16Array(bw, _bonesBuffer);
+        s.WriteClassArray<hkSkinnedMeshShapeBoneSet>(bw, _boneSets);
+        s.WriteClassArray<hkSkinnedMeshShapeBoneSection>(bw, _boneSections);
+        s.WriteClassArray<hkSkinnedMeshShapePart>(bw, _parts);
+        s.WriteStringPointer(bw, _name);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

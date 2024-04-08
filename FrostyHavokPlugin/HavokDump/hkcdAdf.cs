@@ -30,6 +30,18 @@ public class hkcdAdf : IHavokObject, IEquatable<hkcdAdf?>
         _voxels = des.ReadUInt16Array(br);
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_accuracy);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+        _domain.Write(s, bw);
+        s.WriteVector4(bw, _origin);
+        s.WriteVector4(bw, _scale);
+        s.WriteSingleCStyleArray(bw, _range);
+        s.WriteUInt32Array(bw, _nodes);
+        s.WriteUInt16Array(bw, _voxels);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_accuracy), _accuracy);

@@ -18,6 +18,12 @@ public class hkxSparselyAnimatedInt : hkReferencedObject, IEquatable<hkxSparsely
         _ints = des.ReadInt32Array(br);
         _times = des.ReadSingleArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteInt32Array(bw, _ints);
+        s.WriteSingleArray(bw, _times);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

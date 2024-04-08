@@ -18,6 +18,12 @@ public class hkpSpringDamperConstraintMotor : hkpLimitedForceConstraintMotor, IE
         _springConstant = br.ReadSingle();
         _springDamping = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_springConstant);
+        bw.WriteSingle(_springDamping);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

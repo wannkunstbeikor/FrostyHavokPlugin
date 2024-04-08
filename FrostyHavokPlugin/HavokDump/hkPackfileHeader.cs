@@ -39,6 +39,22 @@ public class hkPackfileHeader : IHavokObject, IEquatable<hkPackfileHeader?>
         _maxpredicate = br.ReadUInt16();
         _predicateArraySizePlusPadding = br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteInt32CStyleArray(bw, _magic);
+        bw.WriteInt32(_userTag);
+        bw.WriteInt32(_fileVersion);
+        s.WriteByteCStyleArray(bw, _layoutRules);
+        bw.WriteInt32(_numSections);
+        bw.WriteInt32(_contentsSectionIndex);
+        bw.WriteInt32(_contentsSectionOffset);
+        bw.WriteInt32(_contentsClassNameSectionIndex);
+        bw.WriteInt32(_contentsClassNameSectionOffset);
+        s.WriteSByteCStyleArray(bw, _contentsVersion);
+        bw.WriteInt32(_flags);
+        bw.WriteUInt16(_maxpredicate);
+        bw.WriteUInt16(_predicateArraySizePlusPadding);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_magic), _magic);

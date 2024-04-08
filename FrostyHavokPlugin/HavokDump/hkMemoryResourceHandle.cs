@@ -20,6 +20,13 @@ public class hkMemoryResourceHandle : hkResourceHandle, IEquatable<hkMemoryResou
         _name = des.ReadStringPointer(br);
         _references = des.ReadClassArray<hkMemoryResourceHandleExternalLink>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hkReferencedObject>(bw, _variant);
+        s.WriteStringPointer(bw, _name);
+        s.WriteClassArray<hkMemoryResourceHandleExternalLink>(bw, _references);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

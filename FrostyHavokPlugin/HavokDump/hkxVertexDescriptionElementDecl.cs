@@ -26,6 +26,16 @@ public class hkxVertexDescriptionElementDecl : IHavokObject, IEquatable<hkxVerte
         br.Position += 1; // padding
         _hint = (hkxVertexDescription_DataHint)br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_byteOffset);
+        bw.WriteUInt16((ushort)_type);
+        bw.WriteUInt16((ushort)_usage);
+        bw.WriteUInt32(_byteStride);
+        bw.WriteByte(_numElements);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt16((ushort)_hint);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_byteOffset), _byteOffset);

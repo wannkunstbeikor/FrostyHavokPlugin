@@ -15,6 +15,10 @@ public class hkLinkAttribute : IHavokObject, IEquatable<hkLinkAttribute?>
     {
         _type = (hkLinkAttribute_Link)br.ReadSByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSByte((sbyte)_type);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteEnum<hkLinkAttribute_Link, sbyte>(xe, nameof(_type), (sbyte)_type);

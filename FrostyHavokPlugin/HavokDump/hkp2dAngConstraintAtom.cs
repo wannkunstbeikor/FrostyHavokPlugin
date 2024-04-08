@@ -18,6 +18,12 @@ public class hkp2dAngConstraintAtom : hkpConstraintAtom, IEquatable<hkp2dAngCons
         _freeRotationAxis = br.ReadByte();
         br.Position += 13; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteByte(_freeRotationAxis);
+        for (int i = 0; i < 13; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

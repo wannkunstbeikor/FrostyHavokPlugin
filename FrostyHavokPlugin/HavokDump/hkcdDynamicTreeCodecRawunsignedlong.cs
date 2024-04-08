@@ -21,6 +21,13 @@ public class hkcdDynamicTreeCodecRawunsignedlong : IHavokObject, IEquatable<hkcd
         _children = des.ReadUInt64CStyleArray(br, 2);
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _aabb.Write(s, bw);
+        bw.WriteUInt64(_parent);
+        s.WriteUInt64CStyleArray(bw, _children);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_aabb), _aabb);

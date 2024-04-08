@@ -29,6 +29,18 @@ public class hkxCamera : hkReferencedObject, IEquatable<hkxCamera?>
         _leftHanded = br.ReadBoolean();
         br.Position += 3; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteVector4(bw, _from);
+        s.WriteVector4(bw, _focus);
+        s.WriteVector4(bw, _up);
+        bw.WriteSingle(_fov);
+        bw.WriteSingle(_far);
+        bw.WriteSingle(_near);
+        bw.WriteBoolean(_leftHanded);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

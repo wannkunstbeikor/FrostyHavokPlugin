@@ -16,6 +16,11 @@ public class hknpAction : hkReferencedObject, IEquatable<hknpAction?>
         base.Read(des, br);
         _userData = br.ReadUInt64();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteUInt64(_userData);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

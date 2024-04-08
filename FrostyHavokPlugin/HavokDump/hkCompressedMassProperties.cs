@@ -23,6 +23,14 @@ public class hkCompressedMassProperties : IHavokObject, IEquatable<hkCompressedM
         _mass = br.ReadSingle();
         _volume = br.ReadSingle();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteInt16CStyleArray(bw, _centerOfMass);
+        s.WriteInt16CStyleArray(bw, _inertia);
+        s.WriteInt16CStyleArray(bw, _majorAxisSpace);
+        bw.WriteSingle(_mass);
+        bw.WriteSingle(_volume);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_centerOfMass), _centerOfMass);

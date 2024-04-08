@@ -20,6 +20,12 @@ public class hkxVertexBuffer : hkReferencedObject, IEquatable<hkxVertexBuffer?>
         _desc = new hkxVertexDescription();
         _desc.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _data.Write(s, bw);
+        _desc.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

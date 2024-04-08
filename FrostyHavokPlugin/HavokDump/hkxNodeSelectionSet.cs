@@ -18,6 +18,12 @@ public class hkxNodeSelectionSet : hkxAttributeHolder, IEquatable<hkxNodeSelecti
         _selectedNodes = des.ReadClassPointerArray<hkxNode>(br);
         _name = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointerArray<hkxNode>(bw, _selectedNodes);
+        s.WriteStringPointer(bw, _name);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

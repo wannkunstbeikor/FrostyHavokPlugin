@@ -21,6 +21,12 @@ public class hknpMaterialLibrary : hkReferencedObject, IEquatable<hknpMaterialLi
         _entries = new hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations();
         _entries.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 24; i++) bw.WriteByte(0); // padding
+        _entries.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -18,6 +18,12 @@ public class hkxMesh : hkReferencedObject, IEquatable<hkxMesh?>
         _sections = des.ReadClassPointerArray<hkxMeshSection>(br);
         _userChannelInfos = des.ReadClassPointerArray<hkxMeshUserChannelInfo>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointerArray<hkxMeshSection>(bw, _sections);
+        s.WriteClassPointerArray<hkxMeshUserChannelInfo>(bw, _userChannelInfos);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

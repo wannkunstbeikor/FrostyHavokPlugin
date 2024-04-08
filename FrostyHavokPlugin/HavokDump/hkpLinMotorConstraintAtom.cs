@@ -26,6 +26,16 @@ public class hkpLinMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpLinMot
         br.Position += 4; // padding
         _motor = des.ReadClassPointer<hkpConstraintMotor>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteBoolean(_isEnabled);
+        bw.WriteByte(_motorAxis);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_targetPosition);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hkpConstraintMotor>(bw, _motor);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

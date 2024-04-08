@@ -21,6 +21,14 @@ public class hknpCircularSurfaceVelocity : hknpSurfaceVelocity, IEquatable<hknpC
         _pivot = des.ReadVector4(br);
         _angularVelocity = des.ReadVector4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteBoolean(_velocityIsLocalSpace);
+        for (int i = 0; i < 15; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _pivot);
+        s.WriteVector4(bw, _angularVelocity);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

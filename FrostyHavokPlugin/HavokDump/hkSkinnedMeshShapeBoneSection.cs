@@ -20,6 +20,13 @@ public class hkSkinnedMeshShapeBoneSection : IHavokObject, IEquatable<hkSkinnedM
         _numBoneSets = br.ReadInt16();
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassPointer<hkMeshShape>(bw, _meshBuffer);
+        bw.WriteUInt16(_startBoneSetId);
+        bw.WriteInt16(_numBoneSets);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassPointer(xe, nameof(_meshBuffer), _meshBuffer);

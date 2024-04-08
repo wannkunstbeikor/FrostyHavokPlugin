@@ -19,6 +19,12 @@ public class hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort : IHavokObj
         _index = br.ReadByte();
         _count = br.ReadByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt16(_value);
+        bw.WriteByte(_index);
+        bw.WriteByte(_count);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_value), _value);

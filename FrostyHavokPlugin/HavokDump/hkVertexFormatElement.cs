@@ -25,6 +25,15 @@ public class hkVertexFormatElement : IHavokObject, IEquatable<hkVertexFormatElem
         _flags = (hkVertexFormat_HintFlags)br.ReadByte();
         _pad = des.ReadByteCStyleArray(br, 3);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteByte((byte)_dataType);
+        bw.WriteByte(_numValues);
+        bw.WriteByte((byte)_usage);
+        bw.WriteByte(_subUsage);
+        bw.WriteByte((byte)_flags);
+        s.WriteByteCStyleArray(bw, _pad);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteEnum<hkVertexFormat_ComponentType, byte>(xe, nameof(_dataType), (byte)_dataType);

@@ -19,6 +19,12 @@ public class hknpConvexPolytopeShapeFace : IHavokObject, IEquatable<hknpConvexPo
         _numIndices = br.ReadByte();
         _firstIndex = br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteByte(_minHalfAngle);
+        bw.WriteByte(_numIndices);
+        bw.WriteUInt16(_firstIndex);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_minHalfAngle), _minHalfAngle);

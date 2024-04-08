@@ -26,6 +26,16 @@ public class hknpShapeInstance : IHavokObject, IEquatable<hknpShapeInstance?>
         _padding = des.ReadByteCStyleArray(br, 30);
         br.Position += 6; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteTransform(bw, _transform);
+        s.WriteVector4(bw, _scale);
+        s.WriteClassPointer<hknpShape>(bw, _shape);
+        bw.WriteUInt16(_shapeTag);
+        bw.WriteUInt16(_destructionTag);
+        s.WriteByteCStyleArray(bw, _padding);
+        for (int i = 0; i < 6; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteTransform(xe, nameof(_transform), _transform);

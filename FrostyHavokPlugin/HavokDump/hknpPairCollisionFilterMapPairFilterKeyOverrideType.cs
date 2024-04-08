@@ -19,6 +19,12 @@ public class hknpPairCollisionFilterMapPairFilterKeyOverrideType : IHavokObject,
         _numElems = br.ReadInt32();
         _hashMod = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_numElems);
+        bw.WriteInt32(_hashMod);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_numElems), _numElems);

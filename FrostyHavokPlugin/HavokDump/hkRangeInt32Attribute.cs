@@ -21,6 +21,13 @@ public class hkRangeInt32Attribute : IHavokObject, IEquatable<hkRangeInt32Attrib
         _softmin = br.ReadInt32();
         _softmax = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteInt32(_absmin);
+        bw.WriteInt32(_absmax);
+        bw.WriteInt32(_softmin);
+        bw.WriteInt32(_softmax);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_absmin), _absmin);

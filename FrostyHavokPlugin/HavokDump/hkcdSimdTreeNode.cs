@@ -16,6 +16,11 @@ public class hkcdSimdTreeNode : hkcdFourAabb, IEquatable<hkcdSimdTreeNode?>
         base.Read(des, br);
         _data = des.ReadUInt32CStyleArray(br, 4);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteUInt32CStyleArray(bw, _data);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

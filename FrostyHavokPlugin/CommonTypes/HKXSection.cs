@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using Frosty.Sdk.IO;
 using FrostyHavokPlugin.Utils;
 
@@ -30,13 +31,13 @@ public class HKXSection
     {
         SectionTag = br.ReadFixedSizedString(19);
         br.AssertByte(0xFF);
-        var absoluteDataStart = br.ReadUInt32();
-        var fixupSize = br.ReadUInt32();
-        var localFixupsSize = br.ReadUInt32();
-        var virtualFixupsOffset = br.ReadUInt32();
-        var exportsOffset = br.ReadUInt32();
-        var importsOffset = br.ReadUInt32();
-        var endOffset = br.ReadInt32();
+        uint absoluteDataStart = br.ReadUInt32();
+        uint fixupSize = br.ReadUInt32();
+        uint localFixupsSize = br.ReadUInt32();
+        uint virtualFixupsOffset = br.ReadUInt32();
+        uint exportsOffset = br.ReadUInt32();
+        uint importsOffset = br.ReadUInt32();
+        int endOffset = br.ReadInt32();
 
         // Read Data
         SectionData = br.CreateSubStream(startOffset + absoluteDataStart, endOffset);
@@ -54,7 +55,7 @@ public class HKXSection
                 }
 
                 br.Position -= 4;
-                var f = new LocalFixup(br);
+                LocalFixup f = new(br);
                 _localMap.Add(f.Src, f);
                 LocalFixups.Add(f);
             }
@@ -76,7 +77,7 @@ public class HKXSection
                 }
 
                 br.Position -= 4;
-                var f = new GlobalFixup(br);
+                GlobalFixup f = new(br);
                 _globalMap.Add(f.Src, f);
                 GlobalFixups.Add(f);
             }
@@ -96,7 +97,7 @@ public class HKXSection
                 }
 
                 br.Position -= 4;
-                var f = new VirtualFixup(br);
+                VirtualFixup f = new(br);
                 _virtualMap.Add(f.Src, f);
                 VirtualFixups.Add(f);
             }
@@ -110,55 +111,56 @@ public class HKXSection
         br.AssertUInt32(0xFFFFFFFF);
     }
 
-    // public void WriteHeader(DataStream bw)
-    // {
-    //     bw.WriteFixStr(SectionTag, 19);
-    //     bw.WriteByte(0xFF);
-    //     bw.ReserveUInt32("absoffset" + SectionID);
-    //     bw.ReserveUInt32("locoffset" + SectionID);
-    //     bw.ReserveUInt32("globoffset" + SectionID);
-    //     bw.ReserveUInt32("virtoffset" + SectionID);
-    //     bw.ReserveUInt32("expoffset" + SectionID);
-    //     bw.ReserveUInt32("impoffset" + SectionID);
-    //     bw.ReserveUInt32("endoffset" + SectionID);
-    //
-    //     bw.WriteUInt32(0xFFFFFFFF);
-    //     bw.WriteUInt32(0xFFFFFFFF);
-    //     bw.WriteUInt32(0xFFFFFFFF);
-    //     bw.WriteUInt32(0xFFFFFFFF);
-    // }
-    //
-    // public void WriteData(DataStream bw)
-    // {
-    //     var absoluteOffset = (uint)bw.Position;
-    //     bw.FillUInt32("absoffset" + SectionID, absoluteOffset);
-    //     bw.WriteBytes(SectionData);
-    //     while (bw.Position % 16 != 0) bw.WriteByte(0xFF); // 16 byte align
-    //
-    //     // Local fixups
-    //     bw.FillUInt32("locoffset" + SectionID, (uint)bw.Position - absoluteOffset);
-    //     foreach (var loc in LocalFixups) loc.Write(bw);
-    //     while (bw.Position % 16 != 0) bw.WriteByte(0xFF); // 16 byte align
-    //
-    //     // Global fixups
-    //     bw.FillUInt32("globoffset" + SectionID, (uint)bw.Position - absoluteOffset);
-    //     foreach (var glob in GlobalFixups) glob.Write(bw);
-    //     while (bw.Position % 16 != 0) bw.WriteByte(0xFF); // 16 byte align
-    //
-    //     // Virtual fixups
-    //     bw.FillUInt32("virtoffset" + SectionID, (uint)bw.Position - absoluteOffset);
-    //     foreach (var virt in VirtualFixups) virt.Write(bw);
-    //     while (bw.Position % 16 != 0) bw.WriteByte(0xFF); // 16 byte align
-    //
-    //     bw.FillUInt32("expoffset" + SectionID, (uint)bw.Position - absoluteOffset);
-    //     bw.FillUInt32("impoffset" + SectionID, (uint)bw.Position - absoluteOffset);
-    //     bw.FillUInt32("endoffset" + SectionID, (uint)bw.Position - absoluteOffset);
-    // }
+    public void WriteHeader(DataStream bw)
+    {
+        bw.WriteFixedSizedString(SectionTag, 19);
+        bw.WriteByte(0xFF);
+        bw.ReserveUInt32("absoffset" + SectionID);
+        bw.WriteUInt32((uint)((LocalFixups.Count * 8 + 15 & ~15) + (GlobalFixups.Count * 12 + 15 & ~15)));
+        bw.WriteUInt32((uint)(LocalFixups.Count * 8 + 15 & ~15));
+        bw.ReserveUInt32("virtoffset" + SectionID);
+        bw.ReserveUInt32("expoffset" + SectionID);
+        bw.ReserveUInt32("impoffset" + SectionID);
+        bw.ReserveUInt32("endoffset" + SectionID);
+
+        bw.WriteUInt32(0xFFFFFFFF);
+        bw.WriteUInt32(0xFFFFFFFF);
+        bw.WriteUInt32(0xFFFFFFFF);
+        bw.WriteUInt32(0xFFFFFFFF);
+    }
+
+    public void WriteData(DataStream bw, DataStream fixupTable)
+    {
+        uint absoluteOffset = (uint)bw.Position;
+        bw.FillUInt32("absoffset" + SectionID, absoluteOffset);
+        SectionData.CopyTo(bw);
+        while (bw.Position % 16 != 0)
+        {
+            bw.WriteByte(0xFF); // 16 byte align
+        }
+
+        // Local fixups
+        foreach (LocalFixup loc in LocalFixups) loc.Write(fixupTable);
+        while (fixupTable.Position % 16 != 0) fixupTable.WriteByte(0xFF); // 16 byte align
+
+        // Global fixups
+        foreach (GlobalFixup glob in GlobalFixups) glob.Write(fixupTable);
+        while (fixupTable.Position % 16 != 0) fixupTable.WriteByte(0xFF); // 16 byte align
+
+        // Virtual fixups
+        bw.FillUInt32("virtoffset" + SectionID, (uint)bw.Position - absoluteOffset);
+        foreach (VirtualFixup virt in VirtualFixups) virt.Write(bw);
+        while (bw.Position % 16 != 0) bw.WriteByte(0xFF); // 16 byte align
+
+        bw.FillUInt32("expoffset" + SectionID, (uint)bw.Position - absoluteOffset);
+        bw.FillUInt32("impoffset" + SectionID, (uint)bw.Position - absoluteOffset);
+        bw.FillUInt32("endoffset" + SectionID, (uint)bw.Position - absoluteOffset);
+    }
 
     // Only use for a classnames structure after preliminary deserialization
     internal HKXClassNames ReadClassnames()
     {
-        var classnames = new HKXClassNames();
+        HKXClassNames classnames = new();
         classnames.Read(SectionData);
         return classnames;
     }

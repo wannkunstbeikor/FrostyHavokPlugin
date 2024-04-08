@@ -20,6 +20,13 @@ public class hkSkinBinding : hkMeshShape, IEquatable<hkSkinBinding?>
         _worldFromBoneTransforms = des.ReadMatrix4Array(br);
         _boneNames = des.ReadStringPointerArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hkMeshShape>(bw, _skin);
+        s.WriteMatrix4Array(bw, _worldFromBoneTransforms);
+        s.WriteStringPointerArray(bw, _boneNames);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

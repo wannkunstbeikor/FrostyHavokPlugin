@@ -16,6 +16,11 @@ public class hkxTriangleSelectionChannel : hkReferencedObject, IEquatable<hkxTri
         base.Read(des, br);
         _selectedTriangles = des.ReadInt32Array(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteInt32Array(bw, _selectedTriangles);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

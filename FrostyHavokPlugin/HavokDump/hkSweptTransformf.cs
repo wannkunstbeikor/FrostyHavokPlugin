@@ -23,6 +23,14 @@ public class hkSweptTransformf : IHavokObject, IEquatable<hkSweptTransformf?>
         _rotation1 = des.ReadQuaternion(br);
         _centerOfMassLocal = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _centerOfMass0);
+        s.WriteVector4(bw, _centerOfMass1);
+        s.WriteQuaternion(bw, _rotation0);
+        s.WriteQuaternion(bw, _rotation1);
+        s.WriteVector4(bw, _centerOfMassLocal);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_centerOfMass0), _centerOfMass0);

@@ -12,7 +12,11 @@ public class hkBaseObject : IHavokObject, IEquatable<hkBaseObject?>
     public virtual uint Signature => 0;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
-        br.Position += 8; // padding
+        des.ReadUSize(br);
+    }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteUSize(bw, 0);
     }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {

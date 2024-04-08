@@ -15,6 +15,10 @@ public class hknpCompressedMeshShapeTreeDataRunData : IHavokObject, IEquatable<h
     {
         _data = br.ReadUInt16();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt16(_data);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_data), _data);

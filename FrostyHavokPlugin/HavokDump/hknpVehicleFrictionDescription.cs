@@ -19,6 +19,12 @@ public class hknpVehicleFrictionDescription : IHavokObject, IEquatable<hknpVehic
         _chassisMassInv = br.ReadSingle();
         _axleDescr = des.ReadStructCStyleArray<hknpVehicleFrictionDescriptionAxisDescription>(br, 2);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_wheelDistance);
+        bw.WriteSingle(_chassisMassInv);
+        s.WriteStructCStyleArray<hknpVehicleFrictionDescriptionAxisDescription>(bw, _axleDescr);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_wheelDistance), _wheelDistance);

@@ -16,6 +16,11 @@ public class hknpDefaultBroadPhaseConfig : hknpBroadPhaseConfig, IEquatable<hknp
         base.Read(des, br);
         _layers = des.ReadStructCStyleArray<hknpBroadPhaseConfigLayer>(br, 4);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStructCStyleArray<hknpBroadPhaseConfigLayer>(bw, _layers);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

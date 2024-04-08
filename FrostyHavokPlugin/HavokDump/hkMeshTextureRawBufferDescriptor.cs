@@ -19,6 +19,12 @@ public class hkMeshTextureRawBufferDescriptor : IHavokObject, IEquatable<hkMeshT
         _stride = br.ReadUInt32();
         _numElements = br.ReadUInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteInt64(_offset);
+        bw.WriteUInt32(_stride);
+        bw.WriteUInt32(_numElements);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_offset), _offset);

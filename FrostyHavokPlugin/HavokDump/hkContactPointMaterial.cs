@@ -26,6 +26,15 @@ public class hkContactPointMaterial : IHavokObject, IEquatable<hkContactPointMat
         _flags = br.ReadByte();
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt64(_userData);
+        _friction.Write(s, bw);
+        bw.WriteByte(_restitution);
+        _maxImpulse.Write(s, bw);
+        bw.WriteByte(_flags);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_userData), _userData);

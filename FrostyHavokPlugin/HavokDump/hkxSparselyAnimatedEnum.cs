@@ -16,6 +16,11 @@ public class hkxSparselyAnimatedEnum : hkxSparselyAnimatedInt, IEquatable<hkxSpa
         base.Read(des, br);
         _enum = des.ReadClassPointer<hkxEnum>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hkxEnum>(bw, _enum);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -19,6 +19,11 @@ public class hkpCogWheelConstraintDataAtoms : IHavokObject, IEquatable<hkpCogWhe
         _cogWheels = new hkpCogWheelConstraintAtom();
         _cogWheels.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _cogWheels.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

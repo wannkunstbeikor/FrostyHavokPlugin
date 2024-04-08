@@ -63,6 +63,35 @@ public class hknpMaterial : IHavokObject, IEquatable<hknpMaterial?>
         _isShared = br.ReadBoolean();
         br.Position += 7; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        bw.WriteUInt32(_isExclusive);
+        bw.WriteUInt32((uint)_flags);
+        bw.WriteByte((byte)_triggerType);
+        _triggerManifoldTolerance.Write(s, bw);
+        s.WriteHalf(bw, _dynamicFriction);
+        s.WriteHalf(bw, _staticFriction);
+        s.WriteHalf(bw, _restitution);
+        bw.WriteByte((byte)_frictionCombinePolicy);
+        bw.WriteByte((byte)_restitutionCombinePolicy);
+        s.WriteHalf(bw, _weldingTolerance);
+        bw.WriteSingle(_maxContactImpulse);
+        bw.WriteSingle(_fractionOfClippedImpulseToApply);
+        bw.WriteByte((byte)_massChangerCategory);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+        s.WriteHalf(bw, _massChangerHeavyObjectFactor);
+        s.WriteHalf(bw, _softContactForceFactor);
+        s.WriteHalf(bw, _softContactDampFactor);
+        _softContactSeperationVelocity.Write(s, bw);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hknpSurfaceVelocity>(bw, _surfaceVelocity);
+        s.WriteHalf(bw, _disablingCollisionsBetweenCvxCvxDynamicObjectsDistance);
+        for (int i = 0; i < 6; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt64(_userData);
+        bw.WriteBoolean(_isShared);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

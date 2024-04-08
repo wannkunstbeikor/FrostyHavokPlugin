@@ -19,6 +19,12 @@ public class hkxVertexAnimationUsageMap : IHavokObject, IEquatable<hkxVertexAnim
         _useIndexOrig = br.ReadByte();
         _useIndexLocal = br.ReadByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt16((ushort)_use);
+        bw.WriteByte(_useIndexOrig);
+        bw.WriteByte(_useIndexLocal);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteEnum<hkxVertexDescription_DataUsage, ushort>(xe, nameof(_use), (ushort)_use);

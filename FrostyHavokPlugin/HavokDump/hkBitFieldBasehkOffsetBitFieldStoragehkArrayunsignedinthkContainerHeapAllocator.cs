@@ -16,6 +16,10 @@ public class hkBitFieldBasehkOffsetBitFieldStoragehkArrayunsignedinthkContainerH
         _storage = new hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator();
         _storage.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _storage.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_storage), _storage);

@@ -54,6 +54,30 @@ public class hknpMotionProperties : IHavokObject, IEquatable<hknpMotionPropertie
         _minimumSpikingVelocityScaleSquared = br.ReadByte();
         br.Position += 3; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_isExclusive);
+        bw.WriteUInt32((uint)_flags);
+        bw.WriteSingle(_gravityFactor);
+        bw.WriteSingle(_timeFactor);
+        bw.WriteSingle(_maxLinearSpeed);
+        bw.WriteSingle(_maxAngularSpeed);
+        bw.WriteSingle(_linearDamping);
+        bw.WriteSingle(_angularDamping);
+        bw.WriteSingle(_solverStabilizationSpeedThreshold);
+        bw.WriteSingle(_solverStabilizationSpeedReduction);
+        bw.WriteSingle(_maxDistSqrd);
+        bw.WriteSingle(_maxRotSqrd);
+        bw.WriteSingle(_invBlockSize);
+        bw.WriteInt16(_pathingUpperThreshold);
+        bw.WriteInt16(_pathingLowerThreshold);
+        bw.WriteByte(_numDeactivationFrequencyPasses);
+        bw.WriteByte(_deactivationVelocityScaleSquare);
+        bw.WriteByte(_minimumPathingVelocityScaleSquare);
+        bw.WriteByte(_spikingVelocityScaleThresholdSquared);
+        bw.WriteByte(_minimumSpikingVelocityScaleSquared);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_isExclusive), _isExclusive);

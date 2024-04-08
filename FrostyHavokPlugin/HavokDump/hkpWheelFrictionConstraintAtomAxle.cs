@@ -36,6 +36,21 @@ public class hkpWheelFrictionConstraintAtomAxle : IHavokObject, IEquatable<hkpWh
         br.Position += 3; // padding
         _numWheelsOnGround = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_spinVelocity);
+        bw.WriteSingle(_sumVelocity);
+        bw.WriteInt32(_numWheels);
+        bw.WriteInt32(_wheelsSolved);
+        bw.WriteInt32(_stepsSolved);
+        bw.WriteSingle(_invInertia);
+        bw.WriteSingle(_inertia);
+        bw.WriteSingle(_impulseScaling);
+        bw.WriteSingle(_impulseMax);
+        bw.WriteBoolean(_isFixed);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteInt32(_numWheelsOnGround);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_spinVelocity), _spinVelocity);

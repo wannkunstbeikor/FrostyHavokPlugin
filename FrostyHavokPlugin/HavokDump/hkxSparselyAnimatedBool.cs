@@ -18,6 +18,12 @@ public class hkxSparselyAnimatedBool : hkReferencedObject, IEquatable<hkxSparsel
         _bools = des.ReadBooleanArray(br);
         _times = des.ReadSingleArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteBooleanArray(bw, _bools);
+        s.WriteSingleArray(bw, _times);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

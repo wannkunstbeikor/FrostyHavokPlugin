@@ -24,7 +24,7 @@ public class hkxScene : hkReferencedObject, IEquatable<hkxScene?>
     public List<hkxTextureFile> _externalTextures;
     public List<hkxSkinBinding> _skinBindings;
     public List<hkxSpline> _splines;
-    public Matrix4 _appliedTransform;
+    public Matrix3x4 _appliedTransform;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -43,6 +43,25 @@ public class hkxScene : hkReferencedObject, IEquatable<hkxScene?>
         _skinBindings = des.ReadClassPointerArray<hkxSkinBinding>(br);
         _splines = des.ReadClassPointerArray<hkxSpline>(br);
         _appliedTransform = des.ReadMatrix3(br);
+    }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _modeller);
+        s.WriteStringPointer(bw, _asset);
+        bw.WriteSingle(_sceneLength);
+        bw.WriteUInt32(_numFrames);
+        s.WriteClassPointer<hkxNode>(bw, _rootNode);
+        s.WriteClassPointerArray<hkxNodeSelectionSet>(bw, _selectionSets);
+        s.WriteClassPointerArray<hkxCamera>(bw, _cameras);
+        s.WriteClassPointerArray<hkxLight>(bw, _lights);
+        s.WriteClassPointerArray<hkxMesh>(bw, _meshes);
+        s.WriteClassPointerArray<hkxMaterial>(bw, _materials);
+        s.WriteClassPointerArray<hkxTextureInplace>(bw, _inplaceTextures);
+        s.WriteClassPointerArray<hkxTextureFile>(bw, _externalTextures);
+        s.WriteClassPointerArray<hkxSkinBinding>(bw, _skinBindings);
+        s.WriteClassPointerArray<hkxSpline>(bw, _splines);
+        s.WriteMatrix3(bw, _appliedTransform);
     }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {

@@ -15,6 +15,10 @@ public class hkcdStaticMeshTreeBaseSectionPrimitives : IHavokObject, IEquatable<
     {
         _data = br.ReadUInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteUInt32(_data);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_data), _data);

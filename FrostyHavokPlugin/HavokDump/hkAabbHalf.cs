@@ -15,6 +15,10 @@ public class hkAabbHalf : IHavokObject, IEquatable<hkAabbHalf?>
     {
         _data = des.ReadUInt16CStyleArray(br, 8);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteUInt16CStyleArray(bw, _data);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_data), _data);

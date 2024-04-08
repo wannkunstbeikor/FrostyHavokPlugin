@@ -23,6 +23,15 @@ public class hkxSkinBinding : hkReferencedObject, IEquatable<hkxSkinBinding?>
         br.Position += 8; // padding
         _initSkinTransform = des.ReadMatrix4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hkxMesh>(bw, _mesh);
+        s.WriteStringPointerArray(bw, _nodeNames);
+        s.WriteMatrix4Array(bw, _bindPose);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteMatrix4(bw, _initSkinTransform);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

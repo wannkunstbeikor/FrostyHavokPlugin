@@ -27,6 +27,17 @@ public class hkIndexedTransformSet : hkReferencedObject, IEquatable<hkIndexedTra
         _allMatricesAreAffine = br.ReadBoolean();
         br.Position += 7; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteMatrix4Array(bw, _matrices);
+        s.WriteMatrix4Array(bw, _inverseMatrices);
+        s.WriteInt16Array(bw, _matricesOrder);
+        s.WriteStringPointerArray(bw, _matricesNames);
+        s.WriteClassArray<hkMeshBoneIndexMapping>(bw, _indexMappings);
+        bw.WriteBoolean(_allMatricesAreAffine);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

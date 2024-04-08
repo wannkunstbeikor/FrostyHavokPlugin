@@ -42,6 +42,25 @@ public class hknpBodyCinfo : IHavokObject, IEquatable<hknpBodyCinfo?>
         br.Position += 7; // padding
         _localFrame = des.ReadClassPointer<hkLocalFrame>(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassPointer<hknpShape>(bw, _shape);
+        bw.WriteUInt32(_reservedBodyId);
+        bw.WriteUInt32(_motionId);
+        bw.WriteByte(_qualityId);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt16(_materialId);
+        bw.WriteUInt32(_collisionFilterInfo);
+        bw.WriteUInt32((uint)_flags);
+        bw.WriteSingle(_collisionLookAheadDistance);
+        s.WriteStringPointer(bw, _name);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _position);
+        s.WriteQuaternion(bw, _orientation);
+        bw.WriteByte((byte)_spuFlags);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+        s.WriteClassPointer<hkLocalFrame>(bw, _localFrame);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassPointer(xe, nameof(_shape), _shape);

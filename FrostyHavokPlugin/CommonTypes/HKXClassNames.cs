@@ -20,15 +20,15 @@ internal class HKXClassNames
                 }
 
                 br.ReadUInt32(); // signature
-                var separator = br.ReadByte();
+                byte separator = br.ReadByte();
                 if (separator != 0x09)
                 {
                     break;
                 }
                 br.Position -= 5;
 
-                var stringStart = (uint)br.Position + 5;
-                var className = new HKXClassName(br);
+                uint stringStart = (uint)br.Position + 5;
+                HKXClassName? className = new(br);
                 ClassNames.Add(className);
                 OffsetClassNamesMap.Add(stringStart, className);
                 if (br.Position == br.Length) break;

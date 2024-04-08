@@ -18,6 +18,12 @@ public class hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealP
         _numElems = br.ReadInt32();
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassArray<hkIntRealPair>(bw, _elem);
+        bw.WriteInt32(_numElems);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray<hkIntRealPair>(xe, nameof(_elem), _elem);

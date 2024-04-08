@@ -15,6 +15,10 @@ public class hkSemanticsAttribute : IHavokObject, IEquatable<hkSemanticsAttribut
     {
         _type = (hkSemanticsAttribute_Semantics)br.ReadSByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSByte((sbyte)_type);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteEnum<hkSemanticsAttribute_Semantics, sbyte>(xe, nameof(_type), (sbyte)_type);

@@ -16,6 +16,11 @@ public class hkpWrappedConstraintData : hkpConstraintData, IEquatable<hkpWrapped
         base.Read(des, br);
         _constraintData = des.ReadClassPointer<hkpConstraintData>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hkpConstraintData>(bw, _constraintData);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

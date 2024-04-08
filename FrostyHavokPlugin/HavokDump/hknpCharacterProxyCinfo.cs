@@ -58,6 +58,33 @@ public class hknpCharacterProxyCinfo : hkReferencedObject, IEquatable<hknpCharac
         _presenceInWorld = br.ReadBoolean();
         br.Position += 6; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteVector4(bw, _position);
+        s.WriteQuaternion(bw, _orientation);
+        s.WriteVector4(bw, _velocity);
+        bw.WriteSingle(_dynamicFriction);
+        bw.WriteSingle(_staticFriction);
+        bw.WriteSingle(_keepContactTolerance);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _up);
+        s.WriteClassPointer<hknpShape>(bw, _shape);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt32(_collisionFilterInfo);
+        bw.WriteSingle(_keepDistance);
+        bw.WriteSingle(_contactAngleSensitivity);
+        bw.WriteUInt32(_userPlanes);
+        bw.WriteSingle(_maxCharacterSpeedForSolver);
+        bw.WriteSingle(_characterStrength);
+        bw.WriteSingle(_characterMass);
+        bw.WriteSingle(_maxSlope);
+        bw.WriteSingle(_penetrationRecoverySpeed);
+        bw.WriteInt32(_maxCastIterations);
+        bw.WriteBoolean(_refreshManifoldInCheckSupport);
+        bw.WriteBoolean(_presenceInWorld);
+        for (int i = 0; i < 6; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

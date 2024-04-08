@@ -21,6 +21,14 @@ public class hknpConvexPolytopeShape : hknpConvexShape, IEquatable<hknpConvexPol
         _indices = des.ReadByteRelArray(br);
         br.Position += 4; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteVector4RelArray(bw, _planes);
+        s.WriteClassRelArray<hknpConvexPolytopeShapeFace>(bw, _faces);
+        s.WriteByteRelArray(bw, _indices);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

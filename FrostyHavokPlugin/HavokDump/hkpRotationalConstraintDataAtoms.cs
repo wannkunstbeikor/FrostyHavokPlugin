@@ -19,6 +19,11 @@ public class hkpRotationalConstraintDataAtoms : IHavokObject, IEquatable<hkpRota
         _ang = new hkpAngConstraintAtom();
         _ang.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _rotations.Write(s, bw);
+        _ang.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_rotations), _rotations);

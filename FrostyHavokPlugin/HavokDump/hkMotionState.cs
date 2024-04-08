@@ -36,6 +36,20 @@ public class hkMotionState : IHavokObject, IEquatable<hkMotionState?>
         _deactivationClass = br.ReadByte();
         br.Position += 3; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteTransform(bw, _transform);
+        s.WriteVector4CStyleArray(bw, _sweptTransform);
+        s.WriteVector4(bw, _deltaAngle);
+        bw.WriteSingle(_objectRadius);
+        s.WriteHalf(bw, _linearDamping);
+        s.WriteHalf(bw, _angularDamping);
+        s.WriteHalf(bw, _timeFactor);
+        _maxLinearVelocity.Write(s, bw);
+        _maxAngularVelocity.Write(s, bw);
+        bw.WriteByte(_deactivationClass);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteTransform(xe, nameof(_transform), _transform);

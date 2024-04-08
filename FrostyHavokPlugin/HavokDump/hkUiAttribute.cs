@@ -33,6 +33,20 @@ public class hkUiAttribute : IHavokObject, IEquatable<hkUiAttribute?>
         _advanced = br.ReadBoolean();
         br.Position += 5; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteBoolean(_visible);
+        bw.WriteBoolean(_editable);
+        bw.WriteSByte((sbyte)_hideInModeler);
+        for (int i = 0; i < 5; i++) bw.WriteByte(0); // padding
+        s.WriteStringPointer(bw, _label);
+        s.WriteStringPointer(bw, _group);
+        s.WriteStringPointer(bw, _hideBaseClassMembers);
+        bw.WriteBoolean(_endGroup);
+        bw.WriteBoolean(_endGroup2);
+        bw.WriteBoolean(_advanced);
+        for (int i = 0; i < 5; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteBoolean(xe, nameof(_visible), _visible);

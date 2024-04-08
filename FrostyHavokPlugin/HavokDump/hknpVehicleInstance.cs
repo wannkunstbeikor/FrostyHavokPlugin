@@ -71,6 +71,39 @@ public class hknpVehicleInstance : hknpUnaryAction, IEquatable<hknpVehicleInstan
         _clutchDelayCountdown = br.ReadSingle();
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassPointer<hknpVehicleData>(bw, _data);
+        s.WriteClassPointer<hknpVehicleDriverInput>(bw, _driverInput);
+        s.WriteClassPointer<hknpVehicleSteering>(bw, _steering);
+        s.WriteClassPointer<hknpVehicleEngine>(bw, _engine);
+        s.WriteClassPointer<hknpVehicleTransmission>(bw, _transmission);
+        s.WriteClassPointer<hknpVehicleBrake>(bw, _brake);
+        s.WriteClassPointer<hknpVehicleSuspension>(bw, _suspension);
+        s.WriteClassPointer<hknpVehicleAerodynamics>(bw, _aerodynamics);
+        s.WriteClassPointer<hknpVehicleWheelCollide>(bw, _wheelCollide);
+        s.WriteClassPointer<hknpTyremarksInfo>(bw, _tyreMarks);
+        s.WriteClassPointer<hknpVehicleVelocityDamper>(bw, _velocityDamper);
+        s.WriteClassArray<hknpVehicleInstanceWheelInfo>(bw, _wheelsInfo);
+        _frictionStatus.Write(s, bw);
+        s.WriteClassPointer<hknpVehicleDriverInputStatus>(bw, _deviceStatus);
+        s.WriteBooleanArray(bw, _isFixed);
+        bw.WriteSingle(_wheelsTimeSinceMaxPedalInput);
+        bw.WriteBoolean(_tryingToReverse);
+        for (int i = 0; i < 3; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_torque);
+        bw.WriteSingle(_rpm);
+        bw.WriteSingle(_mainSteeringAngle);
+        bw.WriteSingle(_mainSteeringAngleAssumingNoReduction);
+        s.WriteSingleArray(bw, _wheelsSteeringAngle);
+        bw.WriteBoolean(_isReversing);
+        bw.WriteSByte(_currentGear);
+        bw.WriteBoolean(_delayed);
+        for (int i = 0; i < 1; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_clutchDelayCountdown);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

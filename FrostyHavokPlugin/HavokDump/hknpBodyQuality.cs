@@ -23,6 +23,14 @@ public class hknpBodyQuality : IHavokObject, IEquatable<hknpBodyQuality?>
         _liveJacobianDistanceThreshold = br.ReadSingle();
         _liveJacobianAngleThreshold = br.ReadSingle();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteInt32(_priority);
+        bw.WriteUInt32((uint)_supportedFlags);
+        bw.WriteUInt32((uint)_requestedFlags);
+        bw.WriteSingle(_liveJacobianDistanceThreshold);
+        bw.WriteSingle(_liveJacobianAngleThreshold);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_priority), _priority);

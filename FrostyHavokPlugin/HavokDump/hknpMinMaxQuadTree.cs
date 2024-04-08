@@ -22,6 +22,14 @@ public class hknpMinMaxQuadTree : IHavokObject, IEquatable<hknpMinMaxQuadTree?>
         _invMultiplier = br.ReadSingle();
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassArray<hknpMinMaxQuadTreeMinMaxLevel>(bw, _coarseTreeData);
+        s.WriteVector4(bw, _offset);
+        bw.WriteSingle(_multiplier);
+        bw.WriteSingle(_invMultiplier);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray<hknpMinMaxQuadTreeMinMaxLevel>(xe, nameof(_coarseTreeData), _coarseTreeData);

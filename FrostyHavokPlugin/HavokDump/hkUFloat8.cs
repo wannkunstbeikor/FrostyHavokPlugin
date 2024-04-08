@@ -15,6 +15,10 @@ public class hkUFloat8 : IHavokObject, IEquatable<hkUFloat8?>
     {
         _value = br.ReadByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteByte(_value);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumber(xe, nameof(_value), _value);

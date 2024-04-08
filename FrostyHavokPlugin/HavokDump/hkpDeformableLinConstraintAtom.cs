@@ -25,6 +25,16 @@ public class hkpDeformableLinConstraintAtom : hkpConstraintAtom, IEquatable<hkpD
         _ultimateStrengthDiag = des.ReadVector4(br);
         _ultimateStrengthOffDiag = des.ReadVector4(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 14; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _offset);
+        s.WriteVector4(bw, _yieldStrengthDiag);
+        s.WriteVector4(bw, _yieldStrengthOffDiag);
+        s.WriteVector4(bw, _ultimateStrengthDiag);
+        s.WriteVector4(bw, _ultimateStrengthOffDiag);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

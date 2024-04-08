@@ -21,6 +21,14 @@ public class hkpVelocityConstraintMotor : hkpLimitedForceConstraintMotor, IEquat
         _useVelocityTargetFromConstraintTargets = br.ReadBoolean();
         br.Position += 7; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_tau);
+        bw.WriteSingle(_velocityTarget);
+        bw.WriteBoolean(_useVelocityTargetFromConstraintTargets);
+        for (int i = 0; i < 7; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

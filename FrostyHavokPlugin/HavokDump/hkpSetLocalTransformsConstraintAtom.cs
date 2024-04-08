@@ -19,6 +19,13 @@ public class hkpSetLocalTransformsConstraintAtom : hkpConstraintAtom, IEquatable
         _transformA = des.ReadTransform(br);
         _transformB = des.ReadTransform(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 14; i++) bw.WriteByte(0); // padding
+        s.WriteTransform(bw, _transformA);
+        s.WriteTransform(bw, _transformB);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

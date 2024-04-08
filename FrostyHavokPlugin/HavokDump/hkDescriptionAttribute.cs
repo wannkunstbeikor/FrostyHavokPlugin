@@ -15,6 +15,10 @@ public class hkDescriptionAttribute : IHavokObject, IEquatable<hkDescriptionAttr
     {
         _string = des.ReadStringPointer(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _string);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_string), _string);

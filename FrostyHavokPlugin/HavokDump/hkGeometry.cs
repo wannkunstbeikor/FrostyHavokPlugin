@@ -18,6 +18,12 @@ public class hkGeometry : hkReferencedObject, IEquatable<hkGeometry?>
         _vertices = des.ReadVector4Array(br);
         _triangles = des.ReadClassArray<hkGeometryTriangle>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteVector4Array(bw, _vertices);
+        s.WriteClassArray<hkGeometryTriangle>(bw, _triangles);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

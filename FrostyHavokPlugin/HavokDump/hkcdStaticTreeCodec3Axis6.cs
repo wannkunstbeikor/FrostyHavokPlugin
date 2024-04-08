@@ -18,6 +18,12 @@ public class hkcdStaticTreeCodec3Axis6 : hkcdStaticTreeCodec3Axis, IEquatable<hk
         _hiData = br.ReadByte();
         _loData = br.ReadUInt16();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteByte(_hiData);
+        bw.WriteUInt16(_loData);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

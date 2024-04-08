@@ -22,6 +22,14 @@ public class hkClassEnum : IHavokObject, IEquatable<hkClassEnum?>
         _flags = (hkClassEnum_FlagValues)br.ReadUInt32();
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        // Write TYPE_SIMPLEARRAY
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt32((uint)_flags);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

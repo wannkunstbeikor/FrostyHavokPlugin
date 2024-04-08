@@ -15,6 +15,10 @@ public class hkFloat16Transform : IHavokObject, IEquatable<hkFloat16Transform?>
     {
         _elements = des.ReadStructCStyleArray<hkFloat16>(br, 12);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStructCStyleArray<hkFloat16>(bw, _elements);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassArray(xe, nameof(_elements), _elements);

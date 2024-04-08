@@ -21,6 +21,13 @@ public class hkRangeRealAttribute : IHavokObject, IEquatable<hkRangeRealAttribut
         _softmin = br.ReadSingle();
         _softmax = br.ReadSingle();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        bw.WriteSingle(_absmin);
+        bw.WriteSingle(_absmax);
+        bw.WriteSingle(_softmin);
+        bw.WriteSingle(_softmax);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteFloat(xe, nameof(_absmin), _absmin);

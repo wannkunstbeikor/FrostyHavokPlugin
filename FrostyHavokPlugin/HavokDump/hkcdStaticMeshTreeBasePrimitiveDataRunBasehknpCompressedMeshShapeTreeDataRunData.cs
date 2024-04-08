@@ -20,6 +20,12 @@ public class hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTr
         _index = br.ReadByte();
         _count = br.ReadByte();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _value.Write(s, bw);
+        bw.WriteByte(_index);
+        bw.WriteByte(_count);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_value), _value);

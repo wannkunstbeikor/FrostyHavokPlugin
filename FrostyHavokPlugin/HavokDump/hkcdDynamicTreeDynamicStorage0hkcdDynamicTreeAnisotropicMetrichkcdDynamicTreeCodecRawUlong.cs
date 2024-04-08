@@ -18,6 +18,12 @@ public class hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdD
         _nodes = des.ReadClassArray<hkcdDynamicTreeCodecRawUlong>(br);
         _firstFree = br.ReadUInt64();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hkcdDynamicTreeCodecRawUlong>(bw, _nodes);
+        bw.WriteUInt64(_firstFree);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

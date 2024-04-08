@@ -9,7 +9,7 @@ public interface IHavokObject
 
     public void Read(PackFileDeserializer des, DataStream br);
 
-    //public void Write(PackFileSerializer s, BinaryWriterEx bw);
+    public void Write(PackFileSerializer s, DataStream bw);
     public void WriteXml(XmlSerializer xs, XElement xe);
     //public void ReadXml(XmlDeserializer xd, XElement xe);
 }

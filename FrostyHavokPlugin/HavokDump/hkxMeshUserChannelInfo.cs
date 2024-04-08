@@ -18,6 +18,12 @@ public class hkxMeshUserChannelInfo : hkxAttributeHolder, IEquatable<hkxMeshUser
         _name = des.ReadStringPointer(br);
         _className = des.ReadStringPointer(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _name);
+        s.WriteStringPointer(bw, _className);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

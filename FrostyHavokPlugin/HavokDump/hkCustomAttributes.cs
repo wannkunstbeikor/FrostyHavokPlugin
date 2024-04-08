@@ -15,6 +15,10 @@ public class hkCustomAttributes : IHavokObject, IEquatable<hkCustomAttributes?>
     {
         // Read TYPE_SIMPLEARRAY
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        // Write TYPE_SIMPLEARRAY
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         // Write TYPE_SIMPLEARRAY

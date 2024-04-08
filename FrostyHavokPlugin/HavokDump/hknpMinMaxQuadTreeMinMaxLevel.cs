@@ -20,6 +20,13 @@ public class hknpMinMaxQuadTreeMinMaxLevel : IHavokObject, IEquatable<hknpMinMax
         _zRes = br.ReadUInt16();
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteUInt32Array(bw, _minMaxData);
+        bw.WriteUInt16(_xRes);
+        bw.WriteUInt16(_zRes);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteNumberArray(xe, nameof(_minMaxData), _minMaxData);

@@ -20,6 +20,13 @@ public class hknpTyremarksWheel : hkReferencedObject, IEquatable<hknpTyremarksWh
         _numPoints = br.ReadInt32();
         _tyremarkPoints = des.ReadClassArray<hknpTyremarkPoint>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteInt32(_currentPosition);
+        bw.WriteInt32(_numPoints);
+        s.WriteClassArray<hknpTyremarkPoint>(bw, _tyremarkPoints);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

@@ -22,6 +22,14 @@ public class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor, IEquat
         _proportionalRecoveryVelocity = br.ReadSingle();
         _constantRecoveryVelocity = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_tau);
+        bw.WriteSingle(_damping);
+        bw.WriteSingle(_proportionalRecoveryVelocity);
+        bw.WriteSingle(_constantRecoveryVelocity);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

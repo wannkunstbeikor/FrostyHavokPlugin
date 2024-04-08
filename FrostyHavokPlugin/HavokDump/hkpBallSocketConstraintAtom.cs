@@ -28,6 +28,17 @@ public class hkpBallSocketConstraintAtom : hkpConstraintAtom, IEquatable<hkpBall
         _breachImpulse = br.ReadSingle();
         _inertiaStabilizationFactor = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteByte((byte)_solvingMethod);
+        bw.WriteByte(_bodiesToNotify);
+        _velocityStabilizationFactor.Write(s, bw);
+        bw.WriteBoolean(_enableLinearImpulseLimit);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_breachImpulse);
+        bw.WriteSingle(_inertiaStabilizationFactor);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

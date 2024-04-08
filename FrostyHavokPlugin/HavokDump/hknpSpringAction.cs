@@ -31,6 +31,19 @@ public class hknpSpringAction : hknpBinaryAction, IEquatable<hknpSpringAction?>
         _onExtension = br.ReadBoolean();
         br.Position += 2; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteVector4(bw, _lastForce);
+        s.WriteVector4(bw, _positionAinA);
+        s.WriteVector4(bw, _positionBinB);
+        bw.WriteSingle(_restLength);
+        bw.WriteSingle(_strength);
+        bw.WriteSingle(_damping);
+        bw.WriteBoolean(_onCompression);
+        bw.WriteBoolean(_onExtension);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

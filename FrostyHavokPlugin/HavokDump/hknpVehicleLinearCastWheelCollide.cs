@@ -23,6 +23,15 @@ public class hknpVehicleLinearCastWheelCollide : hknpVehicleWheelCollide, IEquat
         _chassisBody = br.ReadUInt32();
         br.Position += 4; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hknpVehicleLinearCastWheelCollideWheelState>(bw, _wheelStates);
+        bw.WriteSingle(_maxExtraPenetration);
+        bw.WriteSingle(_startPointTolerance);
+        bw.WriteUInt32(_chassisBody);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

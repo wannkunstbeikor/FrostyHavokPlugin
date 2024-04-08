@@ -16,6 +16,11 @@ public class hknpVehicleSuspension : hkReferencedObject, IEquatable<hknpVehicleS
         base.Read(des, br);
         _wheelParams = des.ReadClassArray<hknpVehicleSuspensionSuspensionWheelParameters>(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteClassArray<hknpVehicleSuspensionSuspensionWheelParameters>(bw, _wheelParams);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

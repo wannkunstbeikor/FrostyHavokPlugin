@@ -17,6 +17,11 @@ public class hknpRefWorldCinfo : hkReferencedObject, IEquatable<hknpRefWorldCinf
         _info = new hknpWorldCinfo();
         _info.Read(des, br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        _info.Write(s, bw);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

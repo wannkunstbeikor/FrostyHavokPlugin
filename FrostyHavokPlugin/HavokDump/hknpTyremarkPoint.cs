@@ -17,6 +17,11 @@ public class hknpTyremarkPoint : IHavokObject, IEquatable<hknpTyremarkPoint?>
         _pointLeft = des.ReadVector4(br);
         _pointRight = des.ReadVector4(br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteVector4(bw, _pointLeft);
+        s.WriteVector4(bw, _pointRight);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteVector4(xe, nameof(_pointLeft), _pointLeft);

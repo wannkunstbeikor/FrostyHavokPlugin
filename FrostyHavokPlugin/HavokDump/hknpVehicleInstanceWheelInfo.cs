@@ -53,6 +53,30 @@ public class hknpVehicleInstanceWheelInfo : IHavokObject, IEquatable<hknpVehicle
         _sideSlipVelocity = br.ReadSingle();
         br.Position += 4; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _contactPoint.Write(s, bw);
+        bw.WriteSingle(_contactFriction);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        bw.WriteUInt32(_contactShapeKey);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _hardPointWs);
+        s.WriteVector4(bw, _rayEndPointWs);
+        bw.WriteSingle(_currentSuspensionLength);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+        s.WriteVector4(bw, _suspensionDirectionWs);
+        s.WriteVector4(bw, _spinAxisChassisSpace);
+        s.WriteVector4(bw, _spinAxisWs);
+        s.WriteQuaternion(bw, _steeringOrientationChassisSpace);
+        bw.WriteSingle(_spinVelocity);
+        bw.WriteSingle(_noSlipIdealSpinVelocity);
+        bw.WriteSingle(_spinAngle);
+        bw.WriteSingle(_skidEnergyDensity);
+        bw.WriteSingle(_sideForce);
+        bw.WriteSingle(_forwardSlipVelocity);
+        bw.WriteSingle(_sideSlipVelocity);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_contactPoint), _contactPoint);

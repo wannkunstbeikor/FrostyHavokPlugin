@@ -19,6 +19,12 @@ public class hkxMaterialTextureStage : IHavokObject, IEquatable<hkxMaterialTextu
         _usageHint = (hkxMaterial_TextureType)br.ReadInt32();
         _tcoordChannel = br.ReadInt32();
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteClassPointer<hkReferencedObject>(bw, _texture);
+        bw.WriteInt32((int)_usageHint);
+        bw.WriteInt32(_tcoordChannel);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClassPointer(xe, nameof(_texture), _texture);

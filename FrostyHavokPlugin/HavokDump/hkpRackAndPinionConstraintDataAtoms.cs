@@ -19,6 +19,11 @@ public class hkpRackAndPinionConstraintDataAtoms : IHavokObject, IEquatable<hkpR
         _rackAndPinion = new hkpRackAndPinionConstraintAtom();
         _rackAndPinion.Read(des, br);
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        _transforms.Write(s, bw);
+        _rackAndPinion.Write(s, bw);
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteClass(xe, nameof(_transforms), _transforms);

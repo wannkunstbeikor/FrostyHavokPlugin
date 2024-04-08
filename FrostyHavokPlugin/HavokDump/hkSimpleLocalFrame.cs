@@ -25,6 +25,16 @@ public class hkSimpleLocalFrame : hkLocalFrame, IEquatable<hkSimpleLocalFrame?>
         _name = des.ReadStringPointer(br);
         br.Position += 8; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteTransform(bw, _transform);
+        s.WriteClassPointerArray<hkLocalFrame>(bw, _children);
+        s.WriteClassPointer<hkLocalFrame>(bw, _parentFrame);
+        s.WriteClassPointer<hkLocalFrameGroup>(bw, _group);
+        s.WriteStringPointer(bw, _name);
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

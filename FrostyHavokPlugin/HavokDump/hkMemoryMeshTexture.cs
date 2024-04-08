@@ -28,6 +28,17 @@ public class hkMemoryMeshTexture : hkMeshTexture, IEquatable<hkMemoryMeshTexture
         _usageHint = (hkMeshTexture_TextureUsageType)br.ReadSByte();
         _textureCoordChannel = br.ReadInt32();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteStringPointer(bw, _filename);
+        s.WriteByteArray(bw, _data);
+        bw.WriteSByte((sbyte)_format);
+        bw.WriteBoolean(_hasMipMaps);
+        bw.WriteSByte((sbyte)_filterMode);
+        bw.WriteSByte((sbyte)_usageHint);
+        bw.WriteInt32(_textureCoordChannel);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

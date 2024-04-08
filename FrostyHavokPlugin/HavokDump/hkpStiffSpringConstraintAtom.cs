@@ -19,6 +19,13 @@ public class hkpStiffSpringConstraintAtom : hkpConstraintAtom, IEquatable<hkpSti
         _length = br.ReadSingle();
         _maxLength = br.ReadSingle();
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        for (int i = 0; i < 2; i++) bw.WriteByte(0); // padding
+        bw.WriteSingle(_length);
+        bw.WriteSingle(_maxLength);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

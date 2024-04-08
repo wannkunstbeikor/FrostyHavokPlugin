@@ -21,6 +21,14 @@ public class hknpVehicleDefaultVelocityDamper : hknpVehicleVelocityDamper, IEqua
         _collisionThreshold = br.ReadSingle();
         br.Position += 4; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_normalSpinDamping);
+        bw.WriteSingle(_collisionSpinDamping);
+        bw.WriteSingle(_collisionThreshold);
+        for (int i = 0; i < 4; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

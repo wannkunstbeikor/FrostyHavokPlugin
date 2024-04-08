@@ -20,6 +20,13 @@ public class hknpVehicleDefaultSteering : hknpVehicleSteering, IEquatable<hknpVe
         _maxSpeedFullSteeringAngle = br.ReadSingle();
         _doesWheelSteer = des.ReadBooleanArray(br);
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        bw.WriteSingle(_maxSteeringAngle);
+        bw.WriteSingle(_maxSpeedFullSteeringAngle);
+        s.WriteBooleanArray(bw, _doesWheelSteer);
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);

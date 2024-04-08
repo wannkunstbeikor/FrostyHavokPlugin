@@ -18,6 +18,10 @@ public class hkMultiThreadCheck : IHavokObject, IEquatable<hkMultiThreadCheck?>
     {
         br.Position += 12; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
     }

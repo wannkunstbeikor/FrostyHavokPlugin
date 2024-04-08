@@ -18,6 +18,12 @@ public class hkCustomAttributesAttribute : IHavokObject, IEquatable<hkCustomAttr
         // Read TYPE_VARIANT
         br.Position += 8; // padding
     }
+    public virtual void Write(PackFileSerializer s, DataStream bw)
+    {
+        s.WriteStringPointer(bw, _name);
+        // Write TYPE_VARIANT
+        for (int i = 0; i < 8; i++) bw.WriteByte(0); // padding
+    }
     public virtual void WriteXml(XmlSerializer xs, XElement xe)
     {
         xs.WriteString(xe, nameof(_name), _name);

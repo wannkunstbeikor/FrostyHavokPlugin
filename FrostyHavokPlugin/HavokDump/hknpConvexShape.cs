@@ -17,6 +17,12 @@ public class hknpConvexShape : hknpShape, IEquatable<hknpConvexShape?>
         _vertices = des.ReadVector4RelArray(br);
         br.Position += 12; // padding
     }
+    public override void Write(PackFileSerializer s, DataStream bw)
+    {
+        base.Write(s, bw);
+        s.WriteVector4RelArray(bw, _vertices);
+        for (int i = 0; i < 12; i++) bw.WriteByte(0); // padding
+    }
     public override void WriteXml(XmlSerializer xs, XElement xe)
     {
         base.WriteXml(xs, xe);
