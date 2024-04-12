@@ -206,12 +206,13 @@ public class HavokPhysicsData : Resource
         inStream.Write(data);
         BinaryPrimitives.WriteInt32LittleEndian(inResMeta.Slice(8, 4), data.Size);
 
+        long fixupOffset = inStream.Position;
         inStream.WriteInt32(0);
         inStream.WriteInt32(fixupTable.Size);
         inStream.Write(fixupTable);
-        BinaryPrimitives.WriteInt32LittleEndian(inResMeta.Slice(12, 4), fixupTable.Size + 8);
 
         inStream.WriteRelocTable();
+        BinaryPrimitives.WriteUInt32LittleEndian(inResMeta.Slice(12, 4), (uint)(inStream.Position - fixupOffset));
 
         // set packfile types
         inResMeta[2] = 0;
