@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpCogWheelConstraintAtom : hkpConstraintAtom, IEquatable<hkpCogWheelConstraintAtom?>
+public class hkpCogWheelConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public float _cogWheelRadiusA;
@@ -50,12 +50,10 @@ public class hkpCogWheelConstraintAtom : hkpConstraintAtom, IEquatable<hkpCogWhe
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpCogWheelConstraintAtom);
+        return obj is hkpCogWheelConstraintAtom other && base.Equals(other) && _cogWheelRadiusA == other._cogWheelRadiusA && _cogWheelRadiusB == other._cogWheelRadiusB && _isScrew == other._isScrew && _memOffsetToInitialAngleOffset == other._memOffsetToInitialAngleOffset && _memOffsetToPrevAngle == other._memOffsetToPrevAngle && _memOffsetToRevolutionCounter == other._memOffsetToRevolutionCounter && Signature == other.Signature;
     }
-    public bool Equals(hkpCogWheelConstraintAtom? other)
-    {
-        return other is not null && _cogWheelRadiusA.Equals(other._cogWheelRadiusA) && _cogWheelRadiusB.Equals(other._cogWheelRadiusB) && _isScrew.Equals(other._isScrew) && _memOffsetToInitialAngleOffset.Equals(other._memOffsetToInitialAngleOffset) && _memOffsetToPrevAngle.Equals(other._memOffsetToPrevAngle) && _memOffsetToRevolutionCounter.Equals(other._memOffsetToRevolutionCounter) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpCogWheelConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpCogWheelConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkCustomAttributes : IHavokObject, IEquatable<hkCustomAttributes?>
+public class hkCustomAttributes : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hkCustomAttributesAttribute> _attributes;
+    public List<hkCustomAttributesAttribute?> _attributes = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         // Read TYPE_SIMPLEARRAY
@@ -25,12 +25,10 @@ public class hkCustomAttributes : IHavokObject, IEquatable<hkCustomAttributes?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkCustomAttributes);
+        return obj is hkCustomAttributes other && _attributes.SequenceEqual(other._attributes) && Signature == other.Signature;
     }
-    public bool Equals(hkCustomAttributes? other)
-    {
-        return other is not null && _attributes.Equals(other._attributes) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkCustomAttributes? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkCustomAttributes? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

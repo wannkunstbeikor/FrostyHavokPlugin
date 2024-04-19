@@ -7,13 +7,13 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxVertexAnimation : hkReferencedObject, IEquatable<hkxVertexAnimation?>
+public class hkxVertexAnimation : hkReferencedObject
 {
     public override uint Signature => 0;
     public float _time;
-    public hkxVertexBuffer _vertData;
-    public List<int> _vertexIndexMap;
-    public List<hkxVertexAnimationUsageMap> _componentMap;
+    public hkxVertexBuffer? _vertData;
+    public List<int> _vertexIndexMap = new();
+    public List<hkxVertexAnimationUsageMap?> _componentMap = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -43,12 +43,10 @@ public class hkxVertexAnimation : hkReferencedObject, IEquatable<hkxVertexAnimat
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxVertexAnimation);
+        return obj is hkxVertexAnimation other && base.Equals(other) && _time == other._time && _vertData == other._vertData && _vertexIndexMap.SequenceEqual(other._vertexIndexMap) && _componentMap.SequenceEqual(other._componentMap) && Signature == other.Signature;
     }
-    public bool Equals(hkxVertexAnimation? other)
-    {
-        return other is not null && _time.Equals(other._time) && _vertData.Equals(other._vertData) && _vertexIndexMap.Equals(other._vertexIndexMap) && _componentMap.Equals(other._componentMap) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxVertexAnimation? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxVertexAnimation? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

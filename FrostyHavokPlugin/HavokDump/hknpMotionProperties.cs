@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpMotionProperties : IHavokObject, IEquatable<hknpMotionProperties?>
+public class hknpMotionProperties : IHavokObject
 {
     public virtual uint Signature => 0;
     public uint _isExclusive;
@@ -103,12 +103,10 @@ public class hknpMotionProperties : IHavokObject, IEquatable<hknpMotionPropertie
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpMotionProperties);
+        return obj is hknpMotionProperties other && _isExclusive == other._isExclusive && _flags == other._flags && _gravityFactor == other._gravityFactor && _timeFactor == other._timeFactor && _maxLinearSpeed == other._maxLinearSpeed && _maxAngularSpeed == other._maxAngularSpeed && _linearDamping == other._linearDamping && _angularDamping == other._angularDamping && _solverStabilizationSpeedThreshold == other._solverStabilizationSpeedThreshold && _solverStabilizationSpeedReduction == other._solverStabilizationSpeedReduction && _maxDistSqrd == other._maxDistSqrd && _maxRotSqrd == other._maxRotSqrd && _invBlockSize == other._invBlockSize && _pathingUpperThreshold == other._pathingUpperThreshold && _pathingLowerThreshold == other._pathingLowerThreshold && _numDeactivationFrequencyPasses == other._numDeactivationFrequencyPasses && _deactivationVelocityScaleSquare == other._deactivationVelocityScaleSquare && _minimumPathingVelocityScaleSquare == other._minimumPathingVelocityScaleSquare && _spikingVelocityScaleThresholdSquared == other._spikingVelocityScaleThresholdSquared && _minimumSpikingVelocityScaleSquared == other._minimumSpikingVelocityScaleSquared && Signature == other.Signature;
     }
-    public bool Equals(hknpMotionProperties? other)
-    {
-        return other is not null && _isExclusive.Equals(other._isExclusive) && _flags.Equals(other._flags) && _gravityFactor.Equals(other._gravityFactor) && _timeFactor.Equals(other._timeFactor) && _maxLinearSpeed.Equals(other._maxLinearSpeed) && _maxAngularSpeed.Equals(other._maxAngularSpeed) && _linearDamping.Equals(other._linearDamping) && _angularDamping.Equals(other._angularDamping) && _solverStabilizationSpeedThreshold.Equals(other._solverStabilizationSpeedThreshold) && _solverStabilizationSpeedReduction.Equals(other._solverStabilizationSpeedReduction) && _maxDistSqrd.Equals(other._maxDistSqrd) && _maxRotSqrd.Equals(other._maxRotSqrd) && _invBlockSize.Equals(other._invBlockSize) && _pathingUpperThreshold.Equals(other._pathingUpperThreshold) && _pathingLowerThreshold.Equals(other._pathingLowerThreshold) && _numDeactivationFrequencyPasses.Equals(other._numDeactivationFrequencyPasses) && _deactivationVelocityScaleSquare.Equals(other._deactivationVelocityScaleSquare) && _minimumPathingVelocityScaleSquare.Equals(other._minimumPathingVelocityScaleSquare) && _spikingVelocityScaleThresholdSquared.Equals(other._spikingVelocityScaleThresholdSquared) && _minimumSpikingVelocityScaleSquared.Equals(other._minimumSpikingVelocityScaleSquared) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpMotionProperties? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpMotionProperties? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

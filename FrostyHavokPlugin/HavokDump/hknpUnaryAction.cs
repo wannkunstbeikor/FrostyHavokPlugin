@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpUnaryAction : hknpAction, IEquatable<hknpUnaryAction?>
+public class hknpUnaryAction : hknpAction
 {
     public override uint Signature => 0;
     public uint _body;
@@ -30,12 +30,10 @@ public class hknpUnaryAction : hknpAction, IEquatable<hknpUnaryAction?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpUnaryAction);
+        return obj is hknpUnaryAction other && base.Equals(other) && _body == other._body && Signature == other.Signature;
     }
-    public bool Equals(hknpUnaryAction? other)
-    {
-        return other is not null && _body.Equals(other._body) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpUnaryAction? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpUnaryAction? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,16 +7,16 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpLimitedHingeConstraintDataAtoms : IHavokObject, IEquatable<hkpLimitedHingeConstraintDataAtoms?>
+public class hkpLimitedHingeConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _transforms;
-    public hkpSetupStabilizationAtom _setupStabilization;
-    public hkpAngMotorConstraintAtom _angMotor;
-    public hkpAngFrictionConstraintAtom _angFriction;
-    public hkpAngLimitConstraintAtom _angLimit;
-    public hkp2dAngConstraintAtom _2dAng;
-    public hkpBallSocketConstraintAtom _ballSocket;
+    public hkpSetLocalTransformsConstraintAtom? _transforms;
+    public hkpSetupStabilizationAtom? _setupStabilization;
+    public hkpAngMotorConstraintAtom? _angMotor;
+    public hkpAngFrictionConstraintAtom? _angFriction;
+    public hkpAngLimitConstraintAtom? _angLimit;
+    public hkp2dAngConstraintAtom? _2dAng;
+    public hkpBallSocketConstraintAtom? _ballSocket;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _transforms = new hkpSetLocalTransformsConstraintAtom();
@@ -58,12 +58,10 @@ public class hkpLimitedHingeConstraintDataAtoms : IHavokObject, IEquatable<hkpLi
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpLimitedHingeConstraintDataAtoms);
+        return obj is hkpLimitedHingeConstraintDataAtoms other && _transforms == other._transforms && _setupStabilization == other._setupStabilization && _angMotor == other._angMotor && _angFriction == other._angFriction && _angLimit == other._angLimit && _2dAng == other._2dAng && _ballSocket == other._ballSocket && Signature == other.Signature;
     }
-    public bool Equals(hkpLimitedHingeConstraintDataAtoms? other)
-    {
-        return other is not null && _transforms.Equals(other._transforms) && _setupStabilization.Equals(other._setupStabilization) && _angMotor.Equals(other._angMotor) && _angFriction.Equals(other._angFriction) && _angLimit.Equals(other._angLimit) && _2dAng.Equals(other._2dAng) && _ballSocket.Equals(other._ballSocket) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpLimitedHingeConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpLimitedHingeConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

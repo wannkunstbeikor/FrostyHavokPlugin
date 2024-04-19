@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkRangeRealAttribute : IHavokObject, IEquatable<hkRangeRealAttribute?>
+public class hkRangeRealAttribute : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _absmin;
@@ -37,12 +37,10 @@ public class hkRangeRealAttribute : IHavokObject, IEquatable<hkRangeRealAttribut
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkRangeRealAttribute);
+        return obj is hkRangeRealAttribute other && _absmin == other._absmin && _absmax == other._absmax && _softmin == other._softmin && _softmax == other._softmax && Signature == other.Signature;
     }
-    public bool Equals(hkRangeRealAttribute? other)
-    {
-        return other is not null && _absmin.Equals(other._absmin) && _absmax.Equals(other._absmax) && _softmin.Equals(other._softmin) && _softmax.Equals(other._softmax) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkRangeRealAttribute? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkRangeRealAttribute? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpSpringAction : hknpBinaryAction, IEquatable<hknpSpringAction?>
+public class hknpSpringAction : hknpBinaryAction
 {
     public override uint Signature => 0;
     public Vector4 _lastForce;
@@ -58,12 +58,10 @@ public class hknpSpringAction : hknpBinaryAction, IEquatable<hknpSpringAction?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpSpringAction);
+        return obj is hknpSpringAction other && base.Equals(other) && _lastForce == other._lastForce && _positionAinA == other._positionAinA && _positionBinB == other._positionBinB && _restLength == other._restLength && _strength == other._strength && _damping == other._damping && _onCompression == other._onCompression && _onExtension == other._onExtension && Signature == other.Signature;
     }
-    public bool Equals(hknpSpringAction? other)
-    {
-        return other is not null && _lastForce.Equals(other._lastForce) && _positionAinA.Equals(other._positionAinA) && _positionBinB.Equals(other._positionBinB) && _restLength.Equals(other._restLength) && _strength.Equals(other._strength) && _damping.Equals(other._damping) && _onCompression.Equals(other._onCompression) && _onExtension.Equals(other._onExtension) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpSpringAction? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpSpringAction? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

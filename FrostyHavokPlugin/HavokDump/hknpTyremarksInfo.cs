@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpTyremarksInfo : hkReferencedObject, IEquatable<hknpTyremarksInfo?>
+public class hknpTyremarksInfo : hkReferencedObject
 {
     public override uint Signature => 0;
     public float _minTyremarkEnergy;
     public float _maxTyremarkEnergy;
-    public List<hknpTyremarksWheel> _tyremarksWheel;
+    public List<hknpTyremarksWheel?> _tyremarksWheel = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -36,12 +36,10 @@ public class hknpTyremarksInfo : hkReferencedObject, IEquatable<hknpTyremarksInf
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpTyremarksInfo);
+        return obj is hknpTyremarksInfo other && base.Equals(other) && _minTyremarkEnergy == other._minTyremarkEnergy && _maxTyremarkEnergy == other._maxTyremarkEnergy && _tyremarksWheel.SequenceEqual(other._tyremarksWheel) && Signature == other.Signature;
     }
-    public bool Equals(hknpTyremarksInfo? other)
-    {
-        return other is not null && _minTyremarkEnergy.Equals(other._minTyremarkEnergy) && _maxTyremarkEnergy.Equals(other._maxTyremarkEnergy) && _tyremarksWheel.Equals(other._tyremarksWheel) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpTyremarksInfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpTyremarksInfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

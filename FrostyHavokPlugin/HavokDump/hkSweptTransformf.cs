@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkSweptTransformf : IHavokObject, IEquatable<hkSweptTransformf?>
+public class hkSweptTransformf : IHavokObject
 {
     public virtual uint Signature => 0;
     public Vector4 _centerOfMass0;
@@ -41,12 +41,10 @@ public class hkSweptTransformf : IHavokObject, IEquatable<hkSweptTransformf?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkSweptTransformf);
+        return obj is hkSweptTransformf other && _centerOfMass0 == other._centerOfMass0 && _centerOfMass1 == other._centerOfMass1 && _rotation0 == other._rotation0 && _rotation1 == other._rotation1 && _centerOfMassLocal == other._centerOfMassLocal && Signature == other.Signature;
     }
-    public bool Equals(hkSweptTransformf? other)
-    {
-        return other is not null && _centerOfMass0.Equals(other._centerOfMass0) && _centerOfMass1.Equals(other._centerOfMass1) && _rotation0.Equals(other._rotation0) && _rotation1.Equals(other._rotation1) && _centerOfMassLocal.Equals(other._centerOfMassLocal) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkSweptTransformf? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkSweptTransformf? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

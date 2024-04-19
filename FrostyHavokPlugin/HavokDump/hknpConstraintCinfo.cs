@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpConstraintCinfo : IHavokObject, IEquatable<hknpConstraintCinfo?>
+public class hknpConstraintCinfo : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpConstraintData _constraintData;
+    public hkpConstraintData? _constraintData;
     public uint _bodyA;
     public uint _bodyB;
     public hknpConstraint_FlagsEnum _flags;
@@ -43,12 +43,10 @@ public class hknpConstraintCinfo : IHavokObject, IEquatable<hknpConstraintCinfo?
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpConstraintCinfo);
+        return obj is hknpConstraintCinfo other && _constraintData == other._constraintData && _bodyA == other._bodyA && _bodyB == other._bodyB && _flags == other._flags && _additionalRuntimeSize == other._additionalRuntimeSize && Signature == other.Signature;
     }
-    public bool Equals(hknpConstraintCinfo? other)
-    {
-        return other is not null && _constraintData.Equals(other._constraintData) && _bodyA.Equals(other._bodyA) && _bodyB.Equals(other._bodyB) && _flags.Equals(other._flags) && _additionalRuntimeSize.Equals(other._additionalRuntimeSize) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpConstraintCinfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpConstraintCinfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

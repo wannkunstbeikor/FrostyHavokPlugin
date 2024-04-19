@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMeshTextureRawBufferDescriptor : IHavokObject, IEquatable<hkMeshTextureRawBufferDescriptor?>
+public class hkMeshTextureRawBufferDescriptor : IHavokObject
 {
     public virtual uint Signature => 0;
     public long _offset;
@@ -33,12 +33,10 @@ public class hkMeshTextureRawBufferDescriptor : IHavokObject, IEquatable<hkMeshT
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMeshTextureRawBufferDescriptor);
+        return obj is hkMeshTextureRawBufferDescriptor other && _offset == other._offset && _stride == other._stride && _numElements == other._numElements && Signature == other.Signature;
     }
-    public bool Equals(hkMeshTextureRawBufferDescriptor? other)
-    {
-        return other is not null && _offset.Equals(other._offset) && _stride.Equals(other._stride) && _numElements.Equals(other._numElements) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMeshTextureRawBufferDescriptor? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMeshTextureRawBufferDescriptor? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

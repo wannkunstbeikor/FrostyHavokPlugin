@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTreeDataRunData : IHavokObject, IEquatable<hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTreeDataRunData?>
+public class hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTreeDataRunData : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hknpCompressedMeshShapeTreeDataRunData _value;
+    public hknpCompressedMeshShapeTreeDataRunData? _value;
     public byte _index;
     public byte _count;
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -34,12 +34,10 @@ public class hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTr
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTreeDataRunData);
+        return obj is hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTreeDataRunData other && _value == other._value && _index == other._index && _count == other._count && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTreeDataRunData? other)
-    {
-        return other is not null && _value.Equals(other._value) && _index.Equals(other._index) && _count.Equals(other._count) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTreeDataRunData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticMeshTreeBasePrimitiveDataRunBasehknpCompressedMeshShapeTreeDataRunData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

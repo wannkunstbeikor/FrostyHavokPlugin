@@ -7,15 +7,15 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticMeshTreeBase : hkcdStaticTreeTreehkcdStaticTreeDynamicStorage5, IEquatable<hkcdStaticMeshTreeBase?>
+public class hkcdStaticMeshTreeBase : hkcdStaticTreeTreehkcdStaticTreeDynamicStorage5
 {
     public override uint Signature => 0;
     public int _numPrimitiveKeys;
     public int _bitsPerKey;
     public uint _maxKeyValue;
-    public List<hkcdStaticMeshTreeBaseSection> _sections;
-    public List<hkcdStaticMeshTreeBasePrimitive> _primitives;
-    public List<ushort> _sharedVerticesIndex;
+    public List<hkcdStaticMeshTreeBaseSection?> _sections = new();
+    public List<hkcdStaticMeshTreeBasePrimitive?> _primitives = new();
+    public List<ushort> _sharedVerticesIndex = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -50,12 +50,10 @@ public class hkcdStaticMeshTreeBase : hkcdStaticTreeTreehkcdStaticTreeDynamicSto
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticMeshTreeBase);
+        return obj is hkcdStaticMeshTreeBase other && base.Equals(other) && _numPrimitiveKeys == other._numPrimitiveKeys && _bitsPerKey == other._bitsPerKey && _maxKeyValue == other._maxKeyValue && _sections.SequenceEqual(other._sections) && _primitives.SequenceEqual(other._primitives) && _sharedVerticesIndex.SequenceEqual(other._sharedVerticesIndex) && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticMeshTreeBase? other)
-    {
-        return other is not null && _numPrimitiveKeys.Equals(other._numPrimitiveKeys) && _bitsPerKey.Equals(other._bitsPerKey) && _maxKeyValue.Equals(other._maxKeyValue) && _sections.Equals(other._sections) && _primitives.Equals(other._primitives) && _sharedVerticesIndex.Equals(other._sharedVerticesIndex) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticMeshTreeBase? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticMeshTreeBase? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

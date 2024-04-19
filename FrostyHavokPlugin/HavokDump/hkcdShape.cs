@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdShape : hkReferencedObject, IEquatable<hkcdShape?>
+public class hkcdShape : hkReferencedObject
 {
     public override uint Signature => 0;
     // TYPE_ENUM TYPE_UINT8 _type
@@ -41,12 +41,10 @@ public class hkcdShape : hkReferencedObject, IEquatable<hkcdShape?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdShape);
+        return obj is hkcdShape other && base.Equals(other) && _dispatchType == other._dispatchType && _bitsPerKey == other._bitsPerKey && _shapeInfoCodecType == other._shapeInfoCodecType && Signature == other.Signature;
     }
-    public bool Equals(hkcdShape? other)
-    {
-        return other is not null && _dispatchType.Equals(other._dispatchType) && _bitsPerKey.Equals(other._bitsPerKey) && _shapeInfoCodecType.Equals(other._shapeInfoCodecType) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

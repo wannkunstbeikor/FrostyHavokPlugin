@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpSurfaceVelocity : hkReferencedObject, IEquatable<hknpSurfaceVelocity?>
+public class hknpSurfaceVelocity : hkReferencedObject
 {
     public override uint Signature => 0;
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -24,12 +24,10 @@ public class hknpSurfaceVelocity : hkReferencedObject, IEquatable<hknpSurfaceVel
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpSurfaceVelocity);
+        return obj is hknpSurfaceVelocity other && base.Equals(other) && Signature == other.Signature;
     }
-    public bool Equals(hknpSurfaceVelocity? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpSurfaceVelocity? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpSurfaceVelocity? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

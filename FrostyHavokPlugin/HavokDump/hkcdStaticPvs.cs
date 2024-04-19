@@ -7,15 +7,15 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticPvs : IHavokObject, IEquatable<hkcdStaticPvs?>
+public class hkcdStaticPvs : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkcdStaticTreeTreehkcdStaticTreeDynamicStorage6 _cells;
+    public hkcdStaticTreeTreehkcdStaticTreeDynamicStorage6? _cells;
     public int _bytesPerCells;
     public int _cellsPerBlock;
-    public List<byte> _pvs;
-    public List<ushort> _map;
-    public List<hkcdStaticPvsBlockHeader> _blocks;
+    public List<byte> _pvs = new();
+    public List<ushort> _map = new();
+    public List<hkcdStaticPvsBlockHeader?> _blocks = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _cells = new hkcdStaticTreeTreehkcdStaticTreeDynamicStorage6();
@@ -48,12 +48,10 @@ public class hkcdStaticPvs : IHavokObject, IEquatable<hkcdStaticPvs?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticPvs);
+        return obj is hkcdStaticPvs other && _cells == other._cells && _bytesPerCells == other._bytesPerCells && _cellsPerBlock == other._cellsPerBlock && _pvs.SequenceEqual(other._pvs) && _map.SequenceEqual(other._map) && _blocks.SequenceEqual(other._blocks) && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticPvs? other)
-    {
-        return other is not null && _cells.Equals(other._cells) && _bytesPerCells.Equals(other._bytesPerCells) && _cellsPerBlock.Equals(other._cellsPerBlock) && _pvs.Equals(other._pvs) && _map.Equals(other._map) && _blocks.Equals(other._blocks) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticPvs? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticPvs? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

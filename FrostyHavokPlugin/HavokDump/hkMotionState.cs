@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMotionState : IHavokObject, IEquatable<hkMotionState?>
+public class hkMotionState : IHavokObject
 {
     public virtual uint Signature => 0;
     public Matrix4 _transform;
@@ -17,8 +17,8 @@ public class hkMotionState : IHavokObject, IEquatable<hkMotionState?>
     public Half _linearDamping;
     public Half _angularDamping;
     public Half _timeFactor;
-    public hkUFloat8 _maxLinearVelocity;
-    public hkUFloat8 _maxAngularVelocity;
+    public hkUFloat8? _maxLinearVelocity;
+    public hkUFloat8? _maxAngularVelocity;
     public byte _deactivationClass;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -65,12 +65,10 @@ public class hkMotionState : IHavokObject, IEquatable<hkMotionState?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMotionState);
+        return obj is hkMotionState other && _transform == other._transform && _sweptTransform == other._sweptTransform && _deltaAngle == other._deltaAngle && _objectRadius == other._objectRadius && _linearDamping == other._linearDamping && _angularDamping == other._angularDamping && _timeFactor == other._timeFactor && _maxLinearVelocity == other._maxLinearVelocity && _maxAngularVelocity == other._maxAngularVelocity && _deactivationClass == other._deactivationClass && Signature == other.Signature;
     }
-    public bool Equals(hkMotionState? other)
-    {
-        return other is not null && _transform.Equals(other._transform) && _sweptTransform.Equals(other._sweptTransform) && _deltaAngle.Equals(other._deltaAngle) && _objectRadius.Equals(other._objectRadius) && _linearDamping.Equals(other._linearDamping) && _angularDamping.Equals(other._angularDamping) && _timeFactor.Equals(other._timeFactor) && _maxLinearVelocity.Equals(other._maxLinearVelocity) && _maxAngularVelocity.Equals(other._maxAngularVelocity) && _deactivationClass.Equals(other._deactivationClass) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMotionState? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMotionState? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

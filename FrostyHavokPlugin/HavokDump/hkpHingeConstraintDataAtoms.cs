@@ -7,13 +7,13 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpHingeConstraintDataAtoms : IHavokObject, IEquatable<hkpHingeConstraintDataAtoms?>
+public class hkpHingeConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _transforms;
-    public hkpSetupStabilizationAtom _setupStabilization;
-    public hkp2dAngConstraintAtom _2dAng;
-    public hkpBallSocketConstraintAtom _ballSocket;
+    public hkpSetLocalTransformsConstraintAtom? _transforms;
+    public hkpSetupStabilizationAtom? _setupStabilization;
+    public hkp2dAngConstraintAtom? _2dAng;
+    public hkpBallSocketConstraintAtom? _ballSocket;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _transforms = new hkpSetLocalTransformsConstraintAtom();
@@ -41,12 +41,10 @@ public class hkpHingeConstraintDataAtoms : IHavokObject, IEquatable<hkpHingeCons
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpHingeConstraintDataAtoms);
+        return obj is hkpHingeConstraintDataAtoms other && _transforms == other._transforms && _setupStabilization == other._setupStabilization && _2dAng == other._2dAng && _ballSocket == other._ballSocket && Signature == other.Signature;
     }
-    public bool Equals(hkpHingeConstraintDataAtoms? other)
-    {
-        return other is not null && _transforms.Equals(other._transforms) && _setupStabilization.Equals(other._setupStabilization) && _2dAng.Equals(other._2dAng) && _ballSocket.Equals(other._ballSocket) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpHingeConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpHingeConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

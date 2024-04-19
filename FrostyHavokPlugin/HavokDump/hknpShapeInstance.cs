@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpShapeInstance : IHavokObject, IEquatable<hknpShapeInstance?>
+public class hknpShapeInstance : IHavokObject
 {
     public virtual uint Signature => 0;
     public Matrix4 _transform;
     public Vector4 _scale;
-    public hknpShape _shape;
+    public hknpShape? _shape;
     public ushort _shapeTag;
     public ushort _destructionTag;
     public byte[] _padding = new byte[30];
@@ -47,12 +47,10 @@ public class hknpShapeInstance : IHavokObject, IEquatable<hknpShapeInstance?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpShapeInstance);
+        return obj is hknpShapeInstance other && _transform == other._transform && _scale == other._scale && _shape == other._shape && _shapeTag == other._shapeTag && _destructionTag == other._destructionTag && _padding == other._padding && Signature == other.Signature;
     }
-    public bool Equals(hknpShapeInstance? other)
-    {
-        return other is not null && _transform.Equals(other._transform) && _scale.Equals(other._scale) && _shape.Equals(other._shape) && _shapeTag.Equals(other._shapeTag) && _destructionTag.Equals(other._destructionTag) && _padding.Equals(other._padding) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpShapeInstance? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpShapeInstance? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

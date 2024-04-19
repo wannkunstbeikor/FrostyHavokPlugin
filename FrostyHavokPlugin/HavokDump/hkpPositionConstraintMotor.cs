@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor, IEquatable<hkpPositionConstraintMotor?>
+public class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor
 {
     public override uint Signature => 0;
     public float _tau;
@@ -40,12 +40,10 @@ public class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor, IEquat
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpPositionConstraintMotor);
+        return obj is hkpPositionConstraintMotor other && base.Equals(other) && _tau == other._tau && _damping == other._damping && _proportionalRecoveryVelocity == other._proportionalRecoveryVelocity && _constantRecoveryVelocity == other._constantRecoveryVelocity && Signature == other.Signature;
     }
-    public bool Equals(hkpPositionConstraintMotor? other)
-    {
-        return other is not null && _tau.Equals(other._tau) && _damping.Equals(other._damping) && _proportionalRecoveryVelocity.Equals(other._proportionalRecoveryVelocity) && _constantRecoveryVelocity.Equals(other._constantRecoveryVelocity) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpPositionConstraintMotor? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpPositionConstraintMotor? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

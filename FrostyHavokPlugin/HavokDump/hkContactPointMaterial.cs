@@ -7,13 +7,13 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkContactPointMaterial : IHavokObject, IEquatable<hkContactPointMaterial?>
+public class hkContactPointMaterial : IHavokObject
 {
     public virtual uint Signature => 0;
     public ulong _userData;
-    public hkUFloat8 _friction;
+    public hkUFloat8? _friction;
     public byte _restitution;
-    public hkUFloat8 _maxImpulse;
+    public hkUFloat8? _maxImpulse;
     public byte _flags;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -45,12 +45,10 @@ public class hkContactPointMaterial : IHavokObject, IEquatable<hkContactPointMat
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkContactPointMaterial);
+        return obj is hkContactPointMaterial other && _userData == other._userData && _friction == other._friction && _restitution == other._restitution && _maxImpulse == other._maxImpulse && _flags == other._flags && Signature == other.Signature;
     }
-    public bool Equals(hkContactPointMaterial? other)
-    {
-        return other is not null && _userData.Equals(other._userData) && _friction.Equals(other._friction) && _restitution.Equals(other._restitution) && _maxImpulse.Equals(other._maxImpulse) && _flags.Equals(other._flags) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkContactPointMaterial? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkContactPointMaterial? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

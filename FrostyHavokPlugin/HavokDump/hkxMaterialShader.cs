@@ -7,15 +7,15 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxMaterialShader : hkReferencedObject, IEquatable<hkxMaterialShader?>
+public class hkxMaterialShader : hkReferencedObject
 {
     public override uint Signature => 0;
-    public string _name;
+    public string _name = string.Empty;
     public hkxMaterialShader_ShaderType _type;
-    public string _vertexEntryName;
-    public string _geomEntryName;
-    public string _pixelEntryName;
-    public List<byte> _data;
+    public string _vertexEntryName = string.Empty;
+    public string _geomEntryName = string.Empty;
+    public string _pixelEntryName = string.Empty;
+    public List<byte> _data = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -50,12 +50,10 @@ public class hkxMaterialShader : hkReferencedObject, IEquatable<hkxMaterialShade
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxMaterialShader);
+        return obj is hkxMaterialShader other && base.Equals(other) && _name == other._name && _type == other._type && _vertexEntryName == other._vertexEntryName && _geomEntryName == other._geomEntryName && _pixelEntryName == other._pixelEntryName && _data.SequenceEqual(other._data) && Signature == other.Signature;
     }
-    public bool Equals(hkxMaterialShader? other)
-    {
-        return other is not null && _name.Equals(other._name) && _type.Equals(other._type) && _vertexEntryName.Equals(other._vertexEntryName) && _geomEntryName.Equals(other._geomEntryName) && _pixelEntryName.Equals(other._pixelEntryName) && _data.Equals(other._data) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxMaterialShader? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxMaterialShader? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

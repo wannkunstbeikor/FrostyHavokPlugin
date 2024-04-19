@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using Frosty.Sdk.IO;
 
@@ -163,11 +160,11 @@ public class HavokTypeDumper
             bool isBase = string.IsNullOrEmpty(Parent);
             if (!isBase)
             {
-                WriteLine($"public class {Name} : {Parent}, IEquatable<{Name}?>");
+                WriteLine($"public class {Name} : {Parent}");
             }
             else
             {
-                WriteLine($"public class {Name} : IHavokObject, IEquatable<{Name}?>");
+                WriteLine($"public class {Name} : IHavokObject");
             }
 
             WriteLine("{");
@@ -250,26 +247,35 @@ public class HavokTypeDumper
             WriteLine("public override bool Equals(object? obj)");
             WriteLine("{");
             PushIndent();
-            WriteLine($"return Equals(obj as {Name});");
-            PopIndent();
-            WriteLine("}");
-
-            WriteLine($"public bool Equals({Name}? other)");
-            WriteLine("{");
-            PushIndent();
-            string ret = "return other is not null";
+            string ret = $"return obj is {Name} other";
+            if (!isBase)
+            {
+                ret += " && base.Equals(other)";
+            }
             foreach (hkClassMember member in Members)
             {
                 if (((FlagValues)member.Flags).HasFlag(FlagValues.SERIALIZE_IGNORED))
                 {
                     continue;
                 }
-                ret += $" && {member.Name}.Equals(other.{member.Name})";
+
+                if ((VTYPE)member.Type == VTYPE.TYPE_ARRAY || (VTYPE)member.Type == VTYPE.TYPE_RELARRAY ||
+                    (VTYPE)member.Type == VTYPE.TYPE_SIMPLEARRAY)
+                {
+                    ret += $" && {member.Name}.SequenceEqual(other.{member.Name})";
+                }
+                else
+                {
+                    ret += $" && {member.Name} == other.{member.Name}";
+                }
             }
             ret += " && Signature == other.Signature;";
             WriteLine(ret);
             PopIndent();
             WriteLine("}");
+
+            WriteLine($"public static bool operator ==({Name}? a, object? b) => a?.Equals(b) ?? b is null;");
+            WriteLine($"public static bool operator !=({Name}? a, object? b) => !(a == b);");
 
             WriteLine($"public override int GetHashCode()");
             WriteLine("{");
@@ -291,7 +297,7 @@ public class HavokTypeDumper
             PopIndent();
             WriteLine("}");
 
-            File.WriteAllText($"/home/jona/RiderProjects/FrostyToolsuite/FrostyCli/Havok/HavokDump/{Name}.cs", CurrentFile.ToString());
+            File.WriteAllText($"/home/jona/RiderProjects/FrostyToolsuite/FrostyHavokPlugin/FrostyHavokPlugin/HavokDump/{Name}.cs", CurrentFile.ToString());
         }
     }
 
@@ -372,13 +378,33 @@ public class HavokTypeDumper
                 return;
             }
             string type = ReduceType(this, (VTYPE)Type);
+            string initializer = GetInitializer((VTYPE)Type);
             if ((VTYPE)Type != VTYPE.TYPE_ARRAY && (VTYPE)Type != VTYPE.TYPE_RELARRAY && (VTYPE)Type != VTYPE.TYPE_SIMPLEARRAY && ArraySize > 0)
             {
                 WriteLine($"public {type}[] {Name} = new {type}[{ArraySize}];");
             }
             else
             {
-                WriteLine($"public {type} {Name};");
+                WriteLine($"public {type} {Name}{(string.IsNullOrEmpty(initializer) ? string.Empty : initializer)};");
+            }
+        }
+
+        private string GetInitializer(VTYPE type, bool v = false)
+        {
+            switch (type)
+            {
+                case VTYPE.TYPE_CSTRING:
+                case VTYPE.TYPE_STRINGPTR:
+                    return " = string.Empty";
+                case VTYPE.TYPE_POINTER when v:
+                case VTYPE.TYPE_ARRAY:
+                case VTYPE.TYPE_RELARRAY:
+                case VTYPE.TYPE_SIMPLEARRAY:
+                    return " = new()";
+                case VTYPE.TYPE_POINTER:
+                    return GetInitializer((VTYPE)SubType, true);
+                default:
+                    return string.Empty;
             }
         }
 
@@ -857,7 +883,7 @@ public class HavokTypeDumper
             PopIndent();
             WriteLine("}");
 
-            File.WriteAllText($"/home/jona/RiderProjects/FrostyToolsuite/FrostyCli/Havok/HavokDump/{Name}.cs", CurrentFile.ToString());
+            File.WriteAllText($"/home/jona/RiderProjects/FrostyToolsuite/FrostyHavokPlugin/FrostyHavokPlugin/HavokDump/{Name}.cs", CurrentFile.ToString());
         }
     }
 
@@ -984,12 +1010,10 @@ public class HavokTypeDumper
             case VTYPE.TYPE_QUATERNION:
                 r = "Quaternion";
                 break;
-            case VTYPE.TYPE_ROTATION:
-                r = "Matrix4";
-                break;
             case VTYPE.TYPE_VECTOR4:
                 r = "Vector4";
                 break;
+            case VTYPE.TYPE_ROTATION:
             case VTYPE.TYPE_MATRIX3:
             case VTYPE.TYPE_QSTRANSFORM:
                 r = "Matrix3x4";
@@ -1002,7 +1026,7 @@ public class HavokTypeDumper
             {
                 if (!string.IsNullOrEmpty(m.Class))
                 {
-                    r = m.Class;
+                    r = $"{m.Class}?";
                 }
                 else
                 {
@@ -1019,7 +1043,7 @@ public class HavokTypeDumper
                 r = "List<" + ReduceType(m, (VTYPE)m.SubType, true) + ">";
                 break;
             case VTYPE.TYPE_STRUCT:
-                r = m.Class;
+                r = $"{m.Class}?";
                 break;
             case VTYPE.TYPE_VARIANT:
                 r = "ulong";
@@ -1163,7 +1187,7 @@ public class HavokTypeDumper
 
     public static void Dump()
     {
-        MemoryReader reader = new(Process.GetProcessById(23628)) { Position = 0x1430dec60 };
+        MemoryReader reader = new(Process.GetProcessById(65952)) { Position = 0x1430dec60 };
 
         long offset = reader.ReadLong();
         do

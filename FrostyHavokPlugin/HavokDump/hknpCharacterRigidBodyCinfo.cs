@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpCharacterRigidBodyCinfo : hkReferencedObject, IEquatable<hknpCharacterRigidBodyCinfo?>
+public class hknpCharacterRigidBodyCinfo : hkReferencedObject
 {
     public override uint Signature => 0;
     public uint _collisionFilterInfo;
-    public hknpShape _shape;
+    public hknpShape? _shape;
     // TYPE_POINTER TYPE_VOID _world
     public Vector4 _position;
     public Quaternion _orientation;
@@ -97,12 +97,10 @@ public class hknpCharacterRigidBodyCinfo : hkReferencedObject, IEquatable<hknpCh
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpCharacterRigidBodyCinfo);
+        return obj is hknpCharacterRigidBodyCinfo other && base.Equals(other) && _collisionFilterInfo == other._collisionFilterInfo && _shape == other._shape && _position == other._position && _orientation == other._orientation && _mass == other._mass && _dynamicFriction == other._dynamicFriction && _staticFriction == other._staticFriction && _weldingTolerance == other._weldingTolerance && _reservedBodyId == other._reservedBodyId && _additionFlags == other._additionFlags && _up == other._up && _maxSlope == other._maxSlope && _maxForce == other._maxForce && _maxSpeedForSimplexSolver == other._maxSpeedForSimplexSolver && _supportDistance == other._supportDistance && _hardSupportDistance == other._hardSupportDistance && Signature == other.Signature;
     }
-    public bool Equals(hknpCharacterRigidBodyCinfo? other)
-    {
-        return other is not null && _collisionFilterInfo.Equals(other._collisionFilterInfo) && _shape.Equals(other._shape) && _position.Equals(other._position) && _orientation.Equals(other._orientation) && _mass.Equals(other._mass) && _dynamicFriction.Equals(other._dynamicFriction) && _staticFriction.Equals(other._staticFriction) && _weldingTolerance.Equals(other._weldingTolerance) && _reservedBodyId.Equals(other._reservedBodyId) && _additionFlags.Equals(other._additionFlags) && _up.Equals(other._up) && _maxSlope.Equals(other._maxSlope) && _maxForce.Equals(other._maxForce) && _maxSpeedForSimplexSolver.Equals(other._maxSpeedForSimplexSolver) && _supportDistance.Equals(other._supportDistance) && _hardSupportDistance.Equals(other._hardSupportDistance) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpCharacterRigidBodyCinfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpCharacterRigidBodyCinfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

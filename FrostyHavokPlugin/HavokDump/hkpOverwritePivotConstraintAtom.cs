@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpOverwritePivotConstraintAtom : hkpConstraintAtom, IEquatable<hkpOverwritePivotConstraintAtom?>
+public class hkpOverwritePivotConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public byte _copyToPivotBFromPivotA;
@@ -31,12 +31,10 @@ public class hkpOverwritePivotConstraintAtom : hkpConstraintAtom, IEquatable<hkp
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpOverwritePivotConstraintAtom);
+        return obj is hkpOverwritePivotConstraintAtom other && base.Equals(other) && _copyToPivotBFromPivotA == other._copyToPivotBFromPivotA && Signature == other.Signature;
     }
-    public bool Equals(hkpOverwritePivotConstraintAtom? other)
-    {
-        return other is not null && _copyToPivotBFromPivotA.Equals(other._copyToPivotBFromPivotA) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpOverwritePivotConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpOverwritePivotConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

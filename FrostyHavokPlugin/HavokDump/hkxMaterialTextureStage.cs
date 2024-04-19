@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxMaterialTextureStage : IHavokObject, IEquatable<hkxMaterialTextureStage?>
+public class hkxMaterialTextureStage : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkReferencedObject _texture;
+    public hkReferencedObject? _texture;
     public hkxMaterial_TextureType _usageHint;
     public int _tcoordChannel;
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -33,12 +33,10 @@ public class hkxMaterialTextureStage : IHavokObject, IEquatable<hkxMaterialTextu
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxMaterialTextureStage);
+        return obj is hkxMaterialTextureStage other && _texture == other._texture && _usageHint == other._usageHint && _tcoordChannel == other._tcoordChannel && Signature == other.Signature;
     }
-    public bool Equals(hkxMaterialTextureStage? other)
-    {
-        return other is not null && _texture.Equals(other._texture) && _usageHint.Equals(other._usageHint) && _tcoordChannel.Equals(other._tcoordChannel) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxMaterialTextureStage? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxMaterialTextureStage? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

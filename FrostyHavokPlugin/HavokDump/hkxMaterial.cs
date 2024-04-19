@@ -7,17 +7,17 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxMaterial : hkxAttributeHolder, IEquatable<hkxMaterial?>
+public class hkxMaterial : hkxAttributeHolder
 {
     public override uint Signature => 0;
-    public string _name;
-    public List<hkxMaterialTextureStage> _stages;
+    public string _name = string.Empty;
+    public List<hkxMaterialTextureStage?> _stages = new();
     public Vector4 _diffuseColor;
     public Vector4 _ambientColor;
     public Vector4 _specularColor;
     public Vector4 _emissiveColor;
-    public List<hkxMaterial> _subMaterials;
-    public hkReferencedObject _extraData;
+    public List<hkxMaterial?> _subMaterials = new();
+    public hkReferencedObject? _extraData;
     public float[] _uvMapScale = new float[2];
     public float[] _uvMapOffset = new float[2];
     public float _uvMapRotation;
@@ -26,7 +26,7 @@ public class hkxMaterial : hkxAttributeHolder, IEquatable<hkxMaterial?>
     public float _specularExponent;
     public hkxMaterial_Transparency _transparency;
     public ulong _userData;
-    public List<hkxMaterialProperty> _properties;
+    public List<hkxMaterialProperty?> _properties = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -98,12 +98,10 @@ public class hkxMaterial : hkxAttributeHolder, IEquatable<hkxMaterial?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxMaterial);
+        return obj is hkxMaterial other && base.Equals(other) && _name == other._name && _stages.SequenceEqual(other._stages) && _diffuseColor == other._diffuseColor && _ambientColor == other._ambientColor && _specularColor == other._specularColor && _emissiveColor == other._emissiveColor && _subMaterials.SequenceEqual(other._subMaterials) && _extraData == other._extraData && _uvMapScale == other._uvMapScale && _uvMapOffset == other._uvMapOffset && _uvMapRotation == other._uvMapRotation && _uvMapAlgorithm == other._uvMapAlgorithm && _specularMultiplier == other._specularMultiplier && _specularExponent == other._specularExponent && _transparency == other._transparency && _userData == other._userData && _properties.SequenceEqual(other._properties) && Signature == other.Signature;
     }
-    public bool Equals(hkxMaterial? other)
-    {
-        return other is not null && _name.Equals(other._name) && _stages.Equals(other._stages) && _diffuseColor.Equals(other._diffuseColor) && _ambientColor.Equals(other._ambientColor) && _specularColor.Equals(other._specularColor) && _emissiveColor.Equals(other._emissiveColor) && _subMaterials.Equals(other._subMaterials) && _extraData.Equals(other._extraData) && _uvMapScale.Equals(other._uvMapScale) && _uvMapOffset.Equals(other._uvMapOffset) && _uvMapRotation.Equals(other._uvMapRotation) && _uvMapAlgorithm.Equals(other._uvMapAlgorithm) && _specularMultiplier.Equals(other._specularMultiplier) && _specularExponent.Equals(other._specularExponent) && _transparency.Equals(other._transparency) && _userData.Equals(other._userData) && _properties.Equals(other._properties) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxMaterial? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxMaterial? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

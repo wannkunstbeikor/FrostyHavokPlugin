@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxAttribute : IHavokObject, IEquatable<hkxAttribute?>
+public class hkxAttribute : IHavokObject
 {
     public virtual uint Signature => 0;
-    public string _name;
-    public hkReferencedObject _value;
+    public string _name = string.Empty;
+    public hkReferencedObject? _value;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _name = des.ReadStringPointer(br);
@@ -29,12 +29,10 @@ public class hkxAttribute : IHavokObject, IEquatable<hkxAttribute?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxAttribute);
+        return obj is hkxAttribute other && _name == other._name && _value == other._value && Signature == other.Signature;
     }
-    public bool Equals(hkxAttribute? other)
-    {
-        return other is not null && _name.Equals(other._name) && _value.Equals(other._value) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxAttribute? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxAttribute? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

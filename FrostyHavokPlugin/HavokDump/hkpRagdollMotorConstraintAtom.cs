@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpRagdollMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpRagdollMotorConstraintAtom?>
+public class hkpRagdollMotorConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public bool _isEnabled;
     // TYPE_INT16 TYPE_VOID _initializedOffset
     // TYPE_INT16 TYPE_VOID _previousTargetAnglesOffset
     public Matrix3x4 _target_bRca;
-    public hkpConstraintMotor[] _motors = new hkpConstraintMotor[3];
+    public hkpConstraintMotor?[] _motors = new hkpConstraintMotor?[3];
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -42,12 +42,10 @@ public class hkpRagdollMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpRa
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpRagdollMotorConstraintAtom);
+        return obj is hkpRagdollMotorConstraintAtom other && base.Equals(other) && _isEnabled == other._isEnabled && _target_bRca == other._target_bRca && _motors == other._motors && Signature == other.Signature;
     }
-    public bool Equals(hkpRagdollMotorConstraintAtom? other)
-    {
-        return other is not null && _isEnabled.Equals(other._isEnabled) && _target_bRca.Equals(other._target_bRca) && _motors.Equals(other._motors) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpRagdollMotorConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpRagdollMotorConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

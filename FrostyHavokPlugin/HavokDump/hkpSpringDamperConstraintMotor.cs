@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpSpringDamperConstraintMotor : hkpLimitedForceConstraintMotor, IEquatable<hkpSpringDamperConstraintMotor?>
+public class hkpSpringDamperConstraintMotor : hkpLimitedForceConstraintMotor
 {
     public override uint Signature => 0;
     public float _springConstant;
@@ -32,12 +32,10 @@ public class hkpSpringDamperConstraintMotor : hkpLimitedForceConstraintMotor, IE
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpSpringDamperConstraintMotor);
+        return obj is hkpSpringDamperConstraintMotor other && base.Equals(other) && _springConstant == other._springConstant && _springDamping == other._springDamping && Signature == other.Signature;
     }
-    public bool Equals(hkpSpringDamperConstraintMotor? other)
-    {
-        return other is not null && _springConstant.Equals(other._springConstant) && _springDamping.Equals(other._springDamping) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpSpringDamperConstraintMotor? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpSpringDamperConstraintMotor? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

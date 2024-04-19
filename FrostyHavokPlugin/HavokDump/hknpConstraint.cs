@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpConstraint : IHavokObject, IEquatable<hknpConstraint?>
+public class hknpConstraint : IHavokObject
 {
     public virtual uint Signature => 0;
     public uint _bodyIdA;
     public uint _bodyIdB;
-    public hkpConstraintData _data;
+    public hkpConstraintData? _data;
     public uint _id;
     // TYPE_UINT16 TYPE_VOID _immediateId
     public hknpConstraint_FlagsEnum _flags;
@@ -78,12 +78,10 @@ public class hknpConstraint : IHavokObject, IEquatable<hknpConstraint?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpConstraint);
+        return obj is hknpConstraint other && _bodyIdA == other._bodyIdA && _bodyIdB == other._bodyIdB && _data == other._data && _id == other._id && _flags == other._flags && _type == other._type && _sizeOfAtoms == other._sizeOfAtoms && _sizeOfSchemas == other._sizeOfSchemas && _numSolverResults == other._numSolverResults && _numSolverElemTemps == other._numSolverElemTemps && _runtimeSize == other._runtimeSize && _userData == other._userData && Signature == other.Signature;
     }
-    public bool Equals(hknpConstraint? other)
-    {
-        return other is not null && _bodyIdA.Equals(other._bodyIdA) && _bodyIdB.Equals(other._bodyIdB) && _data.Equals(other._data) && _id.Equals(other._id) && _flags.Equals(other._flags) && _type.Equals(other._type) && _sizeOfAtoms.Equals(other._sizeOfAtoms) && _sizeOfSchemas.Equals(other._sizeOfSchemas) && _numSolverResults.Equals(other._numSolverResults) && _numSolverElemTemps.Equals(other._numSolverElemTemps) && _runtimeSize.Equals(other._runtimeSize) && _userData.Equals(other._userData) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpConstraint? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpConstraint? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

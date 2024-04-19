@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkReferencedObject : hkBaseObject, IEquatable<hkReferencedObject?>
+public class hkReferencedObject : hkBaseObject
 {
     public override uint Signature => 0;
     // TYPE_UINT32 TYPE_VOID _memSizeAndRefCount
@@ -27,12 +27,10 @@ public class hkReferencedObject : hkBaseObject, IEquatable<hkReferencedObject?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkReferencedObject);
+        return obj is hkReferencedObject other && base.Equals(other) && Signature == other.Signature;
     }
-    public bool Equals(hkReferencedObject? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hkReferencedObject? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkReferencedObject? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

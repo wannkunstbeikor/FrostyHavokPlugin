@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpCompressedMeshShape : hknpCompositeShape, IEquatable<hknpCompressedMeshShape?>
+public class hknpCompressedMeshShape : hknpCompositeShape
 {
     public override uint Signature => 0;
-    public hknpCompressedMeshShapeData _data;
-    public hkBitField _quadIsFlat;
-    public hkBitField _triangleIsInternal;
+    public hknpCompressedMeshShapeData? _data;
+    public hkBitField? _quadIsFlat;
+    public hkBitField? _triangleIsInternal;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -40,12 +40,10 @@ public class hknpCompressedMeshShape : hknpCompositeShape, IEquatable<hknpCompre
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpCompressedMeshShape);
+        return obj is hknpCompressedMeshShape other && base.Equals(other) && _data == other._data && _quadIsFlat == other._quadIsFlat && _triangleIsInternal == other._triangleIsInternal && Signature == other.Signature;
     }
-    public bool Equals(hknpCompressedMeshShape? other)
-    {
-        return other is not null && _data.Equals(other._data) && _quadIsFlat.Equals(other._quadIsFlat) && _triangleIsInternal.Equals(other._triangleIsInternal) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpCompressedMeshShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpCompressedMeshShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

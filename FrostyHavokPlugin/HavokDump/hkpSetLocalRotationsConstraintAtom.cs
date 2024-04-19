@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpSetLocalRotationsConstraintAtom : hkpConstraintAtom, IEquatable<hkpSetLocalRotationsConstraintAtom?>
+public class hkpSetLocalRotationsConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public Matrix3x4 _rotationA;
@@ -34,12 +34,10 @@ public class hkpSetLocalRotationsConstraintAtom : hkpConstraintAtom, IEquatable<
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpSetLocalRotationsConstraintAtom);
+        return obj is hkpSetLocalRotationsConstraintAtom other && base.Equals(other) && _rotationA == other._rotationA && _rotationB == other._rotationB && Signature == other.Signature;
     }
-    public bool Equals(hkpSetLocalRotationsConstraintAtom? other)
-    {
-        return other is not null && _rotationA.Equals(other._rotationA) && _rotationB.Equals(other._rotationB) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpSetLocalRotationsConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpSetLocalRotationsConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

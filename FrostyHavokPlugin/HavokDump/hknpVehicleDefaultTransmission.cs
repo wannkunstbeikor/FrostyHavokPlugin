@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultTransmission : hknpVehicleTransmission, IEquatable<hknpVehicleDefaultTransmission?>
+public class hknpVehicleDefaultTransmission : hknpVehicleTransmission
 {
     public override uint Signature => 0;
     public float _downshiftRPM;
@@ -15,8 +15,8 @@ public class hknpVehicleDefaultTransmission : hknpVehicleTransmission, IEquatabl
     public float _primaryTransmissionRatio;
     public float _clutchDelayTime;
     public float _reverseGearRatio;
-    public List<float> _gearsRatio;
-    public List<float> _wheelsTorqueRatio;
+    public List<float> _gearsRatio = new();
+    public List<float> _wheelsTorqueRatio = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -54,12 +54,10 @@ public class hknpVehicleDefaultTransmission : hknpVehicleTransmission, IEquatabl
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultTransmission);
+        return obj is hknpVehicleDefaultTransmission other && base.Equals(other) && _downshiftRPM == other._downshiftRPM && _upshiftRPM == other._upshiftRPM && _primaryTransmissionRatio == other._primaryTransmissionRatio && _clutchDelayTime == other._clutchDelayTime && _reverseGearRatio == other._reverseGearRatio && _gearsRatio.SequenceEqual(other._gearsRatio) && _wheelsTorqueRatio.SequenceEqual(other._wheelsTorqueRatio) && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultTransmission? other)
-    {
-        return other is not null && _downshiftRPM.Equals(other._downshiftRPM) && _upshiftRPM.Equals(other._upshiftRPM) && _primaryTransmissionRatio.Equals(other._primaryTransmissionRatio) && _clutchDelayTime.Equals(other._clutchDelayTime) && _reverseGearRatio.Equals(other._reverseGearRatio) && _gearsRatio.Equals(other._gearsRatio) && _wheelsTorqueRatio.Equals(other._wheelsTorqueRatio) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultTransmission? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultTransmission? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

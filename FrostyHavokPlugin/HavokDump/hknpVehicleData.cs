@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleData : hkReferencedObject, IEquatable<hknpVehicleData?>
+public class hknpVehicleData : hkReferencedObject
 {
     public override uint Signature => 0;
     public Vector4 _gravity;
@@ -24,9 +24,9 @@ public class hknpVehicleData : hkReferencedObject, IEquatable<hknpVehicleData?>
     public float _frictionEqualizer;
     public float _normalClippingAngleCos;
     public float _maxFrictionSolverMassRatio;
-    public List<hknpVehicleDataWheelComponentParams> _wheelParams;
-    public List<sbyte> _numWheelsPerAxle;
-    public hkpVehicleFrictionDescription _frictionDescription;
+    public List<hknpVehicleDataWheelComponentParams?> _wheelParams = new();
+    public List<sbyte> _numWheelsPerAxle = new();
+    public hkpVehicleFrictionDescription? _frictionDescription;
     public Vector4 _chassisFrictionInertiaInvDiag;
     public bool _alreadyInitialised;
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -107,12 +107,10 @@ public class hknpVehicleData : hkReferencedObject, IEquatable<hknpVehicleData?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleData);
+        return obj is hknpVehicleData other && base.Equals(other) && _gravity == other._gravity && _numWheels == other._numWheels && _chassisOrientation == other._chassisOrientation && _torqueRollFactor == other._torqueRollFactor && _torquePitchFactor == other._torquePitchFactor && _torqueYawFactor == other._torqueYawFactor && _extraTorqueFactor == other._extraTorqueFactor && _maxVelocityForPositionalFriction == other._maxVelocityForPositionalFriction && _chassisUnitInertiaYaw == other._chassisUnitInertiaYaw && _chassisUnitInertiaRoll == other._chassisUnitInertiaRoll && _chassisUnitInertiaPitch == other._chassisUnitInertiaPitch && _frictionEqualizer == other._frictionEqualizer && _normalClippingAngleCos == other._normalClippingAngleCos && _maxFrictionSolverMassRatio == other._maxFrictionSolverMassRatio && _wheelParams.SequenceEqual(other._wheelParams) && _numWheelsPerAxle.SequenceEqual(other._numWheelsPerAxle) && _frictionDescription == other._frictionDescription && _chassisFrictionInertiaInvDiag == other._chassisFrictionInertiaInvDiag && _alreadyInitialised == other._alreadyInitialised && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleData? other)
-    {
-        return other is not null && _gravity.Equals(other._gravity) && _numWheels.Equals(other._numWheels) && _chassisOrientation.Equals(other._chassisOrientation) && _torqueRollFactor.Equals(other._torqueRollFactor) && _torquePitchFactor.Equals(other._torquePitchFactor) && _torqueYawFactor.Equals(other._torqueYawFactor) && _extraTorqueFactor.Equals(other._extraTorqueFactor) && _maxVelocityForPositionalFriction.Equals(other._maxVelocityForPositionalFriction) && _chassisUnitInertiaYaw.Equals(other._chassisUnitInertiaYaw) && _chassisUnitInertiaRoll.Equals(other._chassisUnitInertiaRoll) && _chassisUnitInertiaPitch.Equals(other._chassisUnitInertiaPitch) && _frictionEqualizer.Equals(other._frictionEqualizer) && _normalClippingAngleCos.Equals(other._normalClippingAngleCos) && _maxFrictionSolverMassRatio.Equals(other._maxFrictionSolverMassRatio) && _wheelParams.Equals(other._wheelParams) && _numWheelsPerAxle.Equals(other._numWheelsPerAxle) && _frictionDescription.Equals(other._frictionDescription) && _chassisFrictionInertiaInvDiag.Equals(other._chassisFrictionInertiaInvDiag) && _alreadyInitialised.Equals(other._alreadyInitialised) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxSpline : hkReferencedObject, IEquatable<hkxSpline?>
+public class hkxSpline : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<hkxSplineControlPoint> _controlPoints;
+    public List<hkxSplineControlPoint?> _controlPoints = new();
     public bool _isClosed;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
@@ -34,12 +34,10 @@ public class hkxSpline : hkReferencedObject, IEquatable<hkxSpline?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxSpline);
+        return obj is hkxSpline other && base.Equals(other) && _controlPoints.SequenceEqual(other._controlPoints) && _isClosed == other._isClosed && Signature == other.Signature;
     }
-    public bool Equals(hkxSpline? other)
-    {
-        return other is not null && _controlPoints.Equals(other._controlPoints) && _isClosed.Equals(other._isClosed) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxSpline? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxSpline? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

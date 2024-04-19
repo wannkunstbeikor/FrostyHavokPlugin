@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkRangeInt32Attribute : IHavokObject, IEquatable<hkRangeInt32Attribute?>
+public class hkRangeInt32Attribute : IHavokObject
 {
     public virtual uint Signature => 0;
     public int _absmin;
@@ -37,12 +37,10 @@ public class hkRangeInt32Attribute : IHavokObject, IEquatable<hkRangeInt32Attrib
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkRangeInt32Attribute);
+        return obj is hkRangeInt32Attribute other && _absmin == other._absmin && _absmax == other._absmax && _softmin == other._softmin && _softmax == other._softmax && Signature == other.Signature;
     }
-    public bool Equals(hkRangeInt32Attribute? other)
-    {
-        return other is not null && _absmin.Equals(other._absmin) && _absmax.Equals(other._absmax) && _softmin.Equals(other._softmin) && _softmax.Equals(other._softmax) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkRangeInt32Attribute? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkRangeInt32Attribute? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

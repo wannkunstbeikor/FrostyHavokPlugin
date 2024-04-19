@@ -7,13 +7,13 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMemoryResourceContainer : hkResourceContainer, IEquatable<hkMemoryResourceContainer?>
+public class hkMemoryResourceContainer : hkResourceContainer
 {
     public override uint Signature => 0;
-    public string _name;
+    public string _name = string.Empty;
     // TYPE_POINTER TYPE_STRUCT _parent
-    public List<hkMemoryResourceHandle> _resourceHandles;
-    public List<hkMemoryResourceContainer> _children;
+    public List<hkMemoryResourceHandle?> _resourceHandles = new();
+    public List<hkMemoryResourceContainer?> _children = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -39,12 +39,10 @@ public class hkMemoryResourceContainer : hkResourceContainer, IEquatable<hkMemor
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMemoryResourceContainer);
+        return obj is hkMemoryResourceContainer other && base.Equals(other) && _name == other._name && _resourceHandles.SequenceEqual(other._resourceHandles) && _children.SequenceEqual(other._children) && Signature == other.Signature;
     }
-    public bool Equals(hkMemoryResourceContainer? other)
-    {
-        return other is not null && _name.Equals(other._name) && _resourceHandles.Equals(other._resourceHandles) && _children.Equals(other._children) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMemoryResourceContainer? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMemoryResourceContainer? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

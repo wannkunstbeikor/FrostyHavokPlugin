@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpAngFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngFrictionConstraintAtom?>
+public class hkpAngFrictionConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public byte _isEnabled;
@@ -45,12 +45,10 @@ public class hkpAngFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpAng
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpAngFrictionConstraintAtom);
+        return obj is hkpAngFrictionConstraintAtom other && base.Equals(other) && _isEnabled == other._isEnabled && _firstFrictionAxis == other._firstFrictionAxis && _numFrictionAxes == other._numFrictionAxes && _maxFrictionTorque == other._maxFrictionTorque && Signature == other.Signature;
     }
-    public bool Equals(hkpAngFrictionConstraintAtom? other)
-    {
-        return other is not null && _isEnabled.Equals(other._isEnabled) && _firstFrictionAxis.Equals(other._firstFrictionAxis) && _numFrictionAxes.Equals(other._numFrictionAxes) && _maxFrictionTorque.Equals(other._maxFrictionTorque) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpAngFrictionConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpAngFrictionConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

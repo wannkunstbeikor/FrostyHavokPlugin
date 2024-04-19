@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDriverInputAnalogStatus : hknpVehicleDriverInputStatus, IEquatable<hknpVehicleDriverInputAnalogStatus?>
+public class hknpVehicleDriverInputAnalogStatus : hknpVehicleDriverInputStatus
 {
     public override uint Signature => 0;
     public float _positionX;
@@ -42,12 +42,10 @@ public class hknpVehicleDriverInputAnalogStatus : hknpVehicleDriverInputStatus, 
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDriverInputAnalogStatus);
+        return obj is hknpVehicleDriverInputAnalogStatus other && base.Equals(other) && _positionX == other._positionX && _positionY == other._positionY && _handbrakeButtonPressed == other._handbrakeButtonPressed && _reverseButtonPressed == other._reverseButtonPressed && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDriverInputAnalogStatus? other)
-    {
-        return other is not null && _positionX.Equals(other._positionX) && _positionY.Equals(other._positionY) && _handbrakeButtonPressed.Equals(other._handbrakeButtonPressed) && _reverseButtonPressed.Equals(other._reverseButtonPressed) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDriverInputAnalogStatus? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDriverInputAnalogStatus? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

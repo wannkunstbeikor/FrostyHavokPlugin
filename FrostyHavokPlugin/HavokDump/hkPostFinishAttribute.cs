@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkPostFinishAttribute : IHavokObject, IEquatable<hkPostFinishAttribute?>
+public class hkPostFinishAttribute : IHavokObject
 {
     public virtual uint Signature => 0;
     // TYPE_POINTER TYPE_VOID _postFinishFunction
@@ -24,12 +24,10 @@ public class hkPostFinishAttribute : IHavokObject, IEquatable<hkPostFinishAttrib
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkPostFinishAttribute);
+        return obj is hkPostFinishAttribute other && Signature == other.Signature;
     }
-    public bool Equals(hkPostFinishAttribute? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hkPostFinishAttribute? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkPostFinishAttribute? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpBallSocketConstraintAtom : hkpConstraintAtom, IEquatable<hkpBallSocketConstraintAtom?>
+public class hkpBallSocketConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public hkpConstraintAtom_SolvingMethod _solvingMethod;
     public byte _bodiesToNotify;
-    public hkUFloat8 _velocityStabilizationFactor;
+    public hkUFloat8? _velocityStabilizationFactor;
     public bool _enableLinearImpulseLimit;
     public float _breachImpulse;
     public float _inertiaStabilizationFactor;
@@ -51,12 +51,10 @@ public class hkpBallSocketConstraintAtom : hkpConstraintAtom, IEquatable<hkpBall
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpBallSocketConstraintAtom);
+        return obj is hkpBallSocketConstraintAtom other && base.Equals(other) && _solvingMethod == other._solvingMethod && _bodiesToNotify == other._bodiesToNotify && _velocityStabilizationFactor == other._velocityStabilizationFactor && _enableLinearImpulseLimit == other._enableLinearImpulseLimit && _breachImpulse == other._breachImpulse && _inertiaStabilizationFactor == other._inertiaStabilizationFactor && Signature == other.Signature;
     }
-    public bool Equals(hkpBallSocketConstraintAtom? other)
-    {
-        return other is not null && _solvingMethod.Equals(other._solvingMethod) && _bodiesToNotify.Equals(other._bodiesToNotify) && _velocityStabilizationFactor.Equals(other._velocityStabilizationFactor) && _enableLinearImpulseLimit.Equals(other._enableLinearImpulseLimit) && _breachImpulse.Equals(other._breachImpulse) && _inertiaStabilizationFactor.Equals(other._inertiaStabilizationFactor) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpBallSocketConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpBallSocketConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

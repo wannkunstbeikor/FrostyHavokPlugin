@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpCallbackConstraintMotor : hkpLimitedForceConstraintMotor, IEquatable<hkpCallbackConstraintMotor?>
+public class hkpCallbackConstraintMotor : hkpLimitedForceConstraintMotor
 {
     public override uint Signature => 0;
     // TYPE_POINTER TYPE_VOID _callbackFunc
@@ -45,12 +45,10 @@ public class hkpCallbackConstraintMotor : hkpLimitedForceConstraintMotor, IEquat
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpCallbackConstraintMotor);
+        return obj is hkpCallbackConstraintMotor other && base.Equals(other) && _callbackType == other._callbackType && _userData0 == other._userData0 && _userData1 == other._userData1 && _userData2 == other._userData2 && Signature == other.Signature;
     }
-    public bool Equals(hkpCallbackConstraintMotor? other)
-    {
-        return other is not null && _callbackType.Equals(other._callbackType) && _userData0.Equals(other._userData0) && _userData1.Equals(other._userData1) && _userData2.Equals(other._userData2) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpCallbackConstraintMotor? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpCallbackConstraintMotor? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

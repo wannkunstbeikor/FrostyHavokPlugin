@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class HavokPhysicsContainer : hkReferencedObject, IEquatable<HavokPhysicsContainer?>
+public class HavokPhysicsContainer : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<hknpShape> _shapes;
+    public List<hknpShape?> _shapes = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -28,12 +28,10 @@ public class HavokPhysicsContainer : hkReferencedObject, IEquatable<HavokPhysics
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as HavokPhysicsContainer);
+        return obj is HavokPhysicsContainer other && base.Equals(other) && _shapes.SequenceEqual(other._shapes) && Signature == other.Signature;
     }
-    public bool Equals(HavokPhysicsContainer? other)
-    {
-        return other is not null && _shapes.Equals(other._shapes) && Signature == other.Signature;
-    }
+    public static bool operator ==(HavokPhysicsContainer? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(HavokPhysicsContainer? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

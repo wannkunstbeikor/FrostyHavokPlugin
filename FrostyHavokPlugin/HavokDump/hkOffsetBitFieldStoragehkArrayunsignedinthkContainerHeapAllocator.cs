@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator : IHavokObject, IEquatable<hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator?>
+public class hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<uint> _words;
+    public List<uint> _words = new();
     public int _offset;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -31,12 +31,10 @@ public class hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator :
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator);
+        return obj is hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator other && _words.SequenceEqual(other._words) && _offset == other._offset && Signature == other.Signature;
     }
-    public bool Equals(hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator? other)
-    {
-        return other is not null && _words.Equals(other._words) && _offset.Equals(other._offset) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkOffsetBitFieldStoragehkArrayunsignedinthkContainerHeapAllocator? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

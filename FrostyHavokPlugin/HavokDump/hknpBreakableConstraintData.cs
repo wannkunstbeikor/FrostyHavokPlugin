@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpBreakableConstraintData : hkpWrappedConstraintData, IEquatable<hknpBreakableConstraintData?>
+public class hknpBreakableConstraintData : hkpWrappedConstraintData
 {
     public override uint Signature => 0;
     public float _threshold;
@@ -30,12 +30,10 @@ public class hknpBreakableConstraintData : hkpWrappedConstraintData, IEquatable<
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpBreakableConstraintData);
+        return obj is hknpBreakableConstraintData other && base.Equals(other) && _threshold == other._threshold && Signature == other.Signature;
     }
-    public bool Equals(hknpBreakableConstraintData? other)
-    {
-        return other is not null && _threshold.Equals(other._threshold) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpBreakableConstraintData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpBreakableConstraintData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

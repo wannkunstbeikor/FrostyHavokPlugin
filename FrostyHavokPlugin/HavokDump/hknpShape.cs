@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpShape : hkReferencedObject, IEquatable<hknpShape?>
+public class hknpShape : hkReferencedObject
 {
     public override uint Signature => 0;
     public hknpShape_FlagsEnum _flags;
@@ -15,7 +15,7 @@ public class hknpShape : hkReferencedObject, IEquatable<hknpShape?>
     public hknpCollisionDispatchType_Enum _dispatchType;
     public float _convexRadius;
     public ulong _userData;
-    public hkRefCountedProperties _properties;
+    public hkRefCountedProperties? _properties;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -50,12 +50,10 @@ public class hknpShape : hkReferencedObject, IEquatable<hknpShape?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpShape);
+        return obj is hknpShape other && base.Equals(other) && _flags == other._flags && _numShapeKeyBits == other._numShapeKeyBits && _dispatchType == other._dispatchType && _convexRadius == other._convexRadius && _userData == other._userData && _properties == other._properties && Signature == other.Signature;
     }
-    public bool Equals(hknpShape? other)
-    {
-        return other is not null && _flags.Equals(other._flags) && _numShapeKeyBits.Equals(other._numShapeKeyBits) && _dispatchType.Equals(other._dispatchType) && _convexRadius.Equals(other._convexRadius) && _userData.Equals(other._userData) && _properties.Equals(other._properties) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

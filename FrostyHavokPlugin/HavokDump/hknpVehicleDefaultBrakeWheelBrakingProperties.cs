@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultBrakeWheelBrakingProperties : IHavokObject, IEquatable<hknpVehicleDefaultBrakeWheelBrakingProperties?>
+public class hknpVehicleDefaultBrakeWheelBrakingProperties : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _maxBreakingTorque;
@@ -35,12 +35,10 @@ public class hknpVehicleDefaultBrakeWheelBrakingProperties : IHavokObject, IEqua
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultBrakeWheelBrakingProperties);
+        return obj is hknpVehicleDefaultBrakeWheelBrakingProperties other && _maxBreakingTorque == other._maxBreakingTorque && _minPedalInputToBlock == other._minPedalInputToBlock && _isConnectedToHandbrake == other._isConnectedToHandbrake && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultBrakeWheelBrakingProperties? other)
-    {
-        return other is not null && _maxBreakingTorque.Equals(other._maxBreakingTorque) && _minPedalInputToBlock.Equals(other._minPedalInputToBlock) && _isConnectedToHandbrake.Equals(other._isConnectedToHandbrake) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultBrakeWheelBrakingProperties? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultBrakeWheelBrakingProperties? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

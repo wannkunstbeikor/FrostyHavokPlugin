@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxEnvironment : hkReferencedObject, IEquatable<hkxEnvironment?>
+public class hkxEnvironment : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<hkxEnvironmentVariable> _variables;
+    public List<hkxEnvironmentVariable?> _variables = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -28,12 +28,10 @@ public class hkxEnvironment : hkReferencedObject, IEquatable<hkxEnvironment?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxEnvironment);
+        return obj is hkxEnvironment other && base.Equals(other) && _variables.SequenceEqual(other._variables) && Signature == other.Signature;
     }
-    public bool Equals(hkxEnvironment? other)
-    {
-        return other is not null && _variables.Equals(other._variables) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxEnvironment? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxEnvironment? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

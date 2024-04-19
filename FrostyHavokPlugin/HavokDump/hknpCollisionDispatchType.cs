@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpCollisionDispatchType : IHavokObject, IEquatable<hknpCollisionDispatchType?>
+public class hknpCollisionDispatchType : IHavokObject
 {
     public virtual uint Signature => 0;
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -23,12 +23,10 @@ public class hknpCollisionDispatchType : IHavokObject, IEquatable<hknpCollisionD
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpCollisionDispatchType);
+        return obj is hknpCollisionDispatchType other && Signature == other.Signature;
     }
-    public bool Equals(hknpCollisionDispatchType? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpCollisionDispatchType? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpCollisionDispatchType? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

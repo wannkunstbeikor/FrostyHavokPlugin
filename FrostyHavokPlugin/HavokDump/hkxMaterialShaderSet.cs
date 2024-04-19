@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxMaterialShaderSet : hkReferencedObject, IEquatable<hkxMaterialShaderSet?>
+public class hkxMaterialShaderSet : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<hkxMaterialShader> _shaders;
+    public List<hkxMaterialShader?> _shaders = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -28,12 +28,10 @@ public class hkxMaterialShaderSet : hkReferencedObject, IEquatable<hkxMaterialSh
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxMaterialShaderSet);
+        return obj is hkxMaterialShaderSet other && base.Equals(other) && _shaders.SequenceEqual(other._shaders) && Signature == other.Signature;
     }
-    public bool Equals(hkxMaterialShaderSet? other)
-    {
-        return other is not null && _shaders.Equals(other._shaders) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxMaterialShaderSet? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxMaterialShaderSet? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

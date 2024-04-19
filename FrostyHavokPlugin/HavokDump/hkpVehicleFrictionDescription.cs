@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpVehicleFrictionDescription : hkReferencedObject, IEquatable<hkpVehicleFrictionDescription?>
+public class hkpVehicleFrictionDescription : hkReferencedObject
 {
     public override uint Signature => 0;
     public float _wheelDistance;
     public float _chassisMassInv;
-    public hkpVehicleFrictionDescriptionAxisDescription[] _axleDescr = new hkpVehicleFrictionDescriptionAxisDescription[2];
+    public hkpVehicleFrictionDescriptionAxisDescription?[] _axleDescr = new hkpVehicleFrictionDescriptionAxisDescription?[2];
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -36,12 +36,10 @@ public class hkpVehicleFrictionDescription : hkReferencedObject, IEquatable<hkpV
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpVehicleFrictionDescription);
+        return obj is hkpVehicleFrictionDescription other && base.Equals(other) && _wheelDistance == other._wheelDistance && _chassisMassInv == other._chassisMassInv && _axleDescr == other._axleDescr && Signature == other.Signature;
     }
-    public bool Equals(hkpVehicleFrictionDescription? other)
-    {
-        return other is not null && _wheelDistance.Equals(other._wheelDistance) && _chassisMassInv.Equals(other._chassisMassInv) && _axleDescr.Equals(other._axleDescr) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpVehicleFrictionDescription? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpVehicleFrictionDescription? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

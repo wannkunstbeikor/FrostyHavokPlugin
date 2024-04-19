@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxSkinBinding : hkReferencedObject, IEquatable<hkxSkinBinding?>
+public class hkxSkinBinding : hkReferencedObject
 {
     public override uint Signature => 0;
-    public hkxMesh _mesh;
-    public List<string> _nodeNames;
-    public List<Matrix4> _bindPose;
+    public hkxMesh? _mesh;
+    public List<string> _nodeNames = new();
+    public List<Matrix4> _bindPose = new();
     public Matrix4 _initSkinTransform;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
@@ -42,12 +42,10 @@ public class hkxSkinBinding : hkReferencedObject, IEquatable<hkxSkinBinding?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxSkinBinding);
+        return obj is hkxSkinBinding other && base.Equals(other) && _mesh == other._mesh && _nodeNames.SequenceEqual(other._nodeNames) && _bindPose.SequenceEqual(other._bindPose) && _initSkinTransform == other._initSkinTransform && Signature == other.Signature;
     }
-    public bool Equals(hkxSkinBinding? other)
-    {
-        return other is not null && _mesh.Equals(other._mesh) && _nodeNames.Equals(other._nodeNames) && _bindPose.Equals(other._bindPose) && _initSkinTransform.Equals(other._initSkinTransform) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxSkinBinding? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxSkinBinding? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

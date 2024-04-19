@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpMaterialDescriptor : IHavokObject, IEquatable<hknpMaterialDescriptor?>
+public class hknpMaterialDescriptor : IHavokObject
 {
     public virtual uint Signature => 0;
-    public string _name;
-    public hknpRefMaterial _material;
+    public string _name = string.Empty;
+    public hknpRefMaterial? _material;
     public ushort _materialId;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -35,12 +35,10 @@ public class hknpMaterialDescriptor : IHavokObject, IEquatable<hknpMaterialDescr
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpMaterialDescriptor);
+        return obj is hknpMaterialDescriptor other && _name == other._name && _material == other._material && _materialId == other._materialId && Signature == other.Signature;
     }
-    public bool Equals(hknpMaterialDescriptor? other)
-    {
-        return other is not null && _name.Equals(other._name) && _material.Equals(other._material) && _materialId.Equals(other._materialId) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpMaterialDescriptor? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpMaterialDescriptor? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

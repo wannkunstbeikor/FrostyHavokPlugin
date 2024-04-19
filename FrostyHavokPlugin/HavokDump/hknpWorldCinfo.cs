@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpWorldCinfo : IHavokObject, IEquatable<hknpWorldCinfo?>
+public class hknpWorldCinfo : IHavokObject
 {
     public virtual uint Signature => 0;
     public int _bodyBufferCapacity;
@@ -17,14 +17,14 @@ public class hknpWorldCinfo : IHavokObject, IEquatable<hknpWorldCinfo?>
     public int _constraintBufferCapacity;
     // TYPE_POINTER TYPE_VOID _userConstraintBuffer
     // TYPE_POINTER TYPE_VOID _persistentStreamAllocator
-    public hknpMaterialLibrary _materialLibrary;
-    public hknpMotionPropertiesLibrary _motionPropertiesLibrary;
-    public hknpBodyQualityLibrary _qualityLibrary;
-    public hkAabb _broadPhaseAabb;
+    public hknpMaterialLibrary? _materialLibrary;
+    public hknpMotionPropertiesLibrary? _motionPropertiesLibrary;
+    public hknpBodyQualityLibrary? _qualityLibrary;
+    public hkAabb? _broadPhaseAabb;
     public hknpWorldCinfo_LeavingBroadPhaseBehavior _leavingBroadPhaseBehavior;
-    public hknpBroadPhaseConfig _broadPhaseConfig;
-    public hknpCollisionFilter _collisionFilter;
-    public hknpShapeTagCodec _shapeTagCodec;
+    public hknpBroadPhaseConfig? _broadPhaseConfig;
+    public hknpCollisionFilter? _collisionFilter;
+    public hknpShapeTagCodec? _shapeTagCodec;
     public float _collisionTolerance;
     public float _relativeCollisionAccuracy;
     public Vector4 _gravity;
@@ -150,12 +150,10 @@ public class hknpWorldCinfo : IHavokObject, IEquatable<hknpWorldCinfo?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpWorldCinfo);
+        return obj is hknpWorldCinfo other && _bodyBufferCapacity == other._bodyBufferCapacity && _motionBufferCapacity == other._motionBufferCapacity && _constraintBufferCapacity == other._constraintBufferCapacity && _materialLibrary == other._materialLibrary && _motionPropertiesLibrary == other._motionPropertiesLibrary && _qualityLibrary == other._qualityLibrary && _broadPhaseAabb == other._broadPhaseAabb && _leavingBroadPhaseBehavior == other._leavingBroadPhaseBehavior && _broadPhaseConfig == other._broadPhaseConfig && _collisionFilter == other._collisionFilter && _shapeTagCodec == other._shapeTagCodec && _collisionTolerance == other._collisionTolerance && _relativeCollisionAccuracy == other._relativeCollisionAccuracy && _gravity == other._gravity && _solverIterations == other._solverIterations && _solverTau == other._solverTau && _solverDamp == other._solverDamp && _solverMicrosteps == other._solverMicrosteps && _defaultSolverTimestep == other._defaultSolverTimestep && _maxApproachSpeedForHighQualitySolver == other._maxApproachSpeedForHighQualitySolver && _enableSolverDynamicScheduling == other._enableSolverDynamicScheduling && _simulationType == other._simulationType && _numSplitterCells == other._numSplitterCells && _mergeEventsBeforeDispatch == other._mergeEventsBeforeDispatch && _enableDeactivation == other._enableDeactivation && _largeIslandSize == other._largeIslandSize && _unitScale == other._unitScale && Signature == other.Signature;
     }
-    public bool Equals(hknpWorldCinfo? other)
-    {
-        return other is not null && _bodyBufferCapacity.Equals(other._bodyBufferCapacity) && _motionBufferCapacity.Equals(other._motionBufferCapacity) && _constraintBufferCapacity.Equals(other._constraintBufferCapacity) && _materialLibrary.Equals(other._materialLibrary) && _motionPropertiesLibrary.Equals(other._motionPropertiesLibrary) && _qualityLibrary.Equals(other._qualityLibrary) && _broadPhaseAabb.Equals(other._broadPhaseAabb) && _leavingBroadPhaseBehavior.Equals(other._leavingBroadPhaseBehavior) && _broadPhaseConfig.Equals(other._broadPhaseConfig) && _collisionFilter.Equals(other._collisionFilter) && _shapeTagCodec.Equals(other._shapeTagCodec) && _collisionTolerance.Equals(other._collisionTolerance) && _relativeCollisionAccuracy.Equals(other._relativeCollisionAccuracy) && _gravity.Equals(other._gravity) && _solverIterations.Equals(other._solverIterations) && _solverTau.Equals(other._solverTau) && _solverDamp.Equals(other._solverDamp) && _solverMicrosteps.Equals(other._solverMicrosteps) && _defaultSolverTimestep.Equals(other._defaultSolverTimestep) && _maxApproachSpeedForHighQualitySolver.Equals(other._maxApproachSpeedForHighQualitySolver) && _enableSolverDynamicScheduling.Equals(other._enableSolverDynamicScheduling) && _simulationType.Equals(other._simulationType) && _numSplitterCells.Equals(other._numSplitterCells) && _mergeEventsBeforeDispatch.Equals(other._mergeEventsBeforeDispatch) && _enableDeactivation.Equals(other._enableDeactivation) && _largeIslandSize.Equals(other._largeIslandSize) && _unitScale.Equals(other._unitScale) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpWorldCinfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpWorldCinfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

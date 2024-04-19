@@ -7,15 +7,15 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxMeshSection : hkReferencedObject, IEquatable<hkxMeshSection?>
+public class hkxMeshSection : hkReferencedObject
 {
     public override uint Signature => 0;
-    public hkxVertexBuffer _vertexBuffer;
-    public List<hkxIndexBuffer> _indexBuffers;
-    public hkxMaterial _material;
-    public List<hkReferencedObject> _userChannels;
-    public List<hkxVertexAnimation> _vertexAnimations;
-    public List<float> _linearKeyFrameHints;
+    public hkxVertexBuffer? _vertexBuffer;
+    public List<hkxIndexBuffer?> _indexBuffers = new();
+    public hkxMaterial? _material;
+    public List<hkReferencedObject?> _userChannels = new();
+    public List<hkxVertexAnimation?> _vertexAnimations = new();
+    public List<float> _linearKeyFrameHints = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -48,12 +48,10 @@ public class hkxMeshSection : hkReferencedObject, IEquatable<hkxMeshSection?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxMeshSection);
+        return obj is hkxMeshSection other && base.Equals(other) && _vertexBuffer == other._vertexBuffer && _indexBuffers.SequenceEqual(other._indexBuffers) && _material == other._material && _userChannels.SequenceEqual(other._userChannels) && _vertexAnimations.SequenceEqual(other._vertexAnimations) && _linearKeyFrameHints.SequenceEqual(other._linearKeyFrameHints) && Signature == other.Signature;
     }
-    public bool Equals(hkxMeshSection? other)
-    {
-        return other is not null && _vertexBuffer.Equals(other._vertexBuffer) && _indexBuffers.Equals(other._indexBuffers) && _material.Equals(other._material) && _userChannels.Equals(other._userChannels) && _vertexAnimations.Equals(other._vertexAnimations) && _linearKeyFrameHints.Equals(other._linearKeyFrameHints) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxMeshSection? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxMeshSection? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

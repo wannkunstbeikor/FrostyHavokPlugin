@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpAngMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngMotorConstraintAtom?>
+public class hkpAngMotorConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public bool _isEnabled;
@@ -16,7 +16,7 @@ public class hkpAngMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngMot
     // TYPE_INT16 TYPE_VOID _previousTargetAngleOffset
     // TYPE_INT16 TYPE_VOID _correspondingAngLimitSolverResultOffset
     public float _targetAngle;
-    public hkpConstraintMotor _motor;
+    public hkpConstraintMotor? _motor;
     // TYPE_UINT8 TYPE_VOID _padding
     public override void Read(PackFileDeserializer des, DataStream br)
     {
@@ -48,12 +48,10 @@ public class hkpAngMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngMot
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpAngMotorConstraintAtom);
+        return obj is hkpAngMotorConstraintAtom other && base.Equals(other) && _isEnabled == other._isEnabled && _motorAxis == other._motorAxis && _targetAngle == other._targetAngle && _motor == other._motor && Signature == other.Signature;
     }
-    public bool Equals(hkpAngMotorConstraintAtom? other)
-    {
-        return other is not null && _isEnabled.Equals(other._isEnabled) && _motorAxis.Equals(other._motorAxis) && _targetAngle.Equals(other._targetAngle) && _motor.Equals(other._motor) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpAngMotorConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpAngMotorConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

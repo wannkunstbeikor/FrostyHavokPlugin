@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultAnalogDriverInput : hknpVehicleDriverInput, IEquatable<hknpVehicleDefaultAnalogDriverInput?>
+public class hknpVehicleDefaultAnalogDriverInput : hknpVehicleDriverInput
 {
     public override uint Signature => 0;
     public float _slopeChangePointX;
@@ -42,12 +42,10 @@ public class hknpVehicleDefaultAnalogDriverInput : hknpVehicleDriverInput, IEqua
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultAnalogDriverInput);
+        return obj is hknpVehicleDefaultAnalogDriverInput other && base.Equals(other) && _slopeChangePointX == other._slopeChangePointX && _initialSlope == other._initialSlope && _deadZone == other._deadZone && _autoReverse == other._autoReverse && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultAnalogDriverInput? other)
-    {
-        return other is not null && _slopeChangePointX.Equals(other._slopeChangePointX) && _initialSlope.Equals(other._initialSlope) && _deadZone.Equals(other._deadZone) && _autoReverse.Equals(other._autoReverse) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultAnalogDriverInput? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultAnalogDriverInput? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

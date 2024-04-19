@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxNodeAnnotationData : IHavokObject, IEquatable<hkxNodeAnnotationData?>
+public class hkxNodeAnnotationData : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _time;
-    public string _description;
+    public string _description = string.Empty;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _time = br.ReadSingle();
@@ -31,12 +31,10 @@ public class hkxNodeAnnotationData : IHavokObject, IEquatable<hkxNodeAnnotationD
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxNodeAnnotationData);
+        return obj is hkxNodeAnnotationData other && _time == other._time && _description == other._description && Signature == other.Signature;
     }
-    public bool Equals(hkxNodeAnnotationData? other)
-    {
-        return other is not null && _time.Equals(other._time) && _description.Equals(other._description) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxNodeAnnotationData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxNodeAnnotationData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

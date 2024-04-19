@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMemoryMeshMaterial : hkMeshMaterial, IEquatable<hkMemoryMeshMaterial?>
+public class hkMemoryMeshMaterial : hkMeshMaterial
 {
     public override uint Signature => 0;
-    public string _materialName;
-    public List<hkMeshTexture> _textures;
+    public string _materialName = string.Empty;
+    public List<hkMeshTexture?> _textures = new();
     public Vector4 _diffuseColor;
     public Vector4 _ambientColor;
     public Vector4 _specularColor;
@@ -62,12 +62,10 @@ public class hkMemoryMeshMaterial : hkMeshMaterial, IEquatable<hkMemoryMeshMater
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMemoryMeshMaterial);
+        return obj is hkMemoryMeshMaterial other && base.Equals(other) && _materialName == other._materialName && _textures.SequenceEqual(other._textures) && _diffuseColor == other._diffuseColor && _ambientColor == other._ambientColor && _specularColor == other._specularColor && _emissiveColor == other._emissiveColor && _userData == other._userData && _tesselationFactor == other._tesselationFactor && _displacementAmount == other._displacementAmount && Signature == other.Signature;
     }
-    public bool Equals(hkMemoryMeshMaterial? other)
-    {
-        return other is not null && _materialName.Equals(other._materialName) && _textures.Equals(other._textures) && _diffuseColor.Equals(other._diffuseColor) && _ambientColor.Equals(other._ambientColor) && _specularColor.Equals(other._specularColor) && _emissiveColor.Equals(other._emissiveColor) && _userData.Equals(other._userData) && _tesselationFactor.Equals(other._tesselationFactor) && _displacementAmount.Equals(other._displacementAmount) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMemoryMeshMaterial? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMemoryMeshMaterial? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

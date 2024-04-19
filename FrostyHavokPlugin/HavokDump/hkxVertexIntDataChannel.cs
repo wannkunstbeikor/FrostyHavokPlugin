@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxVertexIntDataChannel : hkReferencedObject, IEquatable<hkxVertexIntDataChannel?>
+public class hkxVertexIntDataChannel : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<int> _perVertexInts;
+    public List<int> _perVertexInts = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -28,12 +28,10 @@ public class hkxVertexIntDataChannel : hkReferencedObject, IEquatable<hkxVertexI
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxVertexIntDataChannel);
+        return obj is hkxVertexIntDataChannel other && base.Equals(other) && _perVertexInts.SequenceEqual(other._perVertexInts) && Signature == other.Signature;
     }
-    public bool Equals(hkxVertexIntDataChannel? other)
-    {
-        return other is not null && _perVertexInts.Equals(other._perVertexInts) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxVertexIntDataChannel? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxVertexIntDataChannel? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

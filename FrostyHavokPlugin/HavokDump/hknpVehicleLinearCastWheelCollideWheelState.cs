@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleLinearCastWheelCollideWheelState : IHavokObject, IEquatable<hknpVehicleLinearCastWheelCollideWheelState?>
+public class hknpVehicleLinearCastWheelCollideWheelState : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkAabb _aabb;
-    public hknpShape _shape;
+    public hkAabb? _aabb;
+    public hknpShape? _shape;
     public Matrix4 _transform;
     public Vector4 _to;
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -40,12 +40,10 @@ public class hknpVehicleLinearCastWheelCollideWheelState : IHavokObject, IEquata
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleLinearCastWheelCollideWheelState);
+        return obj is hknpVehicleLinearCastWheelCollideWheelState other && _aabb == other._aabb && _shape == other._shape && _transform == other._transform && _to == other._to && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleLinearCastWheelCollideWheelState? other)
-    {
-        return other is not null && _aabb.Equals(other._aabb) && _shape.Equals(other._shape) && _transform.Equals(other._transform) && _to.Equals(other._to) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleLinearCastWheelCollideWheelState? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleLinearCastWheelCollideWheelState? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

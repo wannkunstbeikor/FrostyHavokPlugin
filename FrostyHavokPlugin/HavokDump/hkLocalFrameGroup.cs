@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkLocalFrameGroup : hkReferencedObject, IEquatable<hkLocalFrameGroup?>
+public class hkLocalFrameGroup : hkReferencedObject
 {
     public override uint Signature => 0;
-    public string _name;
+    public string _name = string.Empty;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -28,12 +28,10 @@ public class hkLocalFrameGroup : hkReferencedObject, IEquatable<hkLocalFrameGrou
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkLocalFrameGroup);
+        return obj is hkLocalFrameGroup other && base.Equals(other) && _name == other._name && Signature == other.Signature;
     }
-    public bool Equals(hkLocalFrameGroup? other)
-    {
-        return other is not null && _name.Equals(other._name) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkLocalFrameGroup? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkLocalFrameGroup? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

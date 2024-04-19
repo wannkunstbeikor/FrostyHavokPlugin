@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpLinFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpLinFrictionConstraintAtom?>
+public class hkpLinFrictionConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public byte _isEnabled;
@@ -39,12 +39,10 @@ public class hkpLinFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpLin
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpLinFrictionConstraintAtom);
+        return obj is hkpLinFrictionConstraintAtom other && base.Equals(other) && _isEnabled == other._isEnabled && _frictionAxis == other._frictionAxis && _maxFrictionForce == other._maxFrictionForce && Signature == other.Signature;
     }
-    public bool Equals(hkpLinFrictionConstraintAtom? other)
-    {
-        return other is not null && _isEnabled.Equals(other._isEnabled) && _frictionAxis.Equals(other._frictionAxis) && _maxFrictionForce.Equals(other._maxFrictionForce) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpLinFrictionConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpLinFrictionConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

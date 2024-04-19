@@ -7,13 +7,13 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpRagdollLimitsDataAtoms : IHavokObject, IEquatable<hkpRagdollLimitsDataAtoms?>
+public class hkpRagdollLimitsDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalRotationsConstraintAtom _rotations;
-    public hkpTwistLimitConstraintAtom _twistLimit;
-    public hkpConeLimitConstraintAtom _coneLimit;
-    public hkpConeLimitConstraintAtom _planesLimit;
+    public hkpSetLocalRotationsConstraintAtom? _rotations;
+    public hkpTwistLimitConstraintAtom? _twistLimit;
+    public hkpConeLimitConstraintAtom? _coneLimit;
+    public hkpConeLimitConstraintAtom? _planesLimit;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _rotations = new hkpSetLocalRotationsConstraintAtom();
@@ -41,12 +41,10 @@ public class hkpRagdollLimitsDataAtoms : IHavokObject, IEquatable<hkpRagdollLimi
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpRagdollLimitsDataAtoms);
+        return obj is hkpRagdollLimitsDataAtoms other && _rotations == other._rotations && _twistLimit == other._twistLimit && _coneLimit == other._coneLimit && _planesLimit == other._planesLimit && Signature == other.Signature;
     }
-    public bool Equals(hkpRagdollLimitsDataAtoms? other)
-    {
-        return other is not null && _rotations.Equals(other._rotations) && _twistLimit.Equals(other._twistLimit) && _coneLimit.Equals(other._coneLimit) && _planesLimit.Equals(other._planesLimit) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpRagdollLimitsDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpRagdollLimitsDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

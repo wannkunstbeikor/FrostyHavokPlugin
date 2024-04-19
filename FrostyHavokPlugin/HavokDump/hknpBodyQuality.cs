@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpBodyQuality : IHavokObject, IEquatable<hknpBodyQuality?>
+public class hknpBodyQuality : IHavokObject
 {
     public virtual uint Signature => 0;
     public int _priority;
@@ -41,12 +41,10 @@ public class hknpBodyQuality : IHavokObject, IEquatable<hknpBodyQuality?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpBodyQuality);
+        return obj is hknpBodyQuality other && _priority == other._priority && _supportedFlags == other._supportedFlags && _requestedFlags == other._requestedFlags && _liveJacobianDistanceThreshold == other._liveJacobianDistanceThreshold && _liveJacobianAngleThreshold == other._liveJacobianAngleThreshold && Signature == other.Signature;
     }
-    public bool Equals(hknpBodyQuality? other)
-    {
-        return other is not null && _priority.Equals(other._priority) && _supportedFlags.Equals(other._supportedFlags) && _requestedFlags.Equals(other._requestedFlags) && _liveJacobianDistanceThreshold.Equals(other._liveJacobianDistanceThreshold) && _liveJacobianAngleThreshold.Equals(other._liveJacobianAngleThreshold) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpBodyQuality? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpBodyQuality? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

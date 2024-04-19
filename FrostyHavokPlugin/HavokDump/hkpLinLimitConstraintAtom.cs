@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpLinLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpLinLimitConstraintAtom?>
+public class hkpLinLimitConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public byte _axisIndex;
@@ -41,12 +41,10 @@ public class hkpLinLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpLinLim
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpLinLimitConstraintAtom);
+        return obj is hkpLinLimitConstraintAtom other && base.Equals(other) && _axisIndex == other._axisIndex && _min == other._min && _max == other._max && Signature == other.Signature;
     }
-    public bool Equals(hkpLinLimitConstraintAtom? other)
-    {
-        return other is not null && _axisIndex.Equals(other._axisIndex) && _min.Equals(other._min) && _max.Equals(other._max) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpLinLimitConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpLinLimitConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpCogWheelConstraintDataAtoms : IHavokObject, IEquatable<hkpCogWheelConstraintDataAtoms?>
+public class hkpCogWheelConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _transforms;
-    public hkpCogWheelConstraintAtom _cogWheels;
+    public hkpSetLocalTransformsConstraintAtom? _transforms;
+    public hkpCogWheelConstraintAtom? _cogWheels;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _transforms = new hkpSetLocalTransformsConstraintAtom();
@@ -31,12 +31,10 @@ public class hkpCogWheelConstraintDataAtoms : IHavokObject, IEquatable<hkpCogWhe
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpCogWheelConstraintDataAtoms);
+        return obj is hkpCogWheelConstraintDataAtoms other && _transforms == other._transforms && _cogWheels == other._cogWheels && Signature == other.Signature;
     }
-    public bool Equals(hkpCogWheelConstraintDataAtoms? other)
-    {
-        return other is not null && _transforms.Equals(other._transforms) && _cogWheels.Equals(other._cogWheels) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpCogWheelConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpCogWheelConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

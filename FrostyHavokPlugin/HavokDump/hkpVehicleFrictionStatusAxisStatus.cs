@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpVehicleFrictionStatusAxisStatus : IHavokObject, IEquatable<hkpVehicleFrictionStatusAxisStatus?>
+public class hkpVehicleFrictionStatusAxisStatus : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _forward_slip_velocity;
@@ -57,12 +57,10 @@ public class hkpVehicleFrictionStatusAxisStatus : IHavokObject, IEquatable<hkpVe
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpVehicleFrictionStatusAxisStatus);
+        return obj is hkpVehicleFrictionStatusAxisStatus other && _forward_slip_velocity == other._forward_slip_velocity && _side_slip_velocity == other._side_slip_velocity && _skid_energy_density == other._skid_energy_density && _side_force == other._side_force && _delayed_forward_impulse == other._delayed_forward_impulse && _sideRhs == other._sideRhs && _forwardRhs == other._forwardRhs && _relativeSideForce == other._relativeSideForce && _relativeForwardForce == other._relativeForwardForce && Signature == other.Signature;
     }
-    public bool Equals(hkpVehicleFrictionStatusAxisStatus? other)
-    {
-        return other is not null && _forward_slip_velocity.Equals(other._forward_slip_velocity) && _side_slip_velocity.Equals(other._side_slip_velocity) && _skid_energy_density.Equals(other._skid_energy_density) && _side_force.Equals(other._side_force) && _delayed_forward_impulse.Equals(other._delayed_forward_impulse) && _sideRhs.Equals(other._sideRhs) && _forwardRhs.Equals(other._forwardRhs) && _relativeSideForce.Equals(other._relativeSideForce) && _relativeForwardForce.Equals(other._relativeForwardForce) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpVehicleFrictionStatusAxisStatus? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpVehicleFrictionStatusAxisStatus? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

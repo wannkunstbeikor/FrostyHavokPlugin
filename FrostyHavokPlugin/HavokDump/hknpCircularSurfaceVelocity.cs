@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpCircularSurfaceVelocity : hknpSurfaceVelocity, IEquatable<hknpCircularSurfaceVelocity?>
+public class hknpCircularSurfaceVelocity : hknpSurfaceVelocity
 {
     public override uint Signature => 0;
     public bool _velocityIsLocalSpace;
@@ -38,12 +38,10 @@ public class hknpCircularSurfaceVelocity : hknpSurfaceVelocity, IEquatable<hknpC
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpCircularSurfaceVelocity);
+        return obj is hknpCircularSurfaceVelocity other && base.Equals(other) && _velocityIsLocalSpace == other._velocityIsLocalSpace && _pivot == other._pivot && _angularVelocity == other._angularVelocity && Signature == other.Signature;
     }
-    public bool Equals(hknpCircularSurfaceVelocity? other)
-    {
-        return other is not null && _velocityIsLocalSpace.Equals(other._velocityIsLocalSpace) && _pivot.Equals(other._pivot) && _angularVelocity.Equals(other._angularVelocity) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpCircularSurfaceVelocity? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpCircularSurfaceVelocity? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,15 +7,15 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkClass : IHavokObject, IEquatable<hkClass?>
+public class hkClass : IHavokObject
 {
     public virtual uint Signature => 0;
-    public string _name;
-    public hkClass _parent;
+    public string _name = string.Empty;
+    public hkClass? _parent;
     public int _objectSize;
     public int _numImplementedInterfaces;
-    public List<hkClassEnum> _declaredEnums;
-    public List<hkClassMember> _declaredMembers;
+    public List<hkClassEnum?> _declaredEnums = new();
+    public List<hkClassMember?> _declaredMembers = new();
     // TYPE_POINTER TYPE_VOID _defaults
     // TYPE_POINTER TYPE_STRUCT _attributes
     public hkClass_FlagValues _flags;
@@ -57,12 +57,10 @@ public class hkClass : IHavokObject, IEquatable<hkClass?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkClass);
+        return obj is hkClass other && _name == other._name && _parent == other._parent && _objectSize == other._objectSize && _numImplementedInterfaces == other._numImplementedInterfaces && _declaredEnums.SequenceEqual(other._declaredEnums) && _declaredMembers.SequenceEqual(other._declaredMembers) && _flags == other._flags && _describedVersion == other._describedVersion && Signature == other.Signature;
     }
-    public bool Equals(hkClass? other)
-    {
-        return other is not null && _name.Equals(other._name) && _parent.Equals(other._parent) && _objectSize.Equals(other._objectSize) && _numImplementedInterfaces.Equals(other._numImplementedInterfaces) && _declaredEnums.Equals(other._declaredEnums) && _declaredMembers.Equals(other._declaredMembers) && _flags.Equals(other._flags) && _describedVersion.Equals(other._describedVersion) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkClass? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkClass? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

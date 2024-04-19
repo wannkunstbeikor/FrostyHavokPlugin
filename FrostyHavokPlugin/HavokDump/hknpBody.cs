@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpBody : IHavokObject, IEquatable<hknpBody?>
+public class hknpBody : IHavokObject
 {
     public virtual uint Signature => 0;
     public Matrix4 _transform;
-    public hkAabb16 _aabb;
-    public hknpShape _shape;
+    public hkAabb16? _aabb;
+    public hknpShape? _shape;
     public hknpBody_FlagsEnum _flags;
     public uint _collisionFilterInfo;
     public uint _id;
@@ -102,12 +102,10 @@ public class hknpBody : IHavokObject, IEquatable<hknpBody?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpBody);
+        return obj is hknpBody other && _transform == other._transform && _aabb == other._aabb && _shape == other._shape && _flags == other._flags && _collisionFilterInfo == other._collisionFilterInfo && _id == other._id && _nextAttachedBodyId == other._nextAttachedBodyId && _motionId == other._motionId && _materialId == other._materialId && _qualityId == other._qualityId && _shapeSizeDiv16 == other._shapeSizeDiv16 && _broadPhaseId == other._broadPhaseId && _indexIntoActiveListOrDeactivatedIslandId == other._indexIntoActiveListOrDeactivatedIslandId && _radiusOfComCenteredBoundingSphere == other._radiusOfComCenteredBoundingSphere && _maxContactDistance == other._maxContactDistance && _maxTimDistance == other._maxTimDistance && _timAngle == other._timAngle && _spuFlags == other._spuFlags && _motionToBodyRotation == other._motionToBodyRotation && _userData == other._userData && Signature == other.Signature;
     }
-    public bool Equals(hknpBody? other)
-    {
-        return other is not null && _transform.Equals(other._transform) && _aabb.Equals(other._aabb) && _shape.Equals(other._shape) && _flags.Equals(other._flags) && _collisionFilterInfo.Equals(other._collisionFilterInfo) && _id.Equals(other._id) && _nextAttachedBodyId.Equals(other._nextAttachedBodyId) && _motionId.Equals(other._motionId) && _materialId.Equals(other._materialId) && _qualityId.Equals(other._qualityId) && _shapeSizeDiv16.Equals(other._shapeSizeDiv16) && _broadPhaseId.Equals(other._broadPhaseId) && _indexIntoActiveListOrDeactivatedIslandId.Equals(other._indexIntoActiveListOrDeactivatedIslandId) && _radiusOfComCenteredBoundingSphere.Equals(other._radiusOfComCenteredBoundingSphere) && _maxContactDistance.Equals(other._maxContactDistance) && _maxTimDistance.Equals(other._maxTimDistance) && _timAngle.Equals(other._timAngle) && _spuFlags.Equals(other._spuFlags) && _motionToBodyRotation.Equals(other._motionToBodyRotation) && _userData.Equals(other._userData) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpBody? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpBody? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

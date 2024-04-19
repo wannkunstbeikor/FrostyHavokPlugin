@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMultipleVertexBufferVertexBufferInfo : IHavokObject, IEquatable<hkMultipleVertexBufferVertexBufferInfo?>
+public class hkMultipleVertexBufferVertexBufferInfo : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkMeshVertexBuffer _vertexBuffer;
+    public hkMeshVertexBuffer? _vertexBuffer;
     // TYPE_POINTER TYPE_VOID _lockedVertices
     public bool _isLocked;
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -34,12 +34,10 @@ public class hkMultipleVertexBufferVertexBufferInfo : IHavokObject, IEquatable<h
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMultipleVertexBufferVertexBufferInfo);
+        return obj is hkMultipleVertexBufferVertexBufferInfo other && _vertexBuffer == other._vertexBuffer && _isLocked == other._isLocked && Signature == other.Signature;
     }
-    public bool Equals(hkMultipleVertexBufferVertexBufferInfo? other)
-    {
-        return other is not null && _vertexBuffer.Equals(other._vertexBuffer) && _isLocked.Equals(other._isLocked) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMultipleVertexBufferVertexBufferInfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMultipleVertexBufferVertexBufferInfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

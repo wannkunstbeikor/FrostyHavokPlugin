@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkRootLevelContainer : IHavokObject, IEquatable<hkRootLevelContainer?>
+public class hkRootLevelContainer : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hkRootLevelContainerNamedVariant> _namedVariants;
+    public List<hkRootLevelContainerNamedVariant?> _namedVariants = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _namedVariants = des.ReadClassArray<hkRootLevelContainerNamedVariant>(br);
@@ -25,12 +25,10 @@ public class hkRootLevelContainer : IHavokObject, IEquatable<hkRootLevelContaine
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkRootLevelContainer);
+        return obj is hkRootLevelContainer other && _namedVariants.SequenceEqual(other._namedVariants) && Signature == other.Signature;
     }
-    public bool Equals(hkRootLevelContainer? other)
-    {
-        return other is not null && _namedVariants.Equals(other._namedVariants) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkRootLevelContainer? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkRootLevelContainer? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

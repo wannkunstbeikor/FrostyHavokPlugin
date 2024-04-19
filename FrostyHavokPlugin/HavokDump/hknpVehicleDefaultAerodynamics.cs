@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultAerodynamics : hknpVehicleAerodynamics, IEquatable<hknpVehicleDefaultAerodynamics?>
+public class hknpVehicleDefaultAerodynamics : hknpVehicleAerodynamics
 {
     public override uint Signature => 0;
     public float _airDensity;
@@ -44,12 +44,10 @@ public class hknpVehicleDefaultAerodynamics : hknpVehicleAerodynamics, IEquatabl
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultAerodynamics);
+        return obj is hknpVehicleDefaultAerodynamics other && base.Equals(other) && _airDensity == other._airDensity && _frontalArea == other._frontalArea && _dragCoefficient == other._dragCoefficient && _liftCoefficient == other._liftCoefficient && _extraGravityws == other._extraGravityws && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultAerodynamics? other)
-    {
-        return other is not null && _airDensity.Equals(other._airDensity) && _frontalArea.Equals(other._frontalArea) && _dragCoefficient.Equals(other._dragCoefficient) && _liftCoefficient.Equals(other._liftCoefficient) && _extraGravityws.Equals(other._extraGravityws) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultAerodynamics? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultAerodynamics? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

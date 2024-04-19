@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpMotionCinfo : IHavokObject, IEquatable<hknpMotionCinfo?>
+public class hknpMotionCinfo : IHavokObject
 {
     public virtual uint Signature => 0;
     public ushort _motionPropertiesId;
@@ -69,12 +69,10 @@ public class hknpMotionCinfo : IHavokObject, IEquatable<hknpMotionCinfo?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpMotionCinfo);
+        return obj is hknpMotionCinfo other && _motionPropertiesId == other._motionPropertiesId && _enableDeactivation == other._enableDeactivation && _inverseMass == other._inverseMass && _massFactor == other._massFactor && _maxLinearAccelerationDistancePerStep == other._maxLinearAccelerationDistancePerStep && _maxRotationToPreventTunneling == other._maxRotationToPreventTunneling && _inverseInertiaLocal == other._inverseInertiaLocal && _centerOfMassWorld == other._centerOfMassWorld && _orientation == other._orientation && _linearVelocity == other._linearVelocity && _angularVelocity == other._angularVelocity && Signature == other.Signature;
     }
-    public bool Equals(hknpMotionCinfo? other)
-    {
-        return other is not null && _motionPropertiesId.Equals(other._motionPropertiesId) && _enableDeactivation.Equals(other._enableDeactivation) && _inverseMass.Equals(other._inverseMass) && _massFactor.Equals(other._massFactor) && _maxLinearAccelerationDistancePerStep.Equals(other._maxLinearAccelerationDistancePerStep) && _maxRotationToPreventTunneling.Equals(other._maxRotationToPreventTunneling) && _inverseInertiaLocal.Equals(other._inverseInertiaLocal) && _centerOfMassWorld.Equals(other._centerOfMassWorld) && _orientation.Equals(other._orientation) && _linearVelocity.Equals(other._linearVelocity) && _angularVelocity.Equals(other._angularVelocity) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpMotionCinfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpMotionCinfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

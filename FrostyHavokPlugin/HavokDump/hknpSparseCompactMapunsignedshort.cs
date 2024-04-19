@@ -7,13 +7,13 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpSparseCompactMapunsignedshort : IHavokObject, IEquatable<hknpSparseCompactMapunsignedshort?>
+public class hknpSparseCompactMapunsignedshort : IHavokObject
 {
     public virtual uint Signature => 0;
     public uint _secondaryKeyMask;
     public uint _sencondaryKeyBits;
-    public List<ushort> _primaryKeyToIndex;
-    public List<ushort> _valueAndSecondaryKeys;
+    public List<ushort> _primaryKeyToIndex = new();
+    public List<ushort> _valueAndSecondaryKeys = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _secondaryKeyMask = br.ReadUInt32();
@@ -37,12 +37,10 @@ public class hknpSparseCompactMapunsignedshort : IHavokObject, IEquatable<hknpSp
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpSparseCompactMapunsignedshort);
+        return obj is hknpSparseCompactMapunsignedshort other && _secondaryKeyMask == other._secondaryKeyMask && _sencondaryKeyBits == other._sencondaryKeyBits && _primaryKeyToIndex.SequenceEqual(other._primaryKeyToIndex) && _valueAndSecondaryKeys.SequenceEqual(other._valueAndSecondaryKeys) && Signature == other.Signature;
     }
-    public bool Equals(hknpSparseCompactMapunsignedshort? other)
-    {
-        return other is not null && _secondaryKeyMask.Equals(other._secondaryKeyMask) && _sencondaryKeyBits.Equals(other._sencondaryKeyBits) && _primaryKeyToIndex.Equals(other._primaryKeyToIndex) && _valueAndSecondaryKeys.Equals(other._valueAndSecondaryKeys) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpSparseCompactMapunsignedshort? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpSparseCompactMapunsignedshort? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

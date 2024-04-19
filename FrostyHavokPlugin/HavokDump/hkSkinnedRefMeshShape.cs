@@ -7,13 +7,13 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkSkinnedRefMeshShape : hkMeshShape, IEquatable<hkSkinnedRefMeshShape?>
+public class hkSkinnedRefMeshShape : hkMeshShape
 {
     public override uint Signature => 0;
-    public hkSkinnedMeshShape _skinnedMeshShape;
-    public List<short> _bones;
-    public List<Vector4> _localFromRootTransforms;
-    public string _name;
+    public hkSkinnedMeshShape? _skinnedMeshShape;
+    public List<short> _bones = new();
+    public List<Vector4> _localFromRootTransforms = new();
+    public string _name = string.Empty;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -40,12 +40,10 @@ public class hkSkinnedRefMeshShape : hkMeshShape, IEquatable<hkSkinnedRefMeshSha
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkSkinnedRefMeshShape);
+        return obj is hkSkinnedRefMeshShape other && base.Equals(other) && _skinnedMeshShape == other._skinnedMeshShape && _bones.SequenceEqual(other._bones) && _localFromRootTransforms.SequenceEqual(other._localFromRootTransforms) && _name == other._name && Signature == other.Signature;
     }
-    public bool Equals(hkSkinnedRefMeshShape? other)
-    {
-        return other is not null && _skinnedMeshShape.Equals(other._skinnedMeshShape) && _bones.Equals(other._bones) && _localFromRootTransforms.Equals(other._localFromRootTransforms) && _name.Equals(other._name) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkSkinnedRefMeshShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkSkinnedRefMeshShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpBridgeAtoms : IHavokObject, IEquatable<hkpBridgeAtoms?>
+public class hkpBridgeAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpBridgeConstraintAtom _bridgeAtom;
+    public hkpBridgeConstraintAtom? _bridgeAtom;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _bridgeAtom = new hkpBridgeConstraintAtom();
@@ -26,12 +26,10 @@ public class hkpBridgeAtoms : IHavokObject, IEquatable<hkpBridgeAtoms?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpBridgeAtoms);
+        return obj is hkpBridgeAtoms other && _bridgeAtom == other._bridgeAtom && Signature == other.Signature;
     }
-    public bool Equals(hkpBridgeAtoms? other)
-    {
-        return other is not null && _bridgeAtom.Equals(other._bridgeAtom) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpBridgeAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpBridgeAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

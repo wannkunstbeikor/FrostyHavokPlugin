@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpStiffSpringConstraintDataAtoms : IHavokObject, IEquatable<hkpStiffSpringConstraintDataAtoms?>
+public class hkpStiffSpringConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTranslationsConstraintAtom _pivots;
-    public hkpSetupStabilizationAtom _setupStabilization;
-    public hkpStiffSpringConstraintAtom _spring;
+    public hkpSetLocalTranslationsConstraintAtom? _pivots;
+    public hkpSetupStabilizationAtom? _setupStabilization;
+    public hkpStiffSpringConstraintAtom? _spring;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _pivots = new hkpSetLocalTranslationsConstraintAtom();
@@ -38,12 +38,10 @@ public class hkpStiffSpringConstraintDataAtoms : IHavokObject, IEquatable<hkpSti
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpStiffSpringConstraintDataAtoms);
+        return obj is hkpStiffSpringConstraintDataAtoms other && _pivots == other._pivots && _setupStabilization == other._setupStabilization && _spring == other._spring && Signature == other.Signature;
     }
-    public bool Equals(hkpStiffSpringConstraintDataAtoms? other)
-    {
-        return other is not null && _pivots.Equals(other._pivots) && _setupStabilization.Equals(other._setupStabilization) && _spring.Equals(other._spring) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpStiffSpringConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpStiffSpringConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations : IHavokObject, IEquatable<hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations?>
+public class hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hknpMaterial> _elements;
+    public List<hknpMaterial?> _elements = new();
     public int _firstFree;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -31,12 +31,10 @@ public class hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArray
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations);
+        return obj is hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations other && _elements.SequenceEqual(other._elements) && _firstFree == other._firstFree && Signature == other.Signature;
     }
-    public bool Equals(hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations? other)
-    {
-        return other is not null && _elements.Equals(other._elements) && _firstFree.Equals(other._firstFree) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkFreeListArrayhknpMaterialhknpMaterialId8hknpMaterialFreeListArrayOperations? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpWheelFrictionConstraintData : hkpConstraintData, IEquatable<hkpWheelFrictionConstraintData?>
+public class hkpWheelFrictionConstraintData : hkpConstraintData
 {
     public override uint Signature => 0;
-    public hkpWheelFrictionConstraintDataAtoms _atoms;
+    public hkpWheelFrictionConstraintDataAtoms? _atoms;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -31,12 +31,10 @@ public class hkpWheelFrictionConstraintData : hkpConstraintData, IEquatable<hkpW
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpWheelFrictionConstraintData);
+        return obj is hkpWheelFrictionConstraintData other && base.Equals(other) && _atoms == other._atoms && Signature == other.Signature;
     }
-    public bool Equals(hkpWheelFrictionConstraintData? other)
-    {
-        return other is not null && _atoms.Equals(other._atoms) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpWheelFrictionConstraintData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpWheelFrictionConstraintData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

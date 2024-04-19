@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdDynamicTreeCodecRawunsignedlong : IHavokObject, IEquatable<hkcdDynamicTreeCodecRawunsignedlong?>
+public class hkcdDynamicTreeCodecRawunsignedlong : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkAabb _aabb;
+    public hkAabb? _aabb;
     public ulong _parent;
     public ulong[] _children = new ulong[2];
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -36,12 +36,10 @@ public class hkcdDynamicTreeCodecRawunsignedlong : IHavokObject, IEquatable<hkcd
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdDynamicTreeCodecRawunsignedlong);
+        return obj is hkcdDynamicTreeCodecRawunsignedlong other && _aabb == other._aabb && _parent == other._parent && _children == other._children && Signature == other.Signature;
     }
-    public bool Equals(hkcdDynamicTreeCodecRawunsignedlong? other)
-    {
-        return other is not null && _aabb.Equals(other._aabb) && _parent.Equals(other._parent) && _children.Equals(other._children) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdDynamicTreeCodecRawunsignedlong? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdDynamicTreeCodecRawunsignedlong? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

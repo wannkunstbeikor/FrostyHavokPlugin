@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpMotion : IHavokObject, IEquatable<hknpMotion?>
+public class hknpMotion : IHavokObject
 {
     public virtual uint Signature => 0;
     public Vector4 _centerOfMassAndMassFactor;
@@ -84,12 +84,10 @@ public class hknpMotion : IHavokObject, IEquatable<hknpMotion?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpMotion);
+        return obj is hknpMotion other && _centerOfMassAndMassFactor == other._centerOfMassAndMassFactor && _orientation == other._orientation && _inverseInertia == other._inverseInertia && _firstAttachedBodyId == other._firstAttachedBodyId && _linearVelocityCage == other._linearVelocityCage && _motionPropertiesId == other._motionPropertiesId && _maxLinearAccelerationDistancePerStep == other._maxLinearAccelerationDistancePerStep && _maxRotationToPreventTunneling == other._maxRotationToPreventTunneling && _integrationFactor == other._integrationFactor && _cellIndex == other._cellIndex && _spaceSplitterWeight == other._spaceSplitterWeight && _linearVelocity == other._linearVelocity && _angularVelocity == other._angularVelocity && _previousStepLinearVelocity == other._previousStepLinearVelocity && _previousStepAngularVelocity == other._previousStepAngularVelocity && Signature == other.Signature;
     }
-    public bool Equals(hknpMotion? other)
-    {
-        return other is not null && _centerOfMassAndMassFactor.Equals(other._centerOfMassAndMassFactor) && _orientation.Equals(other._orientation) && _inverseInertia.Equals(other._inverseInertia) && _firstAttachedBodyId.Equals(other._firstAttachedBodyId) && _linearVelocityCage.Equals(other._linearVelocityCage) && _motionPropertiesId.Equals(other._motionPropertiesId) && _maxLinearAccelerationDistancePerStep.Equals(other._maxLinearAccelerationDistancePerStep) && _maxRotationToPreventTunneling.Equals(other._maxRotationToPreventTunneling) && _integrationFactor.Equals(other._integrationFactor) && _cellIndex.Equals(other._cellIndex) && _spaceSplitterWeight.Equals(other._spaceSplitterWeight) && _linearVelocity.Equals(other._linearVelocity) && _angularVelocity.Equals(other._angularVelocity) && _previousStepLinearVelocity.Equals(other._previousStepLinearVelocity) && _previousStepAngularVelocity.Equals(other._previousStepAngularVelocity) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpMotion? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpMotion? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

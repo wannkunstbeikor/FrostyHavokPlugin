@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpWorldSnapshot : hkReferencedObject, IEquatable<hknpWorldSnapshot?>
+public class hknpWorldSnapshot : hkReferencedObject
 {
     public override uint Signature => 0;
-    public hknpWorldCinfo _worldCinfo;
-    public List<hknpBody> _bodies;
-    public List<string> _bodyNames;
-    public List<hknpMotion> _motions;
-    public List<hknpConstraintCinfo> _constraints;
+    public hknpWorldCinfo? _worldCinfo;
+    public List<hknpBody?> _bodies = new();
+    public List<string> _bodyNames = new();
+    public List<hknpMotion?> _motions = new();
+    public List<hknpConstraintCinfo?> _constraints = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -45,12 +45,10 @@ public class hknpWorldSnapshot : hkReferencedObject, IEquatable<hknpWorldSnapsho
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpWorldSnapshot);
+        return obj is hknpWorldSnapshot other && base.Equals(other) && _worldCinfo == other._worldCinfo && _bodies.SequenceEqual(other._bodies) && _bodyNames.SequenceEqual(other._bodyNames) && _motions.SequenceEqual(other._motions) && _constraints.SequenceEqual(other._constraints) && Signature == other.Signature;
     }
-    public bool Equals(hknpWorldSnapshot? other)
-    {
-        return other is not null && _worldCinfo.Equals(other._worldCinfo) && _bodies.Equals(other._bodies) && _bodyNames.Equals(other._bodyNames) && _motions.Equals(other._motions) && _constraints.Equals(other._constraints) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpWorldSnapshot? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpWorldSnapshot? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

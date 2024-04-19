@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpShapeTagCodec : hkReferencedObject, IEquatable<hknpShapeTagCodec?>
+public class hknpShapeTagCodec : hkReferencedObject
 {
     public override uint Signature => 0;
     public hknpShapeTagCodec_CodecType _type;
@@ -30,12 +30,10 @@ public class hknpShapeTagCodec : hkReferencedObject, IEquatable<hknpShapeTagCode
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpShapeTagCodec);
+        return obj is hknpShapeTagCodec other && base.Equals(other) && _type == other._type && Signature == other.Signature;
     }
-    public bool Equals(hknpShapeTagCodec? other)
-    {
-        return other is not null && _type.Equals(other._type) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpShapeTagCodec? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpShapeTagCodec? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

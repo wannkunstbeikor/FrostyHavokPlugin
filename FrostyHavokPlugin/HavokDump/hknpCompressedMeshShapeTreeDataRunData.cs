@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpCompressedMeshShapeTreeDataRunData : IHavokObject, IEquatable<hknpCompressedMeshShapeTreeDataRunData?>
+public class hknpCompressedMeshShapeTreeDataRunData : IHavokObject
 {
     public virtual uint Signature => 0;
     public ushort _data;
@@ -25,12 +25,10 @@ public class hknpCompressedMeshShapeTreeDataRunData : IHavokObject, IEquatable<h
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpCompressedMeshShapeTreeDataRunData);
+        return obj is hknpCompressedMeshShapeTreeDataRunData other && _data == other._data && Signature == other.Signature;
     }
-    public bool Equals(hknpCompressedMeshShapeTreeDataRunData? other)
-    {
-        return other is not null && _data.Equals(other._data) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpCompressedMeshShapeTreeDataRunData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpCompressedMeshShapeTreeDataRunData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

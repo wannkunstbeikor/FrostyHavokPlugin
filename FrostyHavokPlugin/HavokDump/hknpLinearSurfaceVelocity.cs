@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpLinearSurfaceVelocity : hknpSurfaceVelocity, IEquatable<hknpLinearSurfaceVelocity?>
+public class hknpLinearSurfaceVelocity : hknpSurfaceVelocity
 {
     public override uint Signature => 0;
     public hknpSurfaceVelocity_Space _space;
@@ -48,12 +48,10 @@ public class hknpLinearSurfaceVelocity : hknpSurfaceVelocity, IEquatable<hknpLin
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpLinearSurfaceVelocity);
+        return obj is hknpLinearSurfaceVelocity other && base.Equals(other) && _space == other._space && _projectMethod == other._projectMethod && _maxVelocityScale == other._maxVelocityScale && _velocityMeasurePlane == other._velocityMeasurePlane && _velocity == other._velocity && Signature == other.Signature;
     }
-    public bool Equals(hknpLinearSurfaceVelocity? other)
-    {
-        return other is not null && _space.Equals(other._space) && _projectMethod.Equals(other._projectMethod) && _maxVelocityScale.Equals(other._maxVelocityScale) && _velocityMeasurePlane.Equals(other._velocityMeasurePlane) && _velocity.Equals(other._velocity) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpLinearSurfaceVelocity? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpLinearSurfaceVelocity? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

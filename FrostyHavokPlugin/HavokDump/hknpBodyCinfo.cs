@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpBodyCinfo : IHavokObject, IEquatable<hknpBodyCinfo?>
+public class hknpBodyCinfo : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hknpShape _shape;
+    public hknpShape? _shape;
     public uint _reservedBodyId;
     public uint _motionId;
     public byte _qualityId;
@@ -18,11 +18,11 @@ public class hknpBodyCinfo : IHavokObject, IEquatable<hknpBodyCinfo?>
     public uint _collisionFilterInfo;
     public hknpBody_FlagsEnum _flags;
     public float _collisionLookAheadDistance;
-    public string _name;
+    public string _name = string.Empty;
     public Vector4 _position;
     public Quaternion _orientation;
     public hknpBody_SpuFlagsEnum _spuFlags;
-    public hkLocalFrame _localFrame;
+    public hkLocalFrame? _localFrame;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _shape = des.ReadClassPointer<hknpShape>(br);
@@ -79,12 +79,10 @@ public class hknpBodyCinfo : IHavokObject, IEquatable<hknpBodyCinfo?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpBodyCinfo);
+        return obj is hknpBodyCinfo other && _shape == other._shape && _reservedBodyId == other._reservedBodyId && _motionId == other._motionId && _qualityId == other._qualityId && _materialId == other._materialId && _collisionFilterInfo == other._collisionFilterInfo && _flags == other._flags && _collisionLookAheadDistance == other._collisionLookAheadDistance && _name == other._name && _position == other._position && _orientation == other._orientation && _spuFlags == other._spuFlags && _localFrame == other._localFrame && Signature == other.Signature;
     }
-    public bool Equals(hknpBodyCinfo? other)
-    {
-        return other is not null && _shape.Equals(other._shape) && _reservedBodyId.Equals(other._reservedBodyId) && _motionId.Equals(other._motionId) && _qualityId.Equals(other._qualityId) && _materialId.Equals(other._materialId) && _collisionFilterInfo.Equals(other._collisionFilterInfo) && _flags.Equals(other._flags) && _collisionLookAheadDistance.Equals(other._collisionLookAheadDistance) && _name.Equals(other._name) && _position.Equals(other._position) && _orientation.Equals(other._orientation) && _spuFlags.Equals(other._spuFlags) && _localFrame.Equals(other._localFrame) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpBodyCinfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpBodyCinfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

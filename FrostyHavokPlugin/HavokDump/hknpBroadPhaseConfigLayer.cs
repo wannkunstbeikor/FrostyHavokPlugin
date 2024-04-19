@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpBroadPhaseConfigLayer : IHavokObject, IEquatable<hknpBroadPhaseConfigLayer?>
+public class hknpBroadPhaseConfigLayer : IHavokObject
 {
     public virtual uint Signature => 0;
     public uint _collideWithLayerMask;
@@ -31,12 +31,10 @@ public class hknpBroadPhaseConfigLayer : IHavokObject, IEquatable<hknpBroadPhase
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpBroadPhaseConfigLayer);
+        return obj is hknpBroadPhaseConfigLayer other && _collideWithLayerMask == other._collideWithLayerMask && _isVolatile == other._isVolatile && Signature == other.Signature;
     }
-    public bool Equals(hknpBroadPhaseConfigLayer? other)
-    {
-        return other is not null && _collideWithLayerMask.Equals(other._collideWithLayerMask) && _isVolatile.Equals(other._isVolatile) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpBroadPhaseConfigLayer? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpBroadPhaseConfigLayer? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

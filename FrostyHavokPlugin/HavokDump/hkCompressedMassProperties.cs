@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkCompressedMassProperties : IHavokObject, IEquatable<hkCompressedMassProperties?>
+public class hkCompressedMassProperties : IHavokObject
 {
     public virtual uint Signature => 0;
     public short[] _centerOfMass = new short[4];
@@ -41,12 +41,10 @@ public class hkCompressedMassProperties : IHavokObject, IEquatable<hkCompressedM
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkCompressedMassProperties);
+        return obj is hkCompressedMassProperties other && _centerOfMass == other._centerOfMass && _inertia == other._inertia && _majorAxisSpace == other._majorAxisSpace && _mass == other._mass && _volume == other._volume && Signature == other.Signature;
     }
-    public bool Equals(hkCompressedMassProperties? other)
-    {
-        return other is not null && _centerOfMass.Equals(other._centerOfMass) && _inertia.Equals(other._inertia) && _majorAxisSpace.Equals(other._majorAxisSpace) && _mass.Equals(other._mass) && _volume.Equals(other._volume) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkCompressedMassProperties? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkCompressedMassProperties? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

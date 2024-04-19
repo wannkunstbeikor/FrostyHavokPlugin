@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpCharacterProxyCinfo : hkReferencedObject, IEquatable<hknpCharacterProxyCinfo?>
+public class hknpCharacterProxyCinfo : hkReferencedObject
 {
     public override uint Signature => 0;
     public Vector4 _position;
@@ -17,7 +17,7 @@ public class hknpCharacterProxyCinfo : hkReferencedObject, IEquatable<hknpCharac
     public float _staticFriction;
     public float _keepContactTolerance;
     public Vector4 _up;
-    public hknpShape _shape;
+    public hknpShape? _shape;
     // TYPE_POINTER TYPE_VOID _world
     public uint _collisionFilterInfo;
     public float _keepDistance;
@@ -111,12 +111,10 @@ public class hknpCharacterProxyCinfo : hkReferencedObject, IEquatable<hknpCharac
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpCharacterProxyCinfo);
+        return obj is hknpCharacterProxyCinfo other && base.Equals(other) && _position == other._position && _orientation == other._orientation && _velocity == other._velocity && _dynamicFriction == other._dynamicFriction && _staticFriction == other._staticFriction && _keepContactTolerance == other._keepContactTolerance && _up == other._up && _shape == other._shape && _collisionFilterInfo == other._collisionFilterInfo && _keepDistance == other._keepDistance && _contactAngleSensitivity == other._contactAngleSensitivity && _userPlanes == other._userPlanes && _maxCharacterSpeedForSolver == other._maxCharacterSpeedForSolver && _characterStrength == other._characterStrength && _characterMass == other._characterMass && _maxSlope == other._maxSlope && _penetrationRecoverySpeed == other._penetrationRecoverySpeed && _maxCastIterations == other._maxCastIterations && _refreshManifoldInCheckSupport == other._refreshManifoldInCheckSupport && _presenceInWorld == other._presenceInWorld && Signature == other.Signature;
     }
-    public bool Equals(hknpCharacterProxyCinfo? other)
-    {
-        return other is not null && _position.Equals(other._position) && _orientation.Equals(other._orientation) && _velocity.Equals(other._velocity) && _dynamicFriction.Equals(other._dynamicFriction) && _staticFriction.Equals(other._staticFriction) && _keepContactTolerance.Equals(other._keepContactTolerance) && _up.Equals(other._up) && _shape.Equals(other._shape) && _collisionFilterInfo.Equals(other._collisionFilterInfo) && _keepDistance.Equals(other._keepDistance) && _contactAngleSensitivity.Equals(other._contactAngleSensitivity) && _userPlanes.Equals(other._userPlanes) && _maxCharacterSpeedForSolver.Equals(other._maxCharacterSpeedForSolver) && _characterStrength.Equals(other._characterStrength) && _characterMass.Equals(other._characterMass) && _maxSlope.Equals(other._maxSlope) && _penetrationRecoverySpeed.Equals(other._penetrationRecoverySpeed) && _maxCastIterations.Equals(other._maxCastIterations) && _refreshManifoldInCheckSupport.Equals(other._refreshManifoldInCheckSupport) && _presenceInWorld.Equals(other._presenceInWorld) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpCharacterProxyCinfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpCharacterProxyCinfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

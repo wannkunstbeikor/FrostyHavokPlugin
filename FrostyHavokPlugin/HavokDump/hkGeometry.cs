@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkGeometry : hkReferencedObject, IEquatable<hkGeometry?>
+public class hkGeometry : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<Vector4> _vertices;
-    public List<hkGeometryTriangle> _triangles;
+    public List<Vector4> _vertices = new();
+    public List<hkGeometryTriangle?> _triangles = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -32,12 +32,10 @@ public class hkGeometry : hkReferencedObject, IEquatable<hkGeometry?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkGeometry);
+        return obj is hkGeometry other && base.Equals(other) && _vertices.SequenceEqual(other._vertices) && _triangles.SequenceEqual(other._triangles) && Signature == other.Signature;
     }
-    public bool Equals(hkGeometry? other)
-    {
-        return other is not null && _vertices.Equals(other._vertices) && _triangles.Equals(other._triangles) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkGeometry? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkGeometry? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

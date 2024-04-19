@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpWheelFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpWheelFrictionConstraintAtom?>
+public class hkpWheelFrictionConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public byte _isEnabled;
@@ -18,7 +18,7 @@ public class hkpWheelFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpW
     public float _radius;
     public float[] _frictionImpulse = new float[2];
     public float[] _slipImpulse = new float[2];
-    public hkpWheelFrictionConstraintAtomAxle _axle;
+    public hkpWheelFrictionConstraintAtomAxle? _axle;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -64,12 +64,10 @@ public class hkpWheelFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpW
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpWheelFrictionConstraintAtom);
+        return obj is hkpWheelFrictionConstraintAtom other && base.Equals(other) && _isEnabled == other._isEnabled && _forwardAxis == other._forwardAxis && _sideAxis == other._sideAxis && _maxFrictionForce == other._maxFrictionForce && _torque == other._torque && _radius == other._radius && _frictionImpulse == other._frictionImpulse && _slipImpulse == other._slipImpulse && _axle == other._axle && Signature == other.Signature;
     }
-    public bool Equals(hkpWheelFrictionConstraintAtom? other)
-    {
-        return other is not null && _isEnabled.Equals(other._isEnabled) && _forwardAxis.Equals(other._forwardAxis) && _sideAxis.Equals(other._sideAxis) && _maxFrictionForce.Equals(other._maxFrictionForce) && _torque.Equals(other._torque) && _radius.Equals(other._radius) && _frictionImpulse.Equals(other._frictionImpulse) && _slipImpulse.Equals(other._slipImpulse) && _axle.Equals(other._axle) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpWheelFrictionConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpWheelFrictionConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

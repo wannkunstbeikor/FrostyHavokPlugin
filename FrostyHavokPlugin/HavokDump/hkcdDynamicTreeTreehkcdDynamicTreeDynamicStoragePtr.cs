@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr : hkcdDynamicTreeDynamicStoragePtr, IEquatable<hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr?>
+public class hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr : hkcdDynamicTreeDynamicStoragePtr
 {
     public override uint Signature => 0;
     public uint _numLeaves;
@@ -36,12 +36,10 @@ public class hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr : hkcdDynamicTr
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr);
+        return obj is hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr other && base.Equals(other) && _numLeaves == other._numLeaves && _path == other._path && _root == other._root && Signature == other.Signature;
     }
-    public bool Equals(hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr? other)
-    {
-        return other is not null && _numLeaves.Equals(other._numLeaves) && _path.Equals(other._path) && _root.Equals(other._root) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdDynamicTreeTreehkcdDynamicTreeDynamicStoragePtr? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

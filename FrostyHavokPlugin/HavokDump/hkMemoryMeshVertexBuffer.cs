@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMemoryMeshVertexBuffer : hkMeshVertexBuffer, IEquatable<hkMemoryMeshVertexBuffer?>
+public class hkMemoryMeshVertexBuffer : hkMeshVertexBuffer
 {
     public override uint Signature => 0;
-    public hkVertexFormat _format;
+    public hkVertexFormat? _format;
     public int[] _elementOffsets = new int[32];
-    public List<byte> _memory;
+    public List<byte> _memory = new();
     public int _vertexStride;
     public bool _locked;
     public int _numVertices;
@@ -63,12 +63,10 @@ public class hkMemoryMeshVertexBuffer : hkMeshVertexBuffer, IEquatable<hkMemoryM
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMemoryMeshVertexBuffer);
+        return obj is hkMemoryMeshVertexBuffer other && base.Equals(other) && _format == other._format && _elementOffsets == other._elementOffsets && _memory.SequenceEqual(other._memory) && _vertexStride == other._vertexStride && _locked == other._locked && _numVertices == other._numVertices && _isBigEndian == other._isBigEndian && _isSharable == other._isSharable && Signature == other.Signature;
     }
-    public bool Equals(hkMemoryMeshVertexBuffer? other)
-    {
-        return other is not null && _format.Equals(other._format) && _elementOffsets.Equals(other._elementOffsets) && _memory.Equals(other._memory) && _vertexStride.Equals(other._vertexStride) && _locked.Equals(other._locked) && _numVertices.Equals(other._numVertices) && _isBigEndian.Equals(other._isBigEndian) && _isSharable.Equals(other._isSharable) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMemoryMeshVertexBuffer? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMemoryMeshVertexBuffer? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

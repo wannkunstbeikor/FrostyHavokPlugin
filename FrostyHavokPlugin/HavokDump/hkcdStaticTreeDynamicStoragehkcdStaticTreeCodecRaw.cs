@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw : IHavokObject, IEquatable<hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw?>
+public class hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hkcdStaticTreeCodecRaw> _nodes;
+    public List<hkcdStaticTreeCodecRaw?> _nodes = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _nodes = des.ReadClassArray<hkcdStaticTreeCodecRaw>(br);
@@ -25,12 +25,10 @@ public class hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw : IHavokObject, 
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw);
+        return obj is hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw other && _nodes.SequenceEqual(other._nodes) && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw? other)
-    {
-        return other is not null && _nodes.Equals(other._nodes) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticTreeDynamicStoragehkcdStaticTreeCodecRaw? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkQTransformf : IHavokObject, IEquatable<hkQTransformf?>
+public class hkQTransformf : IHavokObject
 {
     public virtual uint Signature => 0;
     public Quaternion _rotation;
@@ -29,12 +29,10 @@ public class hkQTransformf : IHavokObject, IEquatable<hkQTransformf?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkQTransformf);
+        return obj is hkQTransformf other && _rotation == other._rotation && _translation == other._translation && Signature == other.Signature;
     }
-    public bool Equals(hkQTransformf? other)
-    {
-        return other is not null && _rotation.Equals(other._rotation) && _translation.Equals(other._translation) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkQTransformf? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkQTransformf? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

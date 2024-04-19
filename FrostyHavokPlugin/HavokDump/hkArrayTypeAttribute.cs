@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkArrayTypeAttribute : IHavokObject, IEquatable<hkArrayTypeAttribute?>
+public class hkArrayTypeAttribute : IHavokObject
 {
     public virtual uint Signature => 0;
     public hkArrayTypeAttribute_ArrayType _type;
@@ -25,12 +25,10 @@ public class hkArrayTypeAttribute : IHavokObject, IEquatable<hkArrayTypeAttribut
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkArrayTypeAttribute);
+        return obj is hkArrayTypeAttribute other && _type == other._type && Signature == other.Signature;
     }
-    public bool Equals(hkArrayTypeAttribute? other)
-    {
-        return other is not null && _type.Equals(other._type) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkArrayTypeAttribute? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkArrayTypeAttribute? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdSimdTree : IHavokObject, IEquatable<hkcdSimdTree?>
+public class hkcdSimdTree : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hkcdSimdTreeNode> _nodes;
-    public hkAabb _domain;
+    public List<hkcdSimdTreeNode?> _nodes = new();
+    public hkAabb? _domain;
     public uint _root;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -36,12 +36,10 @@ public class hkcdSimdTree : IHavokObject, IEquatable<hkcdSimdTree?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdSimdTree);
+        return obj is hkcdSimdTree other && _nodes.SequenceEqual(other._nodes) && _domain == other._domain && _root == other._root && Signature == other.Signature;
     }
-    public bool Equals(hkcdSimdTree? other)
-    {
-        return other is not null && _nodes.Equals(other._nodes) && _domain.Equals(other._domain) && _root.Equals(other._root) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdSimdTree? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdSimdTree? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

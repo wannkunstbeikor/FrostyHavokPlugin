@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkSimpleLocalFrame : hkLocalFrame, IEquatable<hkSimpleLocalFrame?>
+public class hkSimpleLocalFrame : hkLocalFrame
 {
     public override uint Signature => 0;
     public Matrix4 _transform;
-    public List<hkLocalFrame> _children;
-    public hkLocalFrame _parentFrame;
-    public hkLocalFrameGroup _group;
-    public string _name;
+    public List<hkLocalFrame?> _children = new();
+    public hkLocalFrame? _parentFrame;
+    public hkLocalFrameGroup? _group;
+    public string _name = string.Empty;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -46,12 +46,10 @@ public class hkSimpleLocalFrame : hkLocalFrame, IEquatable<hkSimpleLocalFrame?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkSimpleLocalFrame);
+        return obj is hkSimpleLocalFrame other && base.Equals(other) && _transform == other._transform && _children.SequenceEqual(other._children) && _parentFrame == other._parentFrame && _group == other._group && _name == other._name && Signature == other.Signature;
     }
-    public bool Equals(hkSimpleLocalFrame? other)
-    {
-        return other is not null && _transform.Equals(other._transform) && _children.Equals(other._children) && _parentFrame.Equals(other._parentFrame) && _group.Equals(other._group) && _name.Equals(other._name) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkSimpleLocalFrame? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkSimpleLocalFrame? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMultipleVertexBuffer : hkMeshVertexBuffer, IEquatable<hkMultipleVertexBuffer?>
+public class hkMultipleVertexBuffer : hkMeshVertexBuffer
 {
     public override uint Signature => 0;
-    public hkVertexFormat _vertexFormat;
-    public List<hkMultipleVertexBufferLockedElement> _lockedElements;
-    public hkMemoryMeshVertexBuffer _lockedBuffer;
-    public List<hkMultipleVertexBufferElementInfo> _elementInfos;
-    public List<hkMultipleVertexBufferVertexBufferInfo> _vertexBufferInfos;
+    public hkVertexFormat? _vertexFormat;
+    public List<hkMultipleVertexBufferLockedElement?> _lockedElements = new();
+    public hkMemoryMeshVertexBuffer? _lockedBuffer;
+    public List<hkMultipleVertexBufferElementInfo?> _elementInfos = new();
+    public List<hkMultipleVertexBufferVertexBufferInfo?> _vertexBufferInfos = new();
     public int _numVertices;
     public bool _isLocked;
     public uint _updateCount;
@@ -75,12 +75,10 @@ public class hkMultipleVertexBuffer : hkMeshVertexBuffer, IEquatable<hkMultipleV
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMultipleVertexBuffer);
+        return obj is hkMultipleVertexBuffer other && base.Equals(other) && _vertexFormat == other._vertexFormat && _lockedElements.SequenceEqual(other._lockedElements) && _lockedBuffer == other._lockedBuffer && _elementInfos.SequenceEqual(other._elementInfos) && _vertexBufferInfos.SequenceEqual(other._vertexBufferInfos) && _numVertices == other._numVertices && _isLocked == other._isLocked && _updateCount == other._updateCount && _writeLock == other._writeLock && _isSharable == other._isSharable && _constructionComplete == other._constructionComplete && Signature == other.Signature;
     }
-    public bool Equals(hkMultipleVertexBuffer? other)
-    {
-        return other is not null && _vertexFormat.Equals(other._vertexFormat) && _lockedElements.Equals(other._lockedElements) && _lockedBuffer.Equals(other._lockedBuffer) && _elementInfos.Equals(other._elementInfos) && _vertexBufferInfos.Equals(other._vertexBufferInfos) && _numVertices.Equals(other._numVertices) && _isLocked.Equals(other._isLocked) && _updateCount.Equals(other._updateCount) && _writeLock.Equals(other._writeLock) && _isSharable.Equals(other._isSharable) && _constructionComplete.Equals(other._constructionComplete) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMultipleVertexBuffer? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMultipleVertexBuffer? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

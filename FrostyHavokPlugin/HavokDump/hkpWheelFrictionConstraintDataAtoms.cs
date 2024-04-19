@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpWheelFrictionConstraintDataAtoms : IHavokObject, IEquatable<hkpWheelFrictionConstraintDataAtoms?>
+public class hkpWheelFrictionConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _transforms;
-    public hkpWheelFrictionConstraintAtom _friction;
+    public hkpSetLocalTransformsConstraintAtom? _transforms;
+    public hkpWheelFrictionConstraintAtom? _friction;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _transforms = new hkpSetLocalTransformsConstraintAtom();
@@ -31,12 +31,10 @@ public class hkpWheelFrictionConstraintDataAtoms : IHavokObject, IEquatable<hkpW
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpWheelFrictionConstraintDataAtoms);
+        return obj is hkpWheelFrictionConstraintDataAtoms other && _transforms == other._transforms && _friction == other._friction && Signature == other.Signature;
     }
-    public bool Equals(hkpWheelFrictionConstraintDataAtoms? other)
-    {
-        return other is not null && _transforms.Equals(other._transforms) && _friction.Equals(other._friction) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpWheelFrictionConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpWheelFrictionConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

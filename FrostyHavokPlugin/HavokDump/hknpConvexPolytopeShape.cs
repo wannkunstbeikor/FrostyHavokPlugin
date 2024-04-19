@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpConvexPolytopeShape : hknpConvexShape, IEquatable<hknpConvexPolytopeShape?>
+public class hknpConvexPolytopeShape : hknpConvexShape
 {
     public override uint Signature => 0;
-    public List<Vector4> _planes;
-    public List<hknpConvexPolytopeShapeFace> _faces;
-    public List<byte> _indices;
+    public List<Vector4> _planes = new();
+    public List<hknpConvexPolytopeShapeFace?> _faces = new();
+    public List<byte> _indices = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -38,12 +38,10 @@ public class hknpConvexPolytopeShape : hknpConvexShape, IEquatable<hknpConvexPol
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpConvexPolytopeShape);
+        return obj is hknpConvexPolytopeShape other && base.Equals(other) && _planes.SequenceEqual(other._planes) && _faces.SequenceEqual(other._faces) && _indices.SequenceEqual(other._indices) && Signature == other.Signature;
     }
-    public bool Equals(hknpConvexPolytopeShape? other)
-    {
-        return other is not null && _planes.Equals(other._planes) && _faces.Equals(other._faces) && _indices.Equals(other._indices) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpConvexPolytopeShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpConvexPolytopeShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

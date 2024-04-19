@@ -7,31 +7,31 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleInstance : hknpUnaryAction, IEquatable<hknpVehicleInstance?>
+public class hknpVehicleInstance : hknpUnaryAction
 {
     public override uint Signature => 0;
-    public hknpVehicleData _data;
-    public hknpVehicleDriverInput _driverInput;
-    public hknpVehicleSteering _steering;
-    public hknpVehicleEngine _engine;
-    public hknpVehicleTransmission _transmission;
-    public hknpVehicleBrake _brake;
-    public hknpVehicleSuspension _suspension;
-    public hknpVehicleAerodynamics _aerodynamics;
-    public hknpVehicleWheelCollide _wheelCollide;
-    public hknpTyremarksInfo _tyreMarks;
-    public hknpVehicleVelocityDamper _velocityDamper;
-    public List<hknpVehicleInstanceWheelInfo> _wheelsInfo;
-    public hkpVehicleFrictionStatus _frictionStatus;
-    public hknpVehicleDriverInputStatus _deviceStatus;
-    public List<bool> _isFixed;
+    public hknpVehicleData? _data;
+    public hknpVehicleDriverInput? _driverInput;
+    public hknpVehicleSteering? _steering;
+    public hknpVehicleEngine? _engine;
+    public hknpVehicleTransmission? _transmission;
+    public hknpVehicleBrake? _brake;
+    public hknpVehicleSuspension? _suspension;
+    public hknpVehicleAerodynamics? _aerodynamics;
+    public hknpVehicleWheelCollide? _wheelCollide;
+    public hknpTyremarksInfo? _tyreMarks;
+    public hknpVehicleVelocityDamper? _velocityDamper;
+    public List<hknpVehicleInstanceWheelInfo?> _wheelsInfo = new();
+    public hkpVehicleFrictionStatus? _frictionStatus;
+    public hknpVehicleDriverInputStatus? _deviceStatus;
+    public List<bool> _isFixed = new();
     public float _wheelsTimeSinceMaxPedalInput;
     public bool _tryingToReverse;
     public float _torque;
     public float _rpm;
     public float _mainSteeringAngle;
     public float _mainSteeringAngleAssumingNoReduction;
-    public List<float> _wheelsSteeringAngle;
+    public List<float> _wheelsSteeringAngle = new();
     public bool _isReversing;
     public sbyte _currentGear;
     public bool _delayed;
@@ -136,12 +136,10 @@ public class hknpVehicleInstance : hknpUnaryAction, IEquatable<hknpVehicleInstan
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleInstance);
+        return obj is hknpVehicleInstance other && base.Equals(other) && _data == other._data && _driverInput == other._driverInput && _steering == other._steering && _engine == other._engine && _transmission == other._transmission && _brake == other._brake && _suspension == other._suspension && _aerodynamics == other._aerodynamics && _wheelCollide == other._wheelCollide && _tyreMarks == other._tyreMarks && _velocityDamper == other._velocityDamper && _wheelsInfo.SequenceEqual(other._wheelsInfo) && _frictionStatus == other._frictionStatus && _deviceStatus == other._deviceStatus && _isFixed.SequenceEqual(other._isFixed) && _wheelsTimeSinceMaxPedalInput == other._wheelsTimeSinceMaxPedalInput && _tryingToReverse == other._tryingToReverse && _torque == other._torque && _rpm == other._rpm && _mainSteeringAngle == other._mainSteeringAngle && _mainSteeringAngleAssumingNoReduction == other._mainSteeringAngleAssumingNoReduction && _wheelsSteeringAngle.SequenceEqual(other._wheelsSteeringAngle) && _isReversing == other._isReversing && _currentGear == other._currentGear && _delayed == other._delayed && _clutchDelayCountdown == other._clutchDelayCountdown && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleInstance? other)
-    {
-        return other is not null && _data.Equals(other._data) && _driverInput.Equals(other._driverInput) && _steering.Equals(other._steering) && _engine.Equals(other._engine) && _transmission.Equals(other._transmission) && _brake.Equals(other._brake) && _suspension.Equals(other._suspension) && _aerodynamics.Equals(other._aerodynamics) && _wheelCollide.Equals(other._wheelCollide) && _tyreMarks.Equals(other._tyreMarks) && _velocityDamper.Equals(other._velocityDamper) && _wheelsInfo.Equals(other._wheelsInfo) && _frictionStatus.Equals(other._frictionStatus) && _deviceStatus.Equals(other._deviceStatus) && _isFixed.Equals(other._isFixed) && _wheelsTimeSinceMaxPedalInput.Equals(other._wheelsTimeSinceMaxPedalInput) && _tryingToReverse.Equals(other._tryingToReverse) && _torque.Equals(other._torque) && _rpm.Equals(other._rpm) && _mainSteeringAngle.Equals(other._mainSteeringAngle) && _mainSteeringAngleAssumingNoReduction.Equals(other._mainSteeringAngleAssumingNoReduction) && _wheelsSteeringAngle.Equals(other._wheelsSteeringAngle) && _isReversing.Equals(other._isReversing) && _currentGear.Equals(other._currentGear) && _delayed.Equals(other._delayed) && _clutchDelayCountdown.Equals(other._clutchDelayCountdown) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleInstance? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleInstance? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultBrake : hknpVehicleBrake, IEquatable<hknpVehicleDefaultBrake?>
+public class hknpVehicleDefaultBrake : hknpVehicleBrake
 {
     public override uint Signature => 0;
-    public List<hknpVehicleDefaultBrakeWheelBrakingProperties> _wheelBrakingProperties;
+    public List<hknpVehicleDefaultBrakeWheelBrakingProperties?> _wheelBrakingProperties = new();
     public float _wheelsMinTimeToBlock;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
@@ -34,12 +34,10 @@ public class hknpVehicleDefaultBrake : hknpVehicleBrake, IEquatable<hknpVehicleD
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultBrake);
+        return obj is hknpVehicleDefaultBrake other && base.Equals(other) && _wheelBrakingProperties.SequenceEqual(other._wheelBrakingProperties) && _wheelsMinTimeToBlock == other._wheelsMinTimeToBlock && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultBrake? other)
-    {
-        return other is not null && _wheelBrakingProperties.Equals(other._wheelBrakingProperties) && _wheelsMinTimeToBlock.Equals(other._wheelsMinTimeToBlock) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultBrake? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultBrake? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,17 +7,17 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpHeightFieldShape : hknpCompositeShape, IEquatable<hknpHeightFieldShape?>
+public class hknpHeightFieldShape : hknpCompositeShape
 {
     public override uint Signature => 0;
-    public hkAabb _aabb;
+    public hkAabb? _aabb;
     public Vector4 _floatToIntScale;
     public Vector4 _intToFloatScale;
     public int _intSizeX;
     public int _intSizeZ;
     public int _numBitsX;
     public int _numBitsZ;
-    public hknpMinMaxQuadTree _minMaxTree;
+    public hknpMinMaxQuadTree? _minMaxTree;
     public int _minMaxTreeCoarseness;
     public bool _includeShapeKeyInSdfContacts;
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -68,12 +68,10 @@ public class hknpHeightFieldShape : hknpCompositeShape, IEquatable<hknpHeightFie
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpHeightFieldShape);
+        return obj is hknpHeightFieldShape other && base.Equals(other) && _aabb == other._aabb && _floatToIntScale == other._floatToIntScale && _intToFloatScale == other._intToFloatScale && _intSizeX == other._intSizeX && _intSizeZ == other._intSizeZ && _numBitsX == other._numBitsX && _numBitsZ == other._numBitsZ && _minMaxTree == other._minMaxTree && _minMaxTreeCoarseness == other._minMaxTreeCoarseness && _includeShapeKeyInSdfContacts == other._includeShapeKeyInSdfContacts && Signature == other.Signature;
     }
-    public bool Equals(hknpHeightFieldShape? other)
-    {
-        return other is not null && _aabb.Equals(other._aabb) && _floatToIntScale.Equals(other._floatToIntScale) && _intToFloatScale.Equals(other._intToFloatScale) && _intSizeX.Equals(other._intSizeX) && _intSizeZ.Equals(other._intSizeZ) && _numBitsX.Equals(other._numBitsX) && _numBitsZ.Equals(other._numBitsZ) && _minMaxTree.Equals(other._minMaxTree) && _minMaxTreeCoarseness.Equals(other._minMaxTreeCoarseness) && _includeShapeKeyInSdfContacts.Equals(other._includeShapeKeyInSdfContacts) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpHeightFieldShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpHeightFieldShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkAlignSceneToNodeOptions : hkReferencedObject, IEquatable<hkAlignSceneToNodeOptions?>
+public class hkAlignSceneToNodeOptions : hkReferencedObject
 {
     public override uint Signature => 0;
     public bool _invert;
@@ -18,7 +18,7 @@ public class hkAlignSceneToNodeOptions : hkReferencedObject, IEquatable<hkAlignS
     public bool _transformScale;
     public bool _transformSkew;
     public int _keyframe;
-    public string _nodeName;
+    public string _nodeName = string.Empty;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -64,12 +64,10 @@ public class hkAlignSceneToNodeOptions : hkReferencedObject, IEquatable<hkAlignS
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkAlignSceneToNodeOptions);
+        return obj is hkAlignSceneToNodeOptions other && base.Equals(other) && _invert == other._invert && _transformPositionX == other._transformPositionX && _transformPositionY == other._transformPositionY && _transformPositionZ == other._transformPositionZ && _transformRotation == other._transformRotation && _transformScale == other._transformScale && _transformSkew == other._transformSkew && _keyframe == other._keyframe && _nodeName == other._nodeName && Signature == other.Signature;
     }
-    public bool Equals(hkAlignSceneToNodeOptions? other)
-    {
-        return other is not null && _invert.Equals(other._invert) && _transformPositionX.Equals(other._transformPositionX) && _transformPositionY.Equals(other._transformPositionY) && _transformPositionZ.Equals(other._transformPositionZ) && _transformRotation.Equals(other._transformRotation) && _transformScale.Equals(other._transformScale) && _transformSkew.Equals(other._transformSkew) && _keyframe.Equals(other._keyframe) && _nodeName.Equals(other._nodeName) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkAlignSceneToNodeOptions? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkAlignSceneToNodeOptions? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

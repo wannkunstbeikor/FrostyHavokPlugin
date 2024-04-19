@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4 : hkcdStaticTreeDynamicStorage4, IEquatable<hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4?>
+public class hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4 : hkcdStaticTreeDynamicStorage4
 {
     public override uint Signature => 0;
-    public hkAabb _domain;
+    public hkAabb? _domain;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -29,12 +29,10 @@ public class hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4 : hkcdStaticTreeDyn
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4);
+        return obj is hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4 other && base.Equals(other) && _domain == other._domain && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4? other)
-    {
-        return other is not null && _domain.Equals(other._domain) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

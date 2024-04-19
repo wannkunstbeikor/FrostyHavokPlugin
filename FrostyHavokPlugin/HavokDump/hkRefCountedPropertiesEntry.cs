@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkRefCountedPropertiesEntry : IHavokObject, IEquatable<hkRefCountedPropertiesEntry?>
+public class hkRefCountedPropertiesEntry : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkReferencedObject _object;
+    public hkReferencedObject? _object;
     public ushort _key;
     public ushort _flags;
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -35,12 +35,10 @@ public class hkRefCountedPropertiesEntry : IHavokObject, IEquatable<hkRefCounted
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkRefCountedPropertiesEntry);
+        return obj is hkRefCountedPropertiesEntry other && _object == other._object && _key == other._key && _flags == other._flags && Signature == other.Signature;
     }
-    public bool Equals(hkRefCountedPropertiesEntry? other)
-    {
-        return other is not null && _object.Equals(other._object) && _key.Equals(other._key) && _flags.Equals(other._flags) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkRefCountedPropertiesEntry? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkRefCountedPropertiesEntry? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

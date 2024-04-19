@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpCompressedHeightFieldShape : hknpHeightFieldShape, IEquatable<hknpCompressedHeightFieldShape?>
+public class hknpCompressedHeightFieldShape : hknpHeightFieldShape
 {
     public override uint Signature => 0;
-    public List<ushort> _storage;
-    public List<ushort> _shapeTags;
+    public List<ushort> _storage = new();
+    public List<ushort> _shapeTags = new();
     public bool _triangleFlip;
     public float _offset;
     public float _scale;
@@ -48,12 +48,10 @@ public class hknpCompressedHeightFieldShape : hknpHeightFieldShape, IEquatable<h
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpCompressedHeightFieldShape);
+        return obj is hknpCompressedHeightFieldShape other && base.Equals(other) && _storage.SequenceEqual(other._storage) && _shapeTags.SequenceEqual(other._shapeTags) && _triangleFlip == other._triangleFlip && _offset == other._offset && _scale == other._scale && Signature == other.Signature;
     }
-    public bool Equals(hknpCompressedHeightFieldShape? other)
-    {
-        return other is not null && _storage.Equals(other._storage) && _shapeTags.Equals(other._shapeTags) && _triangleFlip.Equals(other._triangleFlip) && _offset.Equals(other._offset) && _scale.Equals(other._scale) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpCompressedHeightFieldShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpCompressedHeightFieldShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkIndexedTransformSet : hkReferencedObject, IEquatable<hkIndexedTransformSet?>
+public class hkIndexedTransformSet : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<Matrix4> _matrices;
-    public List<Matrix4> _inverseMatrices;
-    public List<short> _matricesOrder;
-    public List<string> _matricesNames;
-    public List<hkMeshBoneIndexMapping> _indexMappings;
+    public List<Matrix4> _matrices = new();
+    public List<Matrix4> _inverseMatrices = new();
+    public List<short> _matricesOrder = new();
+    public List<string> _matricesNames = new();
+    public List<hkMeshBoneIndexMapping?> _indexMappings = new();
     public bool _allMatricesAreAffine;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
@@ -50,12 +50,10 @@ public class hkIndexedTransformSet : hkReferencedObject, IEquatable<hkIndexedTra
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkIndexedTransformSet);
+        return obj is hkIndexedTransformSet other && base.Equals(other) && _matrices.SequenceEqual(other._matrices) && _inverseMatrices.SequenceEqual(other._inverseMatrices) && _matricesOrder.SequenceEqual(other._matricesOrder) && _matricesNames.SequenceEqual(other._matricesNames) && _indexMappings.SequenceEqual(other._indexMappings) && _allMatricesAreAffine == other._allMatricesAreAffine && Signature == other.Signature;
     }
-    public bool Equals(hkIndexedTransformSet? other)
-    {
-        return other is not null && _matrices.Equals(other._matrices) && _inverseMatrices.Equals(other._inverseMatrices) && _matricesOrder.Equals(other._matricesOrder) && _matricesNames.Equals(other._matricesNames) && _indexMappings.Equals(other._indexMappings) && _allMatricesAreAffine.Equals(other._allMatricesAreAffine) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkIndexedTransformSet? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkIndexedTransformSet? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

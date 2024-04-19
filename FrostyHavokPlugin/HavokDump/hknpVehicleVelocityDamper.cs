@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleVelocityDamper : hkReferencedObject, IEquatable<hknpVehicleVelocityDamper?>
+public class hknpVehicleVelocityDamper : hkReferencedObject
 {
     public override uint Signature => 0;
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -24,12 +24,10 @@ public class hknpVehicleVelocityDamper : hkReferencedObject, IEquatable<hknpVehi
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleVelocityDamper);
+        return obj is hknpVehicleVelocityDamper other && base.Equals(other) && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleVelocityDamper? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleVelocityDamper? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleVelocityDamper? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

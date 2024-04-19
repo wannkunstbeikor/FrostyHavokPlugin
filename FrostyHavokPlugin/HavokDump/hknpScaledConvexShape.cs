@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpScaledConvexShape : hknpScaledConvexShapeBase, IEquatable<hknpScaledConvexShape?>
+public class hknpScaledConvexShape : hknpScaledConvexShapeBase
 {
     public override uint Signature => 0;
     // TYPE_STRUCT TYPE_VOID _mutationSignals
@@ -27,12 +27,10 @@ public class hknpScaledConvexShape : hknpScaledConvexShapeBase, IEquatable<hknpS
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpScaledConvexShape);
+        return obj is hknpScaledConvexShape other && base.Equals(other) && Signature == other.Signature;
     }
-    public bool Equals(hknpScaledConvexShape? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpScaledConvexShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpScaledConvexShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

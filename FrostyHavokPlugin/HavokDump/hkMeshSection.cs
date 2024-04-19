@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMeshSection : IHavokObject, IEquatable<hkMeshSection?>
+public class hkMeshSection : IHavokObject
 {
     public virtual uint Signature => 0;
     public hkMeshSection_PrimitiveType _primitiveType;
@@ -17,8 +17,8 @@ public class hkMeshSection : IHavokObject, IEquatable<hkMeshSection?>
     public int _transformIndex;
     public hkMeshSection_MeshSectionIndexType _indexType;
     // TYPE_POINTER TYPE_VOID _indices
-    public hkMeshVertexBuffer _vertexBuffer;
-    public hkMeshMaterial _material;
+    public hkMeshVertexBuffer? _vertexBuffer;
+    public hkMeshMaterial? _material;
     public int _sectionIndex;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -64,12 +64,10 @@ public class hkMeshSection : IHavokObject, IEquatable<hkMeshSection?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMeshSection);
+        return obj is hkMeshSection other && _primitiveType == other._primitiveType && _numPrimitives == other._numPrimitives && _numIndices == other._numIndices && _vertexStartIndex == other._vertexStartIndex && _transformIndex == other._transformIndex && _indexType == other._indexType && _vertexBuffer == other._vertexBuffer && _material == other._material && _sectionIndex == other._sectionIndex && Signature == other.Signature;
     }
-    public bool Equals(hkMeshSection? other)
-    {
-        return other is not null && _primitiveType.Equals(other._primitiveType) && _numPrimitives.Equals(other._numPrimitives) && _numIndices.Equals(other._numIndices) && _vertexStartIndex.Equals(other._vertexStartIndex) && _transformIndex.Equals(other._transformIndex) && _indexType.Equals(other._indexType) && _vertexBuffer.Equals(other._vertexBuffer) && _material.Equals(other._material) && _sectionIndex.Equals(other._sectionIndex) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMeshSection? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMeshSection? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

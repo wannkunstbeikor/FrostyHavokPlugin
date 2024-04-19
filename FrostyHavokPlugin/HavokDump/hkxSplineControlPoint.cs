@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxSplineControlPoint : IHavokObject, IEquatable<hkxSplineControlPoint?>
+public class hkxSplineControlPoint : IHavokObject
 {
     public virtual uint Signature => 0;
     public Vector4 _position;
@@ -43,12 +43,10 @@ public class hkxSplineControlPoint : IHavokObject, IEquatable<hkxSplineControlPo
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxSplineControlPoint);
+        return obj is hkxSplineControlPoint other && _position == other._position && _tangentIn == other._tangentIn && _tangentOut == other._tangentOut && _inType == other._inType && _outType == other._outType && Signature == other.Signature;
     }
-    public bool Equals(hkxSplineControlPoint? other)
-    {
-        return other is not null && _position.Equals(other._position) && _tangentIn.Equals(other._tangentIn) && _tangentOut.Equals(other._tangentOut) && _inType.Equals(other._inType) && _outType.Equals(other._outType) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxSplineControlPoint? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxSplineControlPoint? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

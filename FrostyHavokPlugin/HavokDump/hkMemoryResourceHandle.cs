@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMemoryResourceHandle : hkResourceHandle, IEquatable<hkMemoryResourceHandle?>
+public class hkMemoryResourceHandle : hkResourceHandle
 {
     public override uint Signature => 0;
-    public hkReferencedObject _variant;
-    public string _name;
-    public List<hkMemoryResourceHandleExternalLink> _references;
+    public hkReferencedObject? _variant;
+    public string _name = string.Empty;
+    public List<hkMemoryResourceHandleExternalLink?> _references = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -36,12 +36,10 @@ public class hkMemoryResourceHandle : hkResourceHandle, IEquatable<hkMemoryResou
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMemoryResourceHandle);
+        return obj is hkMemoryResourceHandle other && base.Equals(other) && _variant == other._variant && _name == other._name && _references.SequenceEqual(other._references) && Signature == other.Signature;
     }
-    public bool Equals(hkMemoryResourceHandle? other)
-    {
-        return other is not null && _variant.Equals(other._variant) && _name.Equals(other._name) && _references.Equals(other._references) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMemoryResourceHandle? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMemoryResourceHandle? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

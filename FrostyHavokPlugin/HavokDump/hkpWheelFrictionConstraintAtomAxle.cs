@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpWheelFrictionConstraintAtomAxle : IHavokObject, IEquatable<hkpWheelFrictionConstraintAtomAxle?>
+public class hkpWheelFrictionConstraintAtomAxle : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _spinVelocity;
@@ -67,12 +67,10 @@ public class hkpWheelFrictionConstraintAtomAxle : IHavokObject, IEquatable<hkpWh
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpWheelFrictionConstraintAtomAxle);
+        return obj is hkpWheelFrictionConstraintAtomAxle other && _spinVelocity == other._spinVelocity && _sumVelocity == other._sumVelocity && _numWheels == other._numWheels && _wheelsSolved == other._wheelsSolved && _stepsSolved == other._stepsSolved && _invInertia == other._invInertia && _inertia == other._inertia && _impulseScaling == other._impulseScaling && _impulseMax == other._impulseMax && _isFixed == other._isFixed && _numWheelsOnGround == other._numWheelsOnGround && Signature == other.Signature;
     }
-    public bool Equals(hkpWheelFrictionConstraintAtomAxle? other)
-    {
-        return other is not null && _spinVelocity.Equals(other._spinVelocity) && _sumVelocity.Equals(other._sumVelocity) && _numWheels.Equals(other._numWheels) && _wheelsSolved.Equals(other._wheelsSolved) && _stepsSolved.Equals(other._stepsSolved) && _invInertia.Equals(other._invInertia) && _inertia.Equals(other._inertia) && _impulseScaling.Equals(other._impulseScaling) && _impulseMax.Equals(other._impulseMax) && _isFixed.Equals(other._isFixed) && _numWheelsOnGround.Equals(other._numWheelsOnGround) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpWheelFrictionConstraintAtomAxle? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpWheelFrictionConstraintAtomAxle? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

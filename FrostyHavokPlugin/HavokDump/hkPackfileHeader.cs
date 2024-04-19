@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkPackfileHeader : IHavokObject, IEquatable<hkPackfileHeader?>
+public class hkPackfileHeader : IHavokObject
 {
     public virtual uint Signature => 0;
     public int[] _magic = new int[2];
@@ -73,12 +73,10 @@ public class hkPackfileHeader : IHavokObject, IEquatable<hkPackfileHeader?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkPackfileHeader);
+        return obj is hkPackfileHeader other && _magic == other._magic && _userTag == other._userTag && _fileVersion == other._fileVersion && _layoutRules == other._layoutRules && _numSections == other._numSections && _contentsSectionIndex == other._contentsSectionIndex && _contentsSectionOffset == other._contentsSectionOffset && _contentsClassNameSectionIndex == other._contentsClassNameSectionIndex && _contentsClassNameSectionOffset == other._contentsClassNameSectionOffset && _contentsVersion == other._contentsVersion && _flags == other._flags && _maxpredicate == other._maxpredicate && _predicateArraySizePlusPadding == other._predicateArraySizePlusPadding && Signature == other.Signature;
     }
-    public bool Equals(hkPackfileHeader? other)
-    {
-        return other is not null && _magic.Equals(other._magic) && _userTag.Equals(other._userTag) && _fileVersion.Equals(other._fileVersion) && _layoutRules.Equals(other._layoutRules) && _numSections.Equals(other._numSections) && _contentsSectionIndex.Equals(other._contentsSectionIndex) && _contentsSectionOffset.Equals(other._contentsSectionOffset) && _contentsClassNameSectionIndex.Equals(other._contentsClassNameSectionIndex) && _contentsClassNameSectionOffset.Equals(other._contentsClassNameSectionOffset) && _contentsVersion.Equals(other._contentsVersion) && _flags.Equals(other._flags) && _maxpredicate.Equals(other._maxpredicate) && _predicateArraySizePlusPadding.Equals(other._predicateArraySizePlusPadding) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkPackfileHeader? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkPackfileHeader? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

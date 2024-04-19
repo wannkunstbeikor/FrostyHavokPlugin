@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpMaterial : IHavokObject, IEquatable<hknpMaterial?>
+public class hknpMaterial : IHavokObject
 {
     public virtual uint Signature => 0;
-    public string _name;
+    public string _name = string.Empty;
     public uint _isExclusive;
     public hknpMaterial_FlagsEnum _flags;
     public hknpMaterial_TriggerType _triggerType;
-    public hkUFloat8 _triggerManifoldTolerance;
+    public hkUFloat8? _triggerManifoldTolerance;
     public Half _dynamicFriction;
     public Half _staticFriction;
     public Half _restitution;
@@ -27,8 +27,8 @@ public class hknpMaterial : IHavokObject, IEquatable<hknpMaterial?>
     public Half _massChangerHeavyObjectFactor;
     public Half _softContactForceFactor;
     public Half _softContactDampFactor;
-    public hkUFloat8 _softContactSeperationVelocity;
-    public hknpSurfaceVelocity _surfaceVelocity;
+    public hkUFloat8? _softContactSeperationVelocity;
+    public hknpSurfaceVelocity? _surfaceVelocity;
     public Half _disablingCollisionsBetweenCvxCvxDynamicObjectsDistance;
     public ulong _userData;
     public bool _isShared;
@@ -119,12 +119,10 @@ public class hknpMaterial : IHavokObject, IEquatable<hknpMaterial?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpMaterial);
+        return obj is hknpMaterial other && _name == other._name && _isExclusive == other._isExclusive && _flags == other._flags && _triggerType == other._triggerType && _triggerManifoldTolerance == other._triggerManifoldTolerance && _dynamicFriction == other._dynamicFriction && _staticFriction == other._staticFriction && _restitution == other._restitution && _frictionCombinePolicy == other._frictionCombinePolicy && _restitutionCombinePolicy == other._restitutionCombinePolicy && _weldingTolerance == other._weldingTolerance && _maxContactImpulse == other._maxContactImpulse && _fractionOfClippedImpulseToApply == other._fractionOfClippedImpulseToApply && _massChangerCategory == other._massChangerCategory && _massChangerHeavyObjectFactor == other._massChangerHeavyObjectFactor && _softContactForceFactor == other._softContactForceFactor && _softContactDampFactor == other._softContactDampFactor && _softContactSeperationVelocity == other._softContactSeperationVelocity && _surfaceVelocity == other._surfaceVelocity && _disablingCollisionsBetweenCvxCvxDynamicObjectsDistance == other._disablingCollisionsBetweenCvxCvxDynamicObjectsDistance && _userData == other._userData && _isShared == other._isShared && Signature == other.Signature;
     }
-    public bool Equals(hknpMaterial? other)
-    {
-        return other is not null && _name.Equals(other._name) && _isExclusive.Equals(other._isExclusive) && _flags.Equals(other._flags) && _triggerType.Equals(other._triggerType) && _triggerManifoldTolerance.Equals(other._triggerManifoldTolerance) && _dynamicFriction.Equals(other._dynamicFriction) && _staticFriction.Equals(other._staticFriction) && _restitution.Equals(other._restitution) && _frictionCombinePolicy.Equals(other._frictionCombinePolicy) && _restitutionCombinePolicy.Equals(other._restitutionCombinePolicy) && _weldingTolerance.Equals(other._weldingTolerance) && _maxContactImpulse.Equals(other._maxContactImpulse) && _fractionOfClippedImpulseToApply.Equals(other._fractionOfClippedImpulseToApply) && _massChangerCategory.Equals(other._massChangerCategory) && _massChangerHeavyObjectFactor.Equals(other._massChangerHeavyObjectFactor) && _softContactForceFactor.Equals(other._softContactForceFactor) && _softContactDampFactor.Equals(other._softContactDampFactor) && _softContactSeperationVelocity.Equals(other._softContactSeperationVelocity) && _surfaceVelocity.Equals(other._surfaceVelocity) && _disablingCollisionsBetweenCvxCvxDynamicObjectsDistance.Equals(other._disablingCollisionsBetweenCvxCvxDynamicObjectsDistance) && _userData.Equals(other._userData) && _isShared.Equals(other._isShared) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpMaterial? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpMaterial? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpMinMaxQuadTree : IHavokObject, IEquatable<hknpMinMaxQuadTree?>
+public class hknpMinMaxQuadTree : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hknpMinMaxQuadTreeMinMaxLevel> _coarseTreeData;
+    public List<hknpMinMaxQuadTreeMinMaxLevel?> _coarseTreeData = new();
     public Vector4 _offset;
     public float _multiplier;
     public float _invMultiplier;
@@ -39,12 +39,10 @@ public class hknpMinMaxQuadTree : IHavokObject, IEquatable<hknpMinMaxQuadTree?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpMinMaxQuadTree);
+        return obj is hknpMinMaxQuadTree other && _coarseTreeData.SequenceEqual(other._coarseTreeData) && _offset == other._offset && _multiplier == other._multiplier && _invMultiplier == other._invMultiplier && Signature == other.Signature;
     }
-    public bool Equals(hknpMinMaxQuadTree? other)
-    {
-        return other is not null && _coarseTreeData.Equals(other._coarseTreeData) && _offset.Equals(other._offset) && _multiplier.Equals(other._multiplier) && _invMultiplier.Equals(other._invMultiplier) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpMinMaxQuadTree? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpMinMaxQuadTree? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpDestructionShapeProperties : hkReferencedObject, IEquatable<hknpDestructionShapeProperties?>
+public class hknpDestructionShapeProperties : hkReferencedObject
 {
     public override uint Signature => 0;
     public Matrix4 _worldFromShape;
@@ -38,12 +38,10 @@ public class hknpDestructionShapeProperties : hkReferencedObject, IEquatable<hkn
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpDestructionShapeProperties);
+        return obj is hknpDestructionShapeProperties other && base.Equals(other) && _worldFromShape == other._worldFromShape && _isHierarchicalCompound == other._isHierarchicalCompound && _hasDestructionShapes == other._hasDestructionShapes && Signature == other.Signature;
     }
-    public bool Equals(hknpDestructionShapeProperties? other)
-    {
-        return other is not null && _worldFromShape.Equals(other._worldFromShape) && _isHierarchicalCompound.Equals(other._isHierarchicalCompound) && _hasDestructionShapes.Equals(other._hasDestructionShapes) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpDestructionShapeProperties? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpDestructionShapeProperties? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

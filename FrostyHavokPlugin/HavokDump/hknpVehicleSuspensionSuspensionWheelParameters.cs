@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleSuspensionSuspensionWheelParameters : IHavokObject, IEquatable<hknpVehicleSuspensionSuspensionWheelParameters?>
+public class hknpVehicleSuspensionSuspensionWheelParameters : IHavokObject
 {
     public virtual uint Signature => 0;
     public Vector4 _hardpointChassisSpace;
@@ -35,12 +35,10 @@ public class hknpVehicleSuspensionSuspensionWheelParameters : IHavokObject, IEqu
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleSuspensionSuspensionWheelParameters);
+        return obj is hknpVehicleSuspensionSuspensionWheelParameters other && _hardpointChassisSpace == other._hardpointChassisSpace && _directionChassisSpace == other._directionChassisSpace && _length == other._length && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleSuspensionSuspensionWheelParameters? other)
-    {
-        return other is not null && _hardpointChassisSpace.Equals(other._hardpointChassisSpace) && _directionChassisSpace.Equals(other._directionChassisSpace) && _length.Equals(other._length) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleSuspensionSuspensionWheelParameters? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleSuspensionSuspensionWheelParameters? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

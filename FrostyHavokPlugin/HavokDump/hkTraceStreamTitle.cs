@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkTraceStreamTitle : IHavokObject, IEquatable<hkTraceStreamTitle?>
+public class hkTraceStreamTitle : IHavokObject
 {
     public virtual uint Signature => 0;
     public sbyte[] _value = new sbyte[32];
@@ -25,12 +25,10 @@ public class hkTraceStreamTitle : IHavokObject, IEquatable<hkTraceStreamTitle?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkTraceStreamTitle);
+        return obj is hkTraceStreamTitle other && _value == other._value && Signature == other.Signature;
     }
-    public bool Equals(hkTraceStreamTitle? other)
-    {
-        return other is not null && _value.Equals(other._value) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkTraceStreamTitle? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkTraceStreamTitle? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

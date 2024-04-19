@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealPair : IHavokObject, IEquatable<hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealPair?>
+public class hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealPair : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hkIntRealPair> _elem;
+    public List<hkIntRealPair?> _elem = new();
     public int _numElems;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -31,12 +31,10 @@ public class hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealP
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealPair);
+        return obj is hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealPair other && _elem.SequenceEqual(other._elem) && _numElems == other._numElems && Signature == other.Signature;
     }
-    public bool Equals(hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealPair? other)
-    {
-        return other is not null && _elem.Equals(other._elem) && _numElems.Equals(other._numElems) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealPair? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkSethkIntRealPairhkContainerHeapAllocatorhkMapOperationshkIntRealPair? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

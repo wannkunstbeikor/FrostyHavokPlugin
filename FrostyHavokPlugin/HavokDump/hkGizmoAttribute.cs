@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkGizmoAttribute : IHavokObject, IEquatable<hkGizmoAttribute?>
+public class hkGizmoAttribute : IHavokObject
 {
     public virtual uint Signature => 0;
     public bool _visible;
-    public string _label;
+    public string _label = string.Empty;
     public hkGizmoAttribute_GizmoType _type;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
@@ -37,12 +37,10 @@ public class hkGizmoAttribute : IHavokObject, IEquatable<hkGizmoAttribute?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkGizmoAttribute);
+        return obj is hkGizmoAttribute other && _visible == other._visible && _label == other._label && _type == other._type && Signature == other.Signature;
     }
-    public bool Equals(hkGizmoAttribute? other)
-    {
-        return other is not null && _visible.Equals(other._visible) && _label.Equals(other._label) && _type.Equals(other._type) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkGizmoAttribute? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkGizmoAttribute? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

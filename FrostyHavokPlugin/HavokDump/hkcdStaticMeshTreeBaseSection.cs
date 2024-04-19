@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticMeshTreeBaseSection : hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4, IEquatable<hkcdStaticMeshTreeBaseSection?>
+public class hkcdStaticMeshTreeBaseSection : hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4
 {
     public override uint Signature => 0;
     public float[] _codecParms = new float[6];
     public uint _firstPackedVertex;
-    public hkcdStaticMeshTreeBaseSectionSharedVertices _sharedVertices;
-    public hkcdStaticMeshTreeBaseSectionPrimitives _primitives;
-    public hkcdStaticMeshTreeBaseSectionDataRuns _dataRuns;
+    public hkcdStaticMeshTreeBaseSectionSharedVertices? _sharedVertices;
+    public hkcdStaticMeshTreeBaseSectionPrimitives? _primitives;
+    public hkcdStaticMeshTreeBaseSectionDataRuns? _dataRuns;
     public byte _numPackedVertices;
     public byte _numSharedIndices;
     public ushort _leafIndex;
@@ -75,12 +75,10 @@ public class hkcdStaticMeshTreeBaseSection : hkcdStaticTreeTreehkcdStaticTreeDyn
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticMeshTreeBaseSection);
+        return obj is hkcdStaticMeshTreeBaseSection other && base.Equals(other) && _codecParms == other._codecParms && _firstPackedVertex == other._firstPackedVertex && _sharedVertices == other._sharedVertices && _primitives == other._primitives && _dataRuns == other._dataRuns && _numPackedVertices == other._numPackedVertices && _numSharedIndices == other._numSharedIndices && _leafIndex == other._leafIndex && _page == other._page && _flags == other._flags && _layerData == other._layerData && _unusedData == other._unusedData && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticMeshTreeBaseSection? other)
-    {
-        return other is not null && _codecParms.Equals(other._codecParms) && _firstPackedVertex.Equals(other._firstPackedVertex) && _sharedVertices.Equals(other._sharedVertices) && _primitives.Equals(other._primitives) && _dataRuns.Equals(other._dataRuns) && _numPackedVertices.Equals(other._numPackedVertices) && _numSharedIndices.Equals(other._numSharedIndices) && _leafIndex.Equals(other._leafIndex) && _page.Equals(other._page) && _flags.Equals(other._flags) && _layerData.Equals(other._layerData) && _unusedData.Equals(other._unusedData) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticMeshTreeBaseSection? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticMeshTreeBaseSection? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

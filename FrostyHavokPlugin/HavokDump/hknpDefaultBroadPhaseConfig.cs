@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpDefaultBroadPhaseConfig : hknpBroadPhaseConfig, IEquatable<hknpDefaultBroadPhaseConfig?>
+public class hknpDefaultBroadPhaseConfig : hknpBroadPhaseConfig
 {
     public override uint Signature => 0;
-    public hknpBroadPhaseConfigLayer[] _layers = new hknpBroadPhaseConfigLayer[4];
+    public hknpBroadPhaseConfigLayer?[] _layers = new hknpBroadPhaseConfigLayer?[4];
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -28,12 +28,10 @@ public class hknpDefaultBroadPhaseConfig : hknpBroadPhaseConfig, IEquatable<hknp
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpDefaultBroadPhaseConfig);
+        return obj is hknpDefaultBroadPhaseConfig other && base.Equals(other) && _layers == other._layers && Signature == other.Signature;
     }
-    public bool Equals(hknpDefaultBroadPhaseConfig? other)
-    {
-        return other is not null && _layers.Equals(other._layers) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpDefaultBroadPhaseConfig? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpDefaultBroadPhaseConfig? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

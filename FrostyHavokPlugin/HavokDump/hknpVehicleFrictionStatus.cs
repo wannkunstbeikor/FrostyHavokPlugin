@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleFrictionStatus : IHavokObject, IEquatable<hknpVehicleFrictionStatus?>
+public class hknpVehicleFrictionStatus : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hknpVehicleFrictionStatusAxisStatus[] _axis = new hknpVehicleFrictionStatusAxisStatus[2];
+    public hknpVehicleFrictionStatusAxisStatus?[] _axis = new hknpVehicleFrictionStatusAxisStatus?[2];
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _axis = des.ReadStructCStyleArray<hknpVehicleFrictionStatusAxisStatus>(br, 2);
@@ -25,12 +25,10 @@ public class hknpVehicleFrictionStatus : IHavokObject, IEquatable<hknpVehicleFri
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleFrictionStatus);
+        return obj is hknpVehicleFrictionStatus other && _axis == other._axis && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleFrictionStatus? other)
-    {
-        return other is not null && _axis.Equals(other._axis) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleFrictionStatus? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleFrictionStatus? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

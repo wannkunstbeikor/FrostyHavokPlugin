@@ -7,16 +7,16 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdAdf : IHavokObject, IEquatable<hkcdAdf?>
+public class hkcdAdf : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _accuracy;
-    public hkAabb _domain;
+    public hkAabb? _domain;
     public Vector4 _origin;
     public Vector4 _scale;
     public float[] _range = new float[2];
-    public List<uint> _nodes;
-    public List<ushort> _voxels;
+    public List<uint> _nodes = new();
+    public List<ushort> _voxels = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _accuracy = br.ReadSingle();
@@ -54,12 +54,10 @@ public class hkcdAdf : IHavokObject, IEquatable<hkcdAdf?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdAdf);
+        return obj is hkcdAdf other && _accuracy == other._accuracy && _domain == other._domain && _origin == other._origin && _scale == other._scale && _range == other._range && _nodes.SequenceEqual(other._nodes) && _voxels.SequenceEqual(other._voxels) && Signature == other.Signature;
     }
-    public bool Equals(hkcdAdf? other)
-    {
-        return other is not null && _accuracy.Equals(other._accuracy) && _domain.Equals(other._domain) && _origin.Equals(other._origin) && _scale.Equals(other._scale) && _range.Equals(other._range) && _nodes.Equals(other._nodes) && _voxels.Equals(other._voxels) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdAdf? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdAdf? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

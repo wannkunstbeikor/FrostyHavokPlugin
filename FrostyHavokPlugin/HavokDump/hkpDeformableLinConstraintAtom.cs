@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpDeformableLinConstraintAtom : hkpConstraintAtom, IEquatable<hkpDeformableLinConstraintAtom?>
+public class hkpDeformableLinConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public Vector4 _offset;
@@ -46,12 +46,10 @@ public class hkpDeformableLinConstraintAtom : hkpConstraintAtom, IEquatable<hkpD
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpDeformableLinConstraintAtom);
+        return obj is hkpDeformableLinConstraintAtom other && base.Equals(other) && _offset == other._offset && _yieldStrengthDiag == other._yieldStrengthDiag && _yieldStrengthOffDiag == other._yieldStrengthOffDiag && _ultimateStrengthDiag == other._ultimateStrengthDiag && _ultimateStrengthOffDiag == other._ultimateStrengthOffDiag && Signature == other.Signature;
     }
-    public bool Equals(hkpDeformableLinConstraintAtom? other)
-    {
-        return other is not null && _offset.Equals(other._offset) && _yieldStrengthDiag.Equals(other._yieldStrengthDiag) && _yieldStrengthOffDiag.Equals(other._yieldStrengthOffDiag) && _ultimateStrengthDiag.Equals(other._ultimateStrengthDiag) && _ultimateStrengthOffDiag.Equals(other._ultimateStrengthOffDiag) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpDeformableLinConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpDeformableLinConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

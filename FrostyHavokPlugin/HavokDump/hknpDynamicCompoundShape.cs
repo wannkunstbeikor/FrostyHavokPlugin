@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpDynamicCompoundShape : hknpCompoundShape, IEquatable<hknpDynamicCompoundShape?>
+public class hknpDynamicCompoundShape : hknpCompoundShape
 {
     public override uint Signature => 0;
-    public hknpDynamicCompoundShapeData _boundingVolumeData;
+    public hknpDynamicCompoundShapeData? _boundingVolumeData;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -30,12 +30,10 @@ public class hknpDynamicCompoundShape : hknpCompoundShape, IEquatable<hknpDynami
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpDynamicCompoundShape);
+        return obj is hknpDynamicCompoundShape other && base.Equals(other) && _boundingVolumeData == other._boundingVolumeData && Signature == other.Signature;
     }
-    public bool Equals(hknpDynamicCompoundShape? other)
-    {
-        return other is not null && _boundingVolumeData.Equals(other._boundingVolumeData) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpDynamicCompoundShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpDynamicCompoundShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

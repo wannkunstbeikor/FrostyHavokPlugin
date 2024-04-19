@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpHingeLimitsDataAtoms : IHavokObject, IEquatable<hkpHingeLimitsDataAtoms?>
+public class hkpHingeLimitsDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalRotationsConstraintAtom _rotations;
-    public hkpAngLimitConstraintAtom _angLimit;
-    public hkp2dAngConstraintAtom _2dAng;
+    public hkpSetLocalRotationsConstraintAtom? _rotations;
+    public hkpAngLimitConstraintAtom? _angLimit;
+    public hkp2dAngConstraintAtom? _2dAng;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _rotations = new hkpSetLocalRotationsConstraintAtom();
@@ -36,12 +36,10 @@ public class hkpHingeLimitsDataAtoms : IHavokObject, IEquatable<hkpHingeLimitsDa
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpHingeLimitsDataAtoms);
+        return obj is hkpHingeLimitsDataAtoms other && _rotations == other._rotations && _angLimit == other._angLimit && _2dAng == other._2dAng && Signature == other.Signature;
     }
-    public bool Equals(hkpHingeLimitsDataAtoms? other)
-    {
-        return other is not null && _rotations.Equals(other._rotations) && _angLimit.Equals(other._angLimit) && _2dAng.Equals(other._2dAng) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpHingeLimitsDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpHingeLimitsDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

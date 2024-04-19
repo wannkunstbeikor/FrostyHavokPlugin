@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkPackfileSectionHeader : IHavokObject, IEquatable<hkPackfileSectionHeader?>
+public class hkPackfileSectionHeader : IHavokObject
 {
     public virtual uint Signature => 0;
     public sbyte[] _sectionTag = new sbyte[19];
@@ -61,12 +61,10 @@ public class hkPackfileSectionHeader : IHavokObject, IEquatable<hkPackfileSectio
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkPackfileSectionHeader);
+        return obj is hkPackfileSectionHeader other && _sectionTag == other._sectionTag && _nullByte == other._nullByte && _absoluteDataStart == other._absoluteDataStart && _localFixupsOffset == other._localFixupsOffset && _globalFixupsOffset == other._globalFixupsOffset && _virtualFixupsOffset == other._virtualFixupsOffset && _exportsOffset == other._exportsOffset && _importsOffset == other._importsOffset && _endOffset == other._endOffset && _pad == other._pad && Signature == other.Signature;
     }
-    public bool Equals(hkPackfileSectionHeader? other)
-    {
-        return other is not null && _sectionTag.Equals(other._sectionTag) && _nullByte.Equals(other._nullByte) && _absoluteDataStart.Equals(other._absoluteDataStart) && _localFixupsOffset.Equals(other._localFixupsOffset) && _globalFixupsOffset.Equals(other._globalFixupsOffset) && _virtualFixupsOffset.Equals(other._virtualFixupsOffset) && _exportsOffset.Equals(other._exportsOffset) && _importsOffset.Equals(other._importsOffset) && _endOffset.Equals(other._endOffset) && _pad.Equals(other._pad) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkPackfileSectionHeader? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkPackfileSectionHeader? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

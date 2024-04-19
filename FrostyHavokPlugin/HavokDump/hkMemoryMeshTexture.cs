@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMemoryMeshTexture : hkMeshTexture, IEquatable<hkMemoryMeshTexture?>
+public class hkMemoryMeshTexture : hkMeshTexture
 {
     public override uint Signature => 0;
-    public string _filename;
-    public List<byte> _data;
+    public string _filename = string.Empty;
+    public List<byte> _data = new();
     public hkMeshTexture_Format _format;
     public bool _hasMipMaps;
     public hkMeshTexture_FilterMode _filterMode;
@@ -52,12 +52,10 @@ public class hkMemoryMeshTexture : hkMeshTexture, IEquatable<hkMemoryMeshTexture
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMemoryMeshTexture);
+        return obj is hkMemoryMeshTexture other && base.Equals(other) && _filename == other._filename && _data.SequenceEqual(other._data) && _format == other._format && _hasMipMaps == other._hasMipMaps && _filterMode == other._filterMode && _usageHint == other._usageHint && _textureCoordChannel == other._textureCoordChannel && Signature == other.Signature;
     }
-    public bool Equals(hkMemoryMeshTexture? other)
-    {
-        return other is not null && _filename.Equals(other._filename) && _data.Equals(other._data) && _format.Equals(other._format) && _hasMipMaps.Equals(other._hasMipMaps) && _filterMode.Equals(other._filterMode) && _usageHint.Equals(other._usageHint) && _textureCoordChannel.Equals(other._textureCoordChannel) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMemoryMeshTexture? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMemoryMeshTexture? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,17 +7,17 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpRagdollConstraintDataAtoms : IHavokObject, IEquatable<hkpRagdollConstraintDataAtoms?>
+public class hkpRagdollConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _transforms;
-    public hkpSetupStabilizationAtom _setupStabilization;
-    public hkpRagdollMotorConstraintAtom _ragdollMotors;
-    public hkpAngFrictionConstraintAtom _angFriction;
-    public hkpTwistLimitConstraintAtom _twistLimit;
-    public hkpConeLimitConstraintAtom _coneLimit;
-    public hkpConeLimitConstraintAtom _planesLimit;
-    public hkpBallSocketConstraintAtom _ballSocket;
+    public hkpSetLocalTransformsConstraintAtom? _transforms;
+    public hkpSetupStabilizationAtom? _setupStabilization;
+    public hkpRagdollMotorConstraintAtom? _ragdollMotors;
+    public hkpAngFrictionConstraintAtom? _angFriction;
+    public hkpTwistLimitConstraintAtom? _twistLimit;
+    public hkpConeLimitConstraintAtom? _coneLimit;
+    public hkpConeLimitConstraintAtom? _planesLimit;
+    public hkpBallSocketConstraintAtom? _ballSocket;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _transforms = new hkpSetLocalTransformsConstraintAtom();
@@ -61,12 +61,10 @@ public class hkpRagdollConstraintDataAtoms : IHavokObject, IEquatable<hkpRagdoll
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpRagdollConstraintDataAtoms);
+        return obj is hkpRagdollConstraintDataAtoms other && _transforms == other._transforms && _setupStabilization == other._setupStabilization && _ragdollMotors == other._ragdollMotors && _angFriction == other._angFriction && _twistLimit == other._twistLimit && _coneLimit == other._coneLimit && _planesLimit == other._planesLimit && _ballSocket == other._ballSocket && Signature == other.Signature;
     }
-    public bool Equals(hkpRagdollConstraintDataAtoms? other)
-    {
-        return other is not null && _transforms.Equals(other._transforms) && _setupStabilization.Equals(other._setupStabilization) && _ragdollMotors.Equals(other._ragdollMotors) && _angFriction.Equals(other._angFriction) && _twistLimit.Equals(other._twistLimit) && _coneLimit.Equals(other._coneLimit) && _planesLimit.Equals(other._planesLimit) && _ballSocket.Equals(other._ballSocket) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpRagdollConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpRagdollConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

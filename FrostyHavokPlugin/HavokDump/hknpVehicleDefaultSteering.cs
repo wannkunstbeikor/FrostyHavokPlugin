@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultSteering : hknpVehicleSteering, IEquatable<hknpVehicleDefaultSteering?>
+public class hknpVehicleDefaultSteering : hknpVehicleSteering
 {
     public override uint Signature => 0;
     public float _maxSteeringAngle;
     public float _maxSpeedFullSteeringAngle;
-    public List<bool> _doesWheelSteer;
+    public List<bool> _doesWheelSteer = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -36,12 +36,10 @@ public class hknpVehicleDefaultSteering : hknpVehicleSteering, IEquatable<hknpVe
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultSteering);
+        return obj is hknpVehicleDefaultSteering other && base.Equals(other) && _maxSteeringAngle == other._maxSteeringAngle && _maxSpeedFullSteeringAngle == other._maxSpeedFullSteeringAngle && _doesWheelSteer.SequenceEqual(other._doesWheelSteer) && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultSteering? other)
-    {
-        return other is not null && _maxSteeringAngle.Equals(other._maxSteeringAngle) && _maxSpeedFullSteeringAngle.Equals(other._maxSpeedFullSteeringAngle) && _doesWheelSteer.Equals(other._doesWheelSteer) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultSteering? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultSteering? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

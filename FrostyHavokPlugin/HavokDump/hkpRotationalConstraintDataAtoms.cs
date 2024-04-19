@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpRotationalConstraintDataAtoms : IHavokObject, IEquatable<hkpRotationalConstraintDataAtoms?>
+public class hkpRotationalConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalRotationsConstraintAtom _rotations;
-    public hkpAngConstraintAtom _ang;
+    public hkpSetLocalRotationsConstraintAtom? _rotations;
+    public hkpAngConstraintAtom? _ang;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _rotations = new hkpSetLocalRotationsConstraintAtom();
@@ -31,12 +31,10 @@ public class hkpRotationalConstraintDataAtoms : IHavokObject, IEquatable<hkpRota
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpRotationalConstraintDataAtoms);
+        return obj is hkpRotationalConstraintDataAtoms other && _rotations == other._rotations && _ang == other._ang && Signature == other.Signature;
     }
-    public bool Equals(hkpRotationalConstraintDataAtoms? other)
-    {
-        return other is not null && _rotations.Equals(other._rotations) && _ang.Equals(other._ang) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpRotationalConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpRotationalConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

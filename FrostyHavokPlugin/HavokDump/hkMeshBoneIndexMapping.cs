@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMeshBoneIndexMapping : IHavokObject, IEquatable<hkMeshBoneIndexMapping?>
+public class hkMeshBoneIndexMapping : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<short> _mapping;
+    public List<short> _mapping = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _mapping = des.ReadInt16Array(br);
@@ -25,12 +25,10 @@ public class hkMeshBoneIndexMapping : IHavokObject, IEquatable<hkMeshBoneIndexMa
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMeshBoneIndexMapping);
+        return obj is hkMeshBoneIndexMapping other && _mapping.SequenceEqual(other._mapping) && Signature == other.Signature;
     }
-    public bool Equals(hkMeshBoneIndexMapping? other)
-    {
-        return other is not null && _mapping.Equals(other._mapping) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMeshBoneIndexMapping? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMeshBoneIndexMapping? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

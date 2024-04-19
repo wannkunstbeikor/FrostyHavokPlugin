@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultEngine : hknpVehicleEngine, IEquatable<hknpVehicleDefaultEngine?>
+public class hknpVehicleDefaultEngine : hknpVehicleEngine
 {
     public override uint Signature => 0;
     public float _minRPM;
@@ -64,12 +64,10 @@ public class hknpVehicleDefaultEngine : hknpVehicleEngine, IEquatable<hknpVehicl
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultEngine);
+        return obj is hknpVehicleDefaultEngine other && base.Equals(other) && _minRPM == other._minRPM && _optRPM == other._optRPM && _maxRPM == other._maxRPM && _maxTorque == other._maxTorque && _torqueFactorAtMinRPM == other._torqueFactorAtMinRPM && _torqueFactorAtMaxRPM == other._torqueFactorAtMaxRPM && _resistanceFactorAtMinRPM == other._resistanceFactorAtMinRPM && _resistanceFactorAtOptRPM == other._resistanceFactorAtOptRPM && _resistanceFactorAtMaxRPM == other._resistanceFactorAtMaxRPM && _clutchSlipRPM == other._clutchSlipRPM && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultEngine? other)
-    {
-        return other is not null && _minRPM.Equals(other._minRPM) && _optRPM.Equals(other._optRPM) && _maxRPM.Equals(other._maxRPM) && _maxTorque.Equals(other._maxTorque) && _torqueFactorAtMinRPM.Equals(other._torqueFactorAtMinRPM) && _torqueFactorAtMaxRPM.Equals(other._torqueFactorAtMaxRPM) && _resistanceFactorAtMinRPM.Equals(other._resistanceFactorAtMinRPM) && _resistanceFactorAtOptRPM.Equals(other._resistanceFactorAtOptRPM) && _resistanceFactorAtMaxRPM.Equals(other._resistanceFactorAtMaxRPM) && _clutchSlipRPM.Equals(other._clutchSlipRPM) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultEngine? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultEngine? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

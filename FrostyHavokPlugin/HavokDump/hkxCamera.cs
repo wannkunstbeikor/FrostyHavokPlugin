@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxCamera : hkReferencedObject, IEquatable<hkxCamera?>
+public class hkxCamera : hkReferencedObject
 {
     public override uint Signature => 0;
     public Vector4 _from;
@@ -54,12 +54,10 @@ public class hkxCamera : hkReferencedObject, IEquatable<hkxCamera?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxCamera);
+        return obj is hkxCamera other && base.Equals(other) && _from == other._from && _focus == other._focus && _up == other._up && _fov == other._fov && _far == other._far && _near == other._near && _leftHanded == other._leftHanded && Signature == other.Signature;
     }
-    public bool Equals(hkxCamera? other)
-    {
-        return other is not null && _from.Equals(other._from) && _focus.Equals(other._focus) && _up.Equals(other._up) && _fov.Equals(other._fov) && _far.Equals(other._far) && _near.Equals(other._near) && _leftHanded.Equals(other._leftHanded) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxCamera? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxCamera? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

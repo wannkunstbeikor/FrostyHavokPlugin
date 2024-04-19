@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpCompoundShape : hknpCompositeShape, IEquatable<hknpCompoundShape?>
+public class hknpCompoundShape : hknpCompositeShape
 {
     public override uint Signature => 0;
-    public hkFreeListArrayhknpShapeInstancehkHandleshort32767hknpShapeInstanceIdDiscriminant8hknpShapeInstance _instances;
-    public hkAabb _aabb;
+    public hkFreeListArrayhknpShapeInstancehkHandleshort32767hknpShapeInstanceIdDiscriminant8hknpShapeInstance? _instances;
+    public hkAabb? _aabb;
     public bool _isMutable;
     // TYPE_STRUCT TYPE_VOID _mutationSignals
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -43,12 +43,10 @@ public class hknpCompoundShape : hknpCompositeShape, IEquatable<hknpCompoundShap
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpCompoundShape);
+        return obj is hknpCompoundShape other && base.Equals(other) && _instances == other._instances && _aabb == other._aabb && _isMutable == other._isMutable && Signature == other.Signature;
     }
-    public bool Equals(hknpCompoundShape? other)
-    {
-        return other is not null && _instances.Equals(other._instances) && _aabb.Equals(other._aabb) && _isMutable.Equals(other._isMutable) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpCompoundShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpCompoundShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

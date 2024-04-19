@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpConvexPolytopeShapeFace : IHavokObject, IEquatable<hknpConvexPolytopeShapeFace?>
+public class hknpConvexPolytopeShapeFace : IHavokObject
 {
     public virtual uint Signature => 0;
     public byte _minHalfAngle;
@@ -33,12 +33,10 @@ public class hknpConvexPolytopeShapeFace : IHavokObject, IEquatable<hknpConvexPo
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpConvexPolytopeShapeFace);
+        return obj is hknpConvexPolytopeShapeFace other && _minHalfAngle == other._minHalfAngle && _numIndices == other._numIndices && _firstIndex == other._firstIndex && Signature == other.Signature;
     }
-    public bool Equals(hknpConvexPolytopeShapeFace? other)
-    {
-        return other is not null && _minHalfAngle.Equals(other._minHalfAngle) && _numIndices.Equals(other._numIndices) && _firstIndex.Equals(other._firstIndex) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpConvexPolytopeShapeFace? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpConvexPolytopeShapeFace? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

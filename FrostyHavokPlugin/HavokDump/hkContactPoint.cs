@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkContactPoint : IHavokObject, IEquatable<hkContactPoint?>
+public class hkContactPoint : IHavokObject
 {
     public virtual uint Signature => 0;
     public Vector4 _position;
@@ -29,12 +29,10 @@ public class hkContactPoint : IHavokObject, IEquatable<hkContactPoint?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkContactPoint);
+        return obj is hkContactPoint other && _position == other._position && _separatingNormal == other._separatingNormal && Signature == other.Signature;
     }
-    public bool Equals(hkContactPoint? other)
-    {
-        return other is not null && _position.Equals(other._position) && _separatingNormal.Equals(other._separatingNormal) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkContactPoint? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkContactPoint? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

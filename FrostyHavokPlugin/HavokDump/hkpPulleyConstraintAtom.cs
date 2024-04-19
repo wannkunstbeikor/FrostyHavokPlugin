@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpPulleyConstraintAtom : hkpConstraintAtom, IEquatable<hkpPulleyConstraintAtom?>
+public class hkpPulleyConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public Vector4 _fixedPivotAinWorld;
@@ -44,12 +44,10 @@ public class hkpPulleyConstraintAtom : hkpConstraintAtom, IEquatable<hkpPulleyCo
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpPulleyConstraintAtom);
+        return obj is hkpPulleyConstraintAtom other && base.Equals(other) && _fixedPivotAinWorld == other._fixedPivotAinWorld && _fixedPivotBinWorld == other._fixedPivotBinWorld && _ropeLength == other._ropeLength && _leverageOnBodyB == other._leverageOnBodyB && Signature == other.Signature;
     }
-    public bool Equals(hkpPulleyConstraintAtom? other)
-    {
-        return other is not null && _fixedPivotAinWorld.Equals(other._fixedPivotAinWorld) && _fixedPivotBinWorld.Equals(other._fixedPivotBinWorld) && _ropeLength.Equals(other._ropeLength) && _leverageOnBodyB.Equals(other._leverageOnBodyB) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpPulleyConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpPulleyConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpExternMeshShapeGeometry : hkReferencedObject, IEquatable<hknpExternMeshShapeGeometry?>
+public class hknpExternMeshShapeGeometry : hkReferencedObject
 {
     public override uint Signature => 0;
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -24,12 +24,10 @@ public class hknpExternMeshShapeGeometry : hkReferencedObject, IEquatable<hknpEx
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpExternMeshShapeGeometry);
+        return obj is hknpExternMeshShapeGeometry other && base.Equals(other) && Signature == other.Signature;
     }
-    public bool Equals(hknpExternMeshShapeGeometry? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpExternMeshShapeGeometry? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpExternMeshShapeGeometry? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

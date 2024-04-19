@@ -120,7 +120,7 @@ public class PackFileDeserializer
         }
         else if (typeof(F) == typeof(GlobalFixup))
         {
-            map = (Dictionary<uint, F>)(object)m_dataSection._localMap;
+            map = (Dictionary<uint, F>)(object)m_dataSection._globalMap;
         }
         else
         {

@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpPointToPathConstraintData : hkpConstraintData, IEquatable<hkpPointToPathConstraintData?>
+public class hkpPointToPathConstraintData : hkpConstraintData
 {
     public override uint Signature => 0;
-    public hkpBridgeAtoms _atoms;
-    public hkpParametricCurve _path;
+    public hkpBridgeAtoms? _atoms;
+    public hkpParametricCurve? _path;
     public float _maxFrictionForce;
     public hkpPointToPathConstraintData_OrientationConstraintType _angularConstrainedDOF;
     public Matrix4[] _transform_OS_KS = new Matrix4[2];
@@ -49,12 +49,10 @@ public class hkpPointToPathConstraintData : hkpConstraintData, IEquatable<hkpPoi
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpPointToPathConstraintData);
+        return obj is hkpPointToPathConstraintData other && base.Equals(other) && _atoms == other._atoms && _path == other._path && _maxFrictionForce == other._maxFrictionForce && _angularConstrainedDOF == other._angularConstrainedDOF && _transform_OS_KS == other._transform_OS_KS && Signature == other.Signature;
     }
-    public bool Equals(hkpPointToPathConstraintData? other)
-    {
-        return other is not null && _atoms.Equals(other._atoms) && _path.Equals(other._path) && _maxFrictionForce.Equals(other._maxFrictionForce) && _angularConstrainedDOF.Equals(other._angularConstrainedDOF) && _transform_OS_KS.Equals(other._transform_OS_KS) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpPointToPathConstraintData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpPointToPathConstraintData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

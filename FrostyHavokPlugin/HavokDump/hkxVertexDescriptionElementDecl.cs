@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxVertexDescriptionElementDecl : IHavokObject, IEquatable<hkxVertexDescriptionElementDecl?>
+public class hkxVertexDescriptionElementDecl : IHavokObject
 {
     public virtual uint Signature => 0;
     public uint _byteOffset;
@@ -47,12 +47,10 @@ public class hkxVertexDescriptionElementDecl : IHavokObject, IEquatable<hkxVerte
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxVertexDescriptionElementDecl);
+        return obj is hkxVertexDescriptionElementDecl other && _byteOffset == other._byteOffset && _type == other._type && _usage == other._usage && _byteStride == other._byteStride && _numElements == other._numElements && _hint == other._hint && Signature == other.Signature;
     }
-    public bool Equals(hkxVertexDescriptionElementDecl? other)
-    {
-        return other is not null && _byteOffset.Equals(other._byteOffset) && _type.Equals(other._type) && _usage.Equals(other._usage) && _byteStride.Equals(other._byteStride) && _numElements.Equals(other._numElements) && _hint.Equals(other._hint) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxVertexDescriptionElementDecl? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxVertexDescriptionElementDecl? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

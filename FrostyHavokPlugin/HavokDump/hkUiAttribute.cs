@@ -7,15 +7,15 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkUiAttribute : IHavokObject, IEquatable<hkUiAttribute?>
+public class hkUiAttribute : IHavokObject
 {
     public virtual uint Signature => 0;
     public bool _visible;
     public bool _editable;
     public hkUiAttribute_HideInModeler _hideInModeler;
-    public string _label;
-    public string _group;
-    public string _hideBaseClassMembers;
+    public string _label = string.Empty;
+    public string _group = string.Empty;
+    public string _hideBaseClassMembers = string.Empty;
     public bool _endGroup;
     public bool _endGroup2;
     public bool _advanced;
@@ -61,12 +61,10 @@ public class hkUiAttribute : IHavokObject, IEquatable<hkUiAttribute?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkUiAttribute);
+        return obj is hkUiAttribute other && _visible == other._visible && _editable == other._editable && _hideInModeler == other._hideInModeler && _label == other._label && _group == other._group && _hideBaseClassMembers == other._hideBaseClassMembers && _endGroup == other._endGroup && _endGroup2 == other._endGroup2 && _advanced == other._advanced && Signature == other.Signature;
     }
-    public bool Equals(hkUiAttribute? other)
-    {
-        return other is not null && _visible.Equals(other._visible) && _editable.Equals(other._editable) && _hideInModeler.Equals(other._hideInModeler) && _label.Equals(other._label) && _group.Equals(other._group) && _hideBaseClassMembers.Equals(other._hideBaseClassMembers) && _endGroup.Equals(other._endGroup) && _endGroup2.Equals(other._endGroup2) && _advanced.Equals(other._advanced) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkUiAttribute? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkUiAttribute? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

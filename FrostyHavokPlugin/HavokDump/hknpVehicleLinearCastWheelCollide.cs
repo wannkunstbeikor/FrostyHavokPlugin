@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleLinearCastWheelCollide : hknpVehicleWheelCollide, IEquatable<hknpVehicleLinearCastWheelCollide?>
+public class hknpVehicleLinearCastWheelCollide : hknpVehicleWheelCollide
 {
     public override uint Signature => 0;
-    public List<hknpVehicleLinearCastWheelCollideWheelState> _wheelStates;
+    public List<hknpVehicleLinearCastWheelCollideWheelState?> _wheelStates = new();
     public float _maxExtraPenetration;
     public float _startPointTolerance;
     public uint _chassisBody;
@@ -42,12 +42,10 @@ public class hknpVehicleLinearCastWheelCollide : hknpVehicleWheelCollide, IEquat
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleLinearCastWheelCollide);
+        return obj is hknpVehicleLinearCastWheelCollide other && base.Equals(other) && _wheelStates.SequenceEqual(other._wheelStates) && _maxExtraPenetration == other._maxExtraPenetration && _startPointTolerance == other._startPointTolerance && _chassisBody == other._chassisBody && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleLinearCastWheelCollide? other)
-    {
-        return other is not null && _wheelStates.Equals(other._wheelStates) && _maxExtraPenetration.Equals(other._maxExtraPenetration) && _startPointTolerance.Equals(other._startPointTolerance) && _chassisBody.Equals(other._chassisBody) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleLinearCastWheelCollide? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleLinearCastWheelCollide? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

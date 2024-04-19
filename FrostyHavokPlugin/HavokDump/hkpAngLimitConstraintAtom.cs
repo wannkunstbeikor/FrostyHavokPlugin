@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpAngLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngLimitConstraintAtom?>
+public class hkpAngLimitConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public byte _isEnabled;
@@ -44,12 +44,10 @@ public class hkpAngLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngLim
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpAngLimitConstraintAtom);
+        return obj is hkpAngLimitConstraintAtom other && base.Equals(other) && _isEnabled == other._isEnabled && _limitAxis == other._limitAxis && _minAngle == other._minAngle && _maxAngle == other._maxAngle && _angularLimitsTauFactor == other._angularLimitsTauFactor && Signature == other.Signature;
     }
-    public bool Equals(hkpAngLimitConstraintAtom? other)
-    {
-        return other is not null && _isEnabled.Equals(other._isEnabled) && _limitAxis.Equals(other._limitAxis) && _minAngle.Equals(other._minAngle) && _maxAngle.Equals(other._maxAngle) && _angularLimitsTauFactor.Equals(other._angularLimitsTauFactor) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpAngLimitConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpAngLimitConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

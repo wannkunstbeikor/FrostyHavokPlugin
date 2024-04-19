@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMemoryResourceHandleExternalLink : IHavokObject, IEquatable<hkMemoryResourceHandleExternalLink?>
+public class hkMemoryResourceHandleExternalLink : IHavokObject
 {
     public virtual uint Signature => 0;
-    public string _memberName;
-    public string _externalId;
+    public string _memberName = string.Empty;
+    public string _externalId = string.Empty;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _memberName = des.ReadStringPointer(br);
@@ -29,12 +29,10 @@ public class hkMemoryResourceHandleExternalLink : IHavokObject, IEquatable<hkMem
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMemoryResourceHandleExternalLink);
+        return obj is hkMemoryResourceHandleExternalLink other && _memberName == other._memberName && _externalId == other._externalId && Signature == other.Signature;
     }
-    public bool Equals(hkMemoryResourceHandleExternalLink? other)
-    {
-        return other is not null && _memberName.Equals(other._memberName) && _externalId.Equals(other._externalId) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMemoryResourceHandleExternalLink? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMemoryResourceHandleExternalLink? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

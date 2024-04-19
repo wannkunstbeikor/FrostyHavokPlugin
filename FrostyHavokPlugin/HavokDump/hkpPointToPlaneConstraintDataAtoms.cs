@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpPointToPlaneConstraintDataAtoms : IHavokObject, IEquatable<hkpPointToPlaneConstraintDataAtoms?>
+public class hkpPointToPlaneConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _transforms;
-    public hkpLinConstraintAtom _lin;
+    public hkpSetLocalTransformsConstraintAtom? _transforms;
+    public hkpLinConstraintAtom? _lin;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _transforms = new hkpSetLocalTransformsConstraintAtom();
@@ -31,12 +31,10 @@ public class hkpPointToPlaneConstraintDataAtoms : IHavokObject, IEquatable<hkpPo
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpPointToPlaneConstraintDataAtoms);
+        return obj is hkpPointToPlaneConstraintDataAtoms other && _transforms == other._transforms && _lin == other._lin && Signature == other.Signature;
     }
-    public bool Equals(hkpPointToPlaneConstraintDataAtoms? other)
-    {
-        return other is not null && _transforms.Equals(other._transforms) && _lin.Equals(other._lin) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpPointToPlaneConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpPointToPlaneConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

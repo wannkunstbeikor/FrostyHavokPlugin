@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpMinMaxQuadTreeMinMaxLevel : IHavokObject, IEquatable<hknpMinMaxQuadTreeMinMaxLevel?>
+public class hknpMinMaxQuadTreeMinMaxLevel : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<uint> _minMaxData;
+    public List<uint> _minMaxData = new();
     public ushort _xRes;
     public ushort _zRes;
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -35,12 +35,10 @@ public class hknpMinMaxQuadTreeMinMaxLevel : IHavokObject, IEquatable<hknpMinMax
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpMinMaxQuadTreeMinMaxLevel);
+        return obj is hknpMinMaxQuadTreeMinMaxLevel other && _minMaxData.SequenceEqual(other._minMaxData) && _xRes == other._xRes && _zRes == other._zRes && Signature == other.Signature;
     }
-    public bool Equals(hknpMinMaxQuadTreeMinMaxLevel? other)
-    {
-        return other is not null && _minMaxData.Equals(other._minMaxData) && _xRes.Equals(other._xRes) && _zRes.Equals(other._zRes) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpMinMaxQuadTreeMinMaxLevel? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpMinMaxQuadTreeMinMaxLevel? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

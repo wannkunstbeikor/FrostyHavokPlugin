@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxVertexBufferVertexData : IHavokObject, IEquatable<hkxVertexBufferVertexData?>
+public class hkxVertexBufferVertexData : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<float> _vectorData;
-    public List<float> _floatData;
-    public List<uint> _uint32Data;
-    public List<ushort> _uint16Data;
-    public List<byte> _uint8Data;
+    public List<float> _vectorData = new();
+    public List<float> _floatData = new();
+    public List<uint> _uint32Data = new();
+    public List<ushort> _uint16Data = new();
+    public List<byte> _uint8Data = new();
     public uint _numVerts;
     public uint _vectorStride;
     public uint _floatStride;
@@ -65,12 +65,10 @@ public class hkxVertexBufferVertexData : IHavokObject, IEquatable<hkxVertexBuffe
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxVertexBufferVertexData);
+        return obj is hkxVertexBufferVertexData other && _vectorData.SequenceEqual(other._vectorData) && _floatData.SequenceEqual(other._floatData) && _uint32Data.SequenceEqual(other._uint32Data) && _uint16Data.SequenceEqual(other._uint16Data) && _uint8Data.SequenceEqual(other._uint8Data) && _numVerts == other._numVerts && _vectorStride == other._vectorStride && _floatStride == other._floatStride && _uint32Stride == other._uint32Stride && _uint16Stride == other._uint16Stride && _uint8Stride == other._uint8Stride && Signature == other.Signature;
     }
-    public bool Equals(hkxVertexBufferVertexData? other)
-    {
-        return other is not null && _vectorData.Equals(other._vectorData) && _floatData.Equals(other._floatData) && _uint32Data.Equals(other._uint32Data) && _uint16Data.Equals(other._uint16Data) && _uint8Data.Equals(other._uint8Data) && _numVerts.Equals(other._numVerts) && _vectorStride.Equals(other._vectorStride) && _floatStride.Equals(other._floatStride) && _uint32Stride.Equals(other._uint32Stride) && _uint16Stride.Equals(other._uint16Stride) && _uint8Stride.Equals(other._uint8Stride) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxVertexBufferVertexData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxVertexBufferVertexData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

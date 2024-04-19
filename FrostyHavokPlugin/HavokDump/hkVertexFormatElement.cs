@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkVertexFormatElement : IHavokObject, IEquatable<hkVertexFormatElement?>
+public class hkVertexFormatElement : IHavokObject
 {
     public virtual uint Signature => 0;
     public hkVertexFormat_ComponentType _dataType;
@@ -45,12 +45,10 @@ public class hkVertexFormatElement : IHavokObject, IEquatable<hkVertexFormatElem
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkVertexFormatElement);
+        return obj is hkVertexFormatElement other && _dataType == other._dataType && _numValues == other._numValues && _usage == other._usage && _subUsage == other._subUsage && _flags == other._flags && _pad == other._pad && Signature == other.Signature;
     }
-    public bool Equals(hkVertexFormatElement? other)
-    {
-        return other is not null && _dataType.Equals(other._dataType) && _numValues.Equals(other._numValues) && _usage.Equals(other._usage) && _subUsage.Equals(other._subUsage) && _flags.Equals(other._flags) && _pad.Equals(other._pad) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkVertexFormatElement? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkVertexFormatElement? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

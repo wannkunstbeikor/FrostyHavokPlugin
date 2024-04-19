@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkGeometryTriangle : IHavokObject, IEquatable<hkGeometryTriangle?>
+public class hkGeometryTriangle : IHavokObject
 {
     public virtual uint Signature => 0;
     public int _a;
@@ -37,12 +37,10 @@ public class hkGeometryTriangle : IHavokObject, IEquatable<hkGeometryTriangle?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkGeometryTriangle);
+        return obj is hkGeometryTriangle other && _a == other._a && _b == other._b && _c == other._c && _material == other._material && Signature == other.Signature;
     }
-    public bool Equals(hkGeometryTriangle? other)
-    {
-        return other is not null && _a.Equals(other._a) && _b.Equals(other._b) && _c.Equals(other._c) && _material.Equals(other._material) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkGeometryTriangle? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkGeometryTriangle? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

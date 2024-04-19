@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort : IHavokObject, IEquatable<hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort?>
+public class hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort : IHavokObject
 {
     public virtual uint Signature => 0;
     public ushort _value;
@@ -33,12 +33,10 @@ public class hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort : IHavokObj
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort);
+        return obj is hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort other && _value == other._value && _index == other._index && _count == other._count && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort? other)
-    {
-        return other is not null && _value.Equals(other._value) && _index.Equals(other._index) && _count.Equals(other._count) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedshort? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

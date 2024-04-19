@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkStorageSkinnedMeshShape : hkSkinnedMeshShape, IEquatable<hkStorageSkinnedMeshShape?>
+public class hkStorageSkinnedMeshShape : hkSkinnedMeshShape
 {
     public override uint Signature => 0;
-    public List<short> _bonesBuffer;
-    public List<hkSkinnedMeshShapeBoneSet> _boneSets;
-    public List<hkSkinnedMeshShapeBoneSection> _boneSections;
-    public List<hkSkinnedMeshShapePart> _parts;
-    public string _name;
+    public List<short> _bonesBuffer = new();
+    public List<hkSkinnedMeshShapeBoneSet?> _boneSets = new();
+    public List<hkSkinnedMeshShapeBoneSection?> _boneSections = new();
+    public List<hkSkinnedMeshShapePart?> _parts = new();
+    public string _name = string.Empty;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -44,12 +44,10 @@ public class hkStorageSkinnedMeshShape : hkSkinnedMeshShape, IEquatable<hkStorag
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkStorageSkinnedMeshShape);
+        return obj is hkStorageSkinnedMeshShape other && base.Equals(other) && _bonesBuffer.SequenceEqual(other._bonesBuffer) && _boneSets.SequenceEqual(other._boneSets) && _boneSections.SequenceEqual(other._boneSections) && _parts.SequenceEqual(other._parts) && _name == other._name && Signature == other.Signature;
     }
-    public bool Equals(hkStorageSkinnedMeshShape? other)
-    {
-        return other is not null && _bonesBuffer.Equals(other._bonesBuffer) && _boneSets.Equals(other._boneSets) && _boneSections.Equals(other._boneSections) && _parts.Equals(other._parts) && _name.Equals(other._name) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkStorageSkinnedMeshShape? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkStorageSkinnedMeshShape? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMemoryMeshBody : hkMeshBody, IEquatable<hkMemoryMeshBody?>
+public class hkMemoryMeshBody : hkMeshBody
 {
     public override uint Signature => 0;
     public Matrix4 _transform;
-    public hkIndexedTransformSet _transformSet;
-    public hkMeshShape _shape;
-    public List<hkMeshVertexBuffer> _vertexBuffers;
-    public string _name;
+    public hkIndexedTransformSet? _transformSet;
+    public hkMeshShape? _shape;
+    public List<hkMeshVertexBuffer?> _vertexBuffers = new();
+    public string _name = string.Empty;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -46,12 +46,10 @@ public class hkMemoryMeshBody : hkMeshBody, IEquatable<hkMemoryMeshBody?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMemoryMeshBody);
+        return obj is hkMemoryMeshBody other && base.Equals(other) && _transform == other._transform && _transformSet == other._transformSet && _shape == other._shape && _vertexBuffers.SequenceEqual(other._vertexBuffers) && _name == other._name && Signature == other.Signature;
     }
-    public bool Equals(hkMemoryMeshBody? other)
-    {
-        return other is not null && _transform.Equals(other._transform) && _transformSet.Equals(other._transformSet) && _shape.Equals(other._shape) && _vertexBuffers.Equals(other._vertexBuffers) && _name.Equals(other._name) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMemoryMeshBody? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMemoryMeshBody? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxLight : hkReferencedObject, IEquatable<hkxLight?>
+public class hkxLight : hkReferencedObject
 {
     public override uint Signature => 0;
     public hkxLight_LightType _type;
@@ -74,12 +74,10 @@ public class hkxLight : hkReferencedObject, IEquatable<hkxLight?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxLight);
+        return obj is hkxLight other && base.Equals(other) && _type == other._type && _position == other._position && _direction == other._direction && _color == other._color && _angle == other._angle && _range == other._range && _fadeStart == other._fadeStart && _fadeEnd == other._fadeEnd && _decayRate == other._decayRate && _intensity == other._intensity && _shadowCaster == other._shadowCaster && Signature == other.Signature;
     }
-    public bool Equals(hkxLight? other)
-    {
-        return other is not null && _type.Equals(other._type) && _position.Equals(other._position) && _direction.Equals(other._direction) && _color.Equals(other._color) && _angle.Equals(other._angle) && _range.Equals(other._range) && _fadeStart.Equals(other._fadeStart) && _fadeEnd.Equals(other._fadeEnd) && _decayRate.Equals(other._decayRate) && _intensity.Equals(other._intensity) && _shadowCaster.Equals(other._shadowCaster) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxLight? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxLight? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticTreeCodec3Axis5 : hkcdStaticTreeCodec3Axis, IEquatable<hkcdStaticTreeCodec3Axis5?>
+public class hkcdStaticTreeCodec3Axis5 : hkcdStaticTreeCodec3Axis
 {
     public override uint Signature => 0;
     public byte _hiData;
@@ -32,12 +32,10 @@ public class hkcdStaticTreeCodec3Axis5 : hkcdStaticTreeCodec3Axis, IEquatable<hk
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticTreeCodec3Axis5);
+        return obj is hkcdStaticTreeCodec3Axis5 other && base.Equals(other) && _hiData == other._hiData && _loData == other._loData && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticTreeCodec3Axis5? other)
-    {
-        return other is not null && _hiData.Equals(other._hiData) && _loData.Equals(other._loData) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticTreeCodec3Axis5? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticTreeCodec3Axis5? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

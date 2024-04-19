@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxVertexDescription : IHavokObject, IEquatable<hkxVertexDescription?>
+public class hkxVertexDescription : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hkxVertexDescriptionElementDecl> _decls;
+    public List<hkxVertexDescriptionElementDecl?> _decls = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _decls = des.ReadClassArray<hkxVertexDescriptionElementDecl>(br);
@@ -25,12 +25,10 @@ public class hkxVertexDescription : IHavokObject, IEquatable<hkxVertexDescriptio
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxVertexDescription);
+        return obj is hkxVertexDescription other && _decls.SequenceEqual(other._decls) && Signature == other.Signature;
     }
-    public bool Equals(hkxVertexDescription? other)
-    {
-        return other is not null && _decls.Equals(other._decls) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxVertexDescription? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxVertexDescription? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

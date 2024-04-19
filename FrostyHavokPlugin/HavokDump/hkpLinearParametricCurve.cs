@@ -7,14 +7,14 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpLinearParametricCurve : hkpParametricCurve, IEquatable<hkpLinearParametricCurve?>
+public class hkpLinearParametricCurve : hkpParametricCurve
 {
     public override uint Signature => 0;
     public float _smoothingFactor;
     public bool _closedLoop;
     public Vector4 _dirNotParallelToTangentAlongWholePath;
-    public List<Vector4> _points;
-    public List<float> _distance;
+    public List<Vector4> _points = new();
+    public List<float> _distance = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -46,12 +46,10 @@ public class hkpLinearParametricCurve : hkpParametricCurve, IEquatable<hkpLinear
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpLinearParametricCurve);
+        return obj is hkpLinearParametricCurve other && base.Equals(other) && _smoothingFactor == other._smoothingFactor && _closedLoop == other._closedLoop && _dirNotParallelToTangentAlongWholePath == other._dirNotParallelToTangentAlongWholePath && _points.SequenceEqual(other._points) && _distance.SequenceEqual(other._distance) && Signature == other.Signature;
     }
-    public bool Equals(hkpLinearParametricCurve? other)
-    {
-        return other is not null && _smoothingFactor.Equals(other._smoothingFactor) && _closedLoop.Equals(other._closedLoop) && _dirNotParallelToTangentAlongWholePath.Equals(other._dirNotParallelToTangentAlongWholePath) && _points.Equals(other._points) && _distance.Equals(other._distance) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpLinearParametricCurve? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpLinearParametricCurve? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

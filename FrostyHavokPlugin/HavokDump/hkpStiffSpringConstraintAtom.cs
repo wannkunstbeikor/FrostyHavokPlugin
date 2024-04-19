@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpStiffSpringConstraintAtom : hkpConstraintAtom, IEquatable<hkpStiffSpringConstraintAtom?>
+public class hkpStiffSpringConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public float _length;
@@ -34,12 +34,10 @@ public class hkpStiffSpringConstraintAtom : hkpConstraintAtom, IEquatable<hkpSti
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpStiffSpringConstraintAtom);
+        return obj is hkpStiffSpringConstraintAtom other && base.Equals(other) && _length == other._length && _maxLength == other._maxLength && Signature == other.Signature;
     }
-    public bool Equals(hkpStiffSpringConstraintAtom? other)
-    {
-        return other is not null && _length.Equals(other._length) && _maxLength.Equals(other._maxLength) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpStiffSpringConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpStiffSpringConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

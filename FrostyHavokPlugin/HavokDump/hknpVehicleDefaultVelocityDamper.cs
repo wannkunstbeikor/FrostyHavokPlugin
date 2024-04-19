@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultVelocityDamper : hknpVehicleVelocityDamper, IEquatable<hknpVehicleDefaultVelocityDamper?>
+public class hknpVehicleDefaultVelocityDamper : hknpVehicleVelocityDamper
 {
     public override uint Signature => 0;
     public float _normalSpinDamping;
@@ -38,12 +38,10 @@ public class hknpVehicleDefaultVelocityDamper : hknpVehicleVelocityDamper, IEqua
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultVelocityDamper);
+        return obj is hknpVehicleDefaultVelocityDamper other && base.Equals(other) && _normalSpinDamping == other._normalSpinDamping && _collisionSpinDamping == other._collisionSpinDamping && _collisionThreshold == other._collisionThreshold && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultVelocityDamper? other)
-    {
-        return other is not null && _normalSpinDamping.Equals(other._normalSpinDamping) && _collisionSpinDamping.Equals(other._collisionSpinDamping) && _collisionThreshold.Equals(other._collisionThreshold) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultVelocityDamper? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultVelocityDamper? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

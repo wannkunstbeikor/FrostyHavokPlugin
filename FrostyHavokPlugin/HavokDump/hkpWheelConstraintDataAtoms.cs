@@ -7,16 +7,16 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpWheelConstraintDataAtoms : IHavokObject, IEquatable<hkpWheelConstraintDataAtoms?>
+public class hkpWheelConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _suspensionBase;
-    public hkpLinLimitConstraintAtom _lin0Limit;
-    public hkpLinSoftConstraintAtom _lin0Soft;
-    public hkpLinConstraintAtom _lin1;
-    public hkpLinConstraintAtom _lin2;
-    public hkpSetLocalRotationsConstraintAtom _steeringBase;
-    public hkp2dAngConstraintAtom _2dAng;
+    public hkpSetLocalTransformsConstraintAtom? _suspensionBase;
+    public hkpLinLimitConstraintAtom? _lin0Limit;
+    public hkpLinSoftConstraintAtom? _lin0Soft;
+    public hkpLinConstraintAtom? _lin1;
+    public hkpLinConstraintAtom? _lin2;
+    public hkpSetLocalRotationsConstraintAtom? _steeringBase;
+    public hkp2dAngConstraintAtom? _2dAng;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _suspensionBase = new hkpSetLocalTransformsConstraintAtom();
@@ -56,12 +56,10 @@ public class hkpWheelConstraintDataAtoms : IHavokObject, IEquatable<hkpWheelCons
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpWheelConstraintDataAtoms);
+        return obj is hkpWheelConstraintDataAtoms other && _suspensionBase == other._suspensionBase && _lin0Limit == other._lin0Limit && _lin0Soft == other._lin0Soft && _lin1 == other._lin1 && _lin2 == other._lin2 && _steeringBase == other._steeringBase && _2dAng == other._2dAng && Signature == other.Signature;
     }
-    public bool Equals(hkpWheelConstraintDataAtoms? other)
-    {
-        return other is not null && _suspensionBase.Equals(other._suspensionBase) && _lin0Limit.Equals(other._lin0Limit) && _lin0Soft.Equals(other._lin0Soft) && _lin1.Equals(other._lin1) && _lin2.Equals(other._lin2) && _steeringBase.Equals(other._steeringBase) && _2dAng.Equals(other._2dAng) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpWheelConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpWheelConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

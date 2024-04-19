@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdDynamicTreeDynamicStorage32 : hkcdDynamicTreeDefaultDynamicStoragehkcdDynamicTreeCodecRawUint, IEquatable<hkcdDynamicTreeDynamicStorage32?>
+public class hkcdDynamicTreeDynamicStorage32 : hkcdDynamicTreeDefaultDynamicStoragehkcdDynamicTreeCodecRawUint
 {
     public override uint Signature => 0;
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -24,12 +24,10 @@ public class hkcdDynamicTreeDynamicStorage32 : hkcdDynamicTreeDefaultDynamicStor
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdDynamicTreeDynamicStorage32);
+        return obj is hkcdDynamicTreeDynamicStorage32 other && base.Equals(other) && Signature == other.Signature;
     }
-    public bool Equals(hkcdDynamicTreeDynamicStorage32? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdDynamicTreeDynamicStorage32? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdDynamicTreeDynamicStorage32? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

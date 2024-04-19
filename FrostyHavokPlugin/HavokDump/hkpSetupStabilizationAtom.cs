@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpSetupStabilizationAtom : hkpConstraintAtom, IEquatable<hkpSetupStabilizationAtom?>
+public class hkpSetupStabilizationAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public bool _enabled;
@@ -42,12 +42,10 @@ public class hkpSetupStabilizationAtom : hkpConstraintAtom, IEquatable<hkpSetupS
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpSetupStabilizationAtom);
+        return obj is hkpSetupStabilizationAtom other && base.Equals(other) && _enabled == other._enabled && _maxLinImpulse == other._maxLinImpulse && _maxAngImpulse == other._maxAngImpulse && _maxAngle == other._maxAngle && Signature == other.Signature;
     }
-    public bool Equals(hkpSetupStabilizationAtom? other)
-    {
-        return other is not null && _enabled.Equals(other._enabled) && _maxLinImpulse.Equals(other._maxLinImpulse) && _maxAngImpulse.Equals(other._maxAngImpulse) && _maxAngle.Equals(other._maxAngle) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpSetupStabilizationAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpSetupStabilizationAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

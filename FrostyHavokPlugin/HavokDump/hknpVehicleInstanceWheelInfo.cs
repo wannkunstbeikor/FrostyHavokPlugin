@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleInstanceWheelInfo : IHavokObject, IEquatable<hknpVehicleInstanceWheelInfo?>
+public class hknpVehicleInstanceWheelInfo : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkContactPoint _contactPoint;
+    public hkContactPoint? _contactPoint;
     public float _contactFriction;
     // TYPE_UINT32 TYPE_VOID _contactBodyId
     public uint _contactShapeKey;
@@ -99,12 +99,10 @@ public class hknpVehicleInstanceWheelInfo : IHavokObject, IEquatable<hknpVehicle
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleInstanceWheelInfo);
+        return obj is hknpVehicleInstanceWheelInfo other && _contactPoint == other._contactPoint && _contactFriction == other._contactFriction && _contactShapeKey == other._contactShapeKey && _hardPointWs == other._hardPointWs && _rayEndPointWs == other._rayEndPointWs && _currentSuspensionLength == other._currentSuspensionLength && _suspensionDirectionWs == other._suspensionDirectionWs && _spinAxisChassisSpace == other._spinAxisChassisSpace && _spinAxisWs == other._spinAxisWs && _steeringOrientationChassisSpace == other._steeringOrientationChassisSpace && _spinVelocity == other._spinVelocity && _noSlipIdealSpinVelocity == other._noSlipIdealSpinVelocity && _spinAngle == other._spinAngle && _skidEnergyDensity == other._skidEnergyDensity && _sideForce == other._sideForce && _forwardSlipVelocity == other._forwardSlipVelocity && _sideSlipVelocity == other._sideSlipVelocity && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleInstanceWheelInfo? other)
-    {
-        return other is not null && _contactPoint.Equals(other._contactPoint) && _contactFriction.Equals(other._contactFriction) && _contactShapeKey.Equals(other._contactShapeKey) && _hardPointWs.Equals(other._hardPointWs) && _rayEndPointWs.Equals(other._rayEndPointWs) && _currentSuspensionLength.Equals(other._currentSuspensionLength) && _suspensionDirectionWs.Equals(other._suspensionDirectionWs) && _spinAxisChassisSpace.Equals(other._spinAxisChassisSpace) && _spinAxisWs.Equals(other._spinAxisWs) && _steeringOrientationChassisSpace.Equals(other._steeringOrientationChassisSpace) && _spinVelocity.Equals(other._spinVelocity) && _noSlipIdealSpinVelocity.Equals(other._noSlipIdealSpinVelocity) && _spinAngle.Equals(other._spinAngle) && _skidEnergyDensity.Equals(other._skidEnergyDensity) && _sideForce.Equals(other._sideForce) && _forwardSlipVelocity.Equals(other._forwardSlipVelocity) && _sideSlipVelocity.Equals(other._sideSlipVelocity) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleInstanceWheelInfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleInstanceWheelInfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

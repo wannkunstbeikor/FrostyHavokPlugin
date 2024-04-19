@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdFourAabb : IHavokObject, IEquatable<hkcdFourAabb?>
+public class hkcdFourAabb : IHavokObject
 {
     public virtual uint Signature => 0;
     public Vector4 _lx;
@@ -45,12 +45,10 @@ public class hkcdFourAabb : IHavokObject, IEquatable<hkcdFourAabb?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdFourAabb);
+        return obj is hkcdFourAabb other && _lx == other._lx && _hx == other._hx && _ly == other._ly && _hy == other._hy && _lz == other._lz && _hz == other._hz && Signature == other.Signature;
     }
-    public bool Equals(hkcdFourAabb? other)
-    {
-        return other is not null && _lx.Equals(other._lx) && _hx.Equals(other._hx) && _ly.Equals(other._ly) && _hy.Equals(other._hy) && _lz.Equals(other._lz) && _hz.Equals(other._hz) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdFourAabb? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdFourAabb? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

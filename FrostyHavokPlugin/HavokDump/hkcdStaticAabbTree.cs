@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticAabbTree : hkReferencedObject, IEquatable<hkcdStaticAabbTree?>
+public class hkcdStaticAabbTree : hkReferencedObject
 {
     public override uint Signature => 0;
     // TYPE_BOOL TYPE_VOID _shouldDeleteTree
-    public hkcdStaticTreeDefaultTreeStorage6 _treePtr;
+    public hkcdStaticTreeDefaultTreeStorage6? _treePtr;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -31,12 +31,10 @@ public class hkcdStaticAabbTree : hkReferencedObject, IEquatable<hkcdStaticAabbT
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticAabbTree);
+        return obj is hkcdStaticAabbTree other && base.Equals(other) && _treePtr == other._treePtr && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticAabbTree? other)
-    {
-        return other is not null && _treePtr.Equals(other._treePtr) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticAabbTree? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticAabbTree? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

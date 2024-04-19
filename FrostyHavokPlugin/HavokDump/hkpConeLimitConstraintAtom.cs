@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpConeLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpConeLimitConstraintAtom?>
+public class hkpConeLimitConstraintAtom : hkpConstraintAtom
 {
     public override uint Signature => 0;
     public byte _isEnabled;
@@ -61,12 +61,10 @@ public class hkpConeLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpConeL
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpConeLimitConstraintAtom);
+        return obj is hkpConeLimitConstraintAtom other && base.Equals(other) && _isEnabled == other._isEnabled && _twistAxisInA == other._twistAxisInA && _refAxisInB == other._refAxisInB && _angleMeasurementMode == other._angleMeasurementMode && _memOffsetToAngleOffset == other._memOffsetToAngleOffset && _minAngle == other._minAngle && _maxAngle == other._maxAngle && _angularLimitsTauFactor == other._angularLimitsTauFactor && Signature == other.Signature;
     }
-    public bool Equals(hkpConeLimitConstraintAtom? other)
-    {
-        return other is not null && _isEnabled.Equals(other._isEnabled) && _twistAxisInA.Equals(other._twistAxisInA) && _refAxisInB.Equals(other._refAxisInB) && _angleMeasurementMode.Equals(other._angleMeasurementMode) && _memOffsetToAngleOffset.Equals(other._memOffsetToAngleOffset) && _minAngle.Equals(other._minAngle) && _maxAngle.Equals(other._maxAngle) && _angularLimitsTauFactor.Equals(other._angularLimitsTauFactor) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpConeLimitConstraintAtom? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpConeLimitConstraintAtom? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

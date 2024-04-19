@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxVertexAnimationUsageMap : IHavokObject, IEquatable<hkxVertexAnimationUsageMap?>
+public class hkxVertexAnimationUsageMap : IHavokObject
 {
     public virtual uint Signature => 0;
     public hkxVertexDescription_DataUsage _use;
@@ -33,12 +33,10 @@ public class hkxVertexAnimationUsageMap : IHavokObject, IEquatable<hkxVertexAnim
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxVertexAnimationUsageMap);
+        return obj is hkxVertexAnimationUsageMap other && _use == other._use && _useIndexOrig == other._useIndexOrig && _useIndexLocal == other._useIndexLocal && Signature == other.Signature;
     }
-    public bool Equals(hkxVertexAnimationUsageMap? other)
-    {
-        return other is not null && _use.Equals(other._use) && _useIndexOrig.Equals(other._useIndexOrig) && _useIndexLocal.Equals(other._useIndexLocal) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxVertexAnimationUsageMap? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxVertexAnimationUsageMap? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

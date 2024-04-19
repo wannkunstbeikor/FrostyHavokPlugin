@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkAabbUint32 : IHavokObject, IEquatable<hkAabbUint32?>
+public class hkAabbUint32 : IHavokObject
 {
     public virtual uint Signature => 0;
     public uint[] _min = new uint[3];
@@ -45,12 +45,10 @@ public class hkAabbUint32 : IHavokObject, IEquatable<hkAabbUint32?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkAabbUint32);
+        return obj is hkAabbUint32 other && _min == other._min && _expansionMin == other._expansionMin && _expansionShift == other._expansionShift && _max == other._max && _expansionMax == other._expansionMax && _shapeKeyByte == other._shapeKeyByte && Signature == other.Signature;
     }
-    public bool Equals(hkAabbUint32? other)
-    {
-        return other is not null && _min.Equals(other._min) && _expansionMin.Equals(other._expansionMin) && _expansionShift.Equals(other._expansionShift) && _max.Equals(other._max) && _expansionMax.Equals(other._expansionMax) && _shapeKeyByte.Equals(other._shapeKeyByte) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkAabbUint32? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkAabbUint32? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkRootLevelContainerNamedVariant : IHavokObject, IEquatable<hkRootLevelContainerNamedVariant?>
+public class hkRootLevelContainerNamedVariant : IHavokObject
 {
     public virtual uint Signature => 0;
-    public string _name;
-    public string _className;
-    public hkReferencedObject _variant;
+    public string _name = string.Empty;
+    public string _className = string.Empty;
+    public hkReferencedObject? _variant;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _name = des.ReadStringPointer(br);
@@ -33,12 +33,10 @@ public class hkRootLevelContainerNamedVariant : IHavokObject, IEquatable<hkRootL
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkRootLevelContainerNamedVariant);
+        return obj is hkRootLevelContainerNamedVariant other && _name == other._name && _className == other._className && _variant == other._variant && Signature == other.Signature;
     }
-    public bool Equals(hkRootLevelContainerNamedVariant? other)
-    {
-        return other is not null && _name.Equals(other._name) && _className.Equals(other._className) && _variant.Equals(other._variant) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkRootLevelContainerNamedVariant? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkRootLevelContainerNamedVariant? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

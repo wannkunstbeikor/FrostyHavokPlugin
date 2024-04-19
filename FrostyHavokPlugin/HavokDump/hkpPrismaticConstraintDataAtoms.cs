@@ -7,16 +7,16 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpPrismaticConstraintDataAtoms : IHavokObject, IEquatable<hkpPrismaticConstraintDataAtoms?>
+public class hkpPrismaticConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _transforms;
-    public hkpLinMotorConstraintAtom _motor;
-    public hkpLinFrictionConstraintAtom _friction;
-    public hkpAngConstraintAtom _ang;
-    public hkpLinConstraintAtom _lin0;
-    public hkpLinConstraintAtom _lin1;
-    public hkpLinLimitConstraintAtom _linLimit;
+    public hkpSetLocalTransformsConstraintAtom? _transforms;
+    public hkpLinMotorConstraintAtom? _motor;
+    public hkpLinFrictionConstraintAtom? _friction;
+    public hkpAngConstraintAtom? _ang;
+    public hkpLinConstraintAtom? _lin0;
+    public hkpLinConstraintAtom? _lin1;
+    public hkpLinLimitConstraintAtom? _linLimit;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _transforms = new hkpSetLocalTransformsConstraintAtom();
@@ -58,12 +58,10 @@ public class hkpPrismaticConstraintDataAtoms : IHavokObject, IEquatable<hkpPrism
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpPrismaticConstraintDataAtoms);
+        return obj is hkpPrismaticConstraintDataAtoms other && _transforms == other._transforms && _motor == other._motor && _friction == other._friction && _ang == other._ang && _lin0 == other._lin0 && _lin1 == other._lin1 && _linLimit == other._linLimit && Signature == other.Signature;
     }
-    public bool Equals(hkpPrismaticConstraintDataAtoms? other)
-    {
-        return other is not null && _transforms.Equals(other._transforms) && _motor.Equals(other._motor) && _friction.Equals(other._friction) && _ang.Equals(other._ang) && _lin0.Equals(other._lin0) && _lin1.Equals(other._lin1) && _linLimit.Equals(other._linLimit) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpPrismaticConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpPrismaticConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDataWheelComponentParams : IHavokObject, IEquatable<hknpVehicleDataWheelComponentParams?>
+public class hknpVehicleDataWheelComponentParams : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _radius;
@@ -63,12 +63,10 @@ public class hknpVehicleDataWheelComponentParams : IHavokObject, IEquatable<hknp
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDataWheelComponentParams);
+        return obj is hknpVehicleDataWheelComponentParams other && _radius == other._radius && _mass == other._mass && _width == other._width && _friction == other._friction && _viscosityFriction == other._viscosityFriction && _maxFriction == other._maxFriction && _slipAngle == other._slipAngle && _forceFeedbackMultiplier == other._forceFeedbackMultiplier && _maxContactBodyAcceleration == other._maxContactBodyAcceleration && _axle == other._axle && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDataWheelComponentParams? other)
-    {
-        return other is not null && _radius.Equals(other._radius) && _mass.Equals(other._mass) && _width.Equals(other._width) && _friction.Equals(other._friction) && _viscosityFriction.Equals(other._viscosityFriction) && _maxFriction.Equals(other._maxFriction) && _slipAngle.Equals(other._slipAngle) && _forceFeedbackMultiplier.Equals(other._forceFeedbackMultiplier) && _maxContactBodyAcceleration.Equals(other._maxContactBodyAcceleration) && _axle.Equals(other._axle) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDataWheelComponentParams? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDataWheelComponentParams? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

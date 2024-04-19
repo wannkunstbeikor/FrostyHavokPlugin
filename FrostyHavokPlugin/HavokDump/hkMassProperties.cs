@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMassProperties : IHavokObject, IEquatable<hkMassProperties?>
+public class hkMassProperties : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _volume;
@@ -39,12 +39,10 @@ public class hkMassProperties : IHavokObject, IEquatable<hkMassProperties?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMassProperties);
+        return obj is hkMassProperties other && _volume == other._volume && _mass == other._mass && _centerOfMass == other._centerOfMass && _inertiaTensor == other._inertiaTensor && Signature == other.Signature;
     }
-    public bool Equals(hkMassProperties? other)
-    {
-        return other is not null && _volume.Equals(other._volume) && _mass.Equals(other._mass) && _centerOfMass.Equals(other._centerOfMass) && _inertiaTensor.Equals(other._inertiaTensor) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMassProperties? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMassProperties? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

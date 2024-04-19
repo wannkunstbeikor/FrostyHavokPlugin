@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMultiThreadCheck : IHavokObject, IEquatable<hkMultiThreadCheck?>
+public class hkMultiThreadCheck : IHavokObject
 {
     public virtual uint Signature => 0;
     // TYPE_UINT32 TYPE_VOID _threadId
@@ -27,12 +27,10 @@ public class hkMultiThreadCheck : IHavokObject, IEquatable<hkMultiThreadCheck?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMultiThreadCheck);
+        return obj is hkMultiThreadCheck other && Signature == other.Signature;
     }
-    public bool Equals(hkMultiThreadCheck? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMultiThreadCheck? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMultiThreadCheck? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

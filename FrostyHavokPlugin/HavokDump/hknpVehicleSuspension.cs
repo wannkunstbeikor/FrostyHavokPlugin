@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleSuspension : hkReferencedObject, IEquatable<hknpVehicleSuspension?>
+public class hknpVehicleSuspension : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<hknpVehicleSuspensionSuspensionWheelParameters> _wheelParams;
+    public List<hknpVehicleSuspensionSuspensionWheelParameters?> _wheelParams = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -28,12 +28,10 @@ public class hknpVehicleSuspension : hkReferencedObject, IEquatable<hknpVehicleS
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleSuspension);
+        return obj is hknpVehicleSuspension other && base.Equals(other) && _wheelParams.SequenceEqual(other._wheelParams) && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleSuspension? other)
-    {
-        return other is not null && _wheelParams.Equals(other._wheelParams) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleSuspension? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleSuspension? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

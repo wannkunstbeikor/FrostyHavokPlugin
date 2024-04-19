@@ -7,23 +7,23 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxScene : hkReferencedObject, IEquatable<hkxScene?>
+public class hkxScene : hkReferencedObject
 {
     public override uint Signature => 0;
-    public string _modeller;
-    public string _asset;
+    public string _modeller = string.Empty;
+    public string _asset = string.Empty;
     public float _sceneLength;
     public uint _numFrames;
-    public hkxNode _rootNode;
-    public List<hkxNodeSelectionSet> _selectionSets;
-    public List<hkxCamera> _cameras;
-    public List<hkxLight> _lights;
-    public List<hkxMesh> _meshes;
-    public List<hkxMaterial> _materials;
-    public List<hkxTextureInplace> _inplaceTextures;
-    public List<hkxTextureFile> _externalTextures;
-    public List<hkxSkinBinding> _skinBindings;
-    public List<hkxSpline> _splines;
+    public hkxNode? _rootNode;
+    public List<hkxNodeSelectionSet?> _selectionSets = new();
+    public List<hkxCamera?> _cameras = new();
+    public List<hkxLight?> _lights = new();
+    public List<hkxMesh?> _meshes = new();
+    public List<hkxMaterial?> _materials = new();
+    public List<hkxTextureInplace?> _inplaceTextures = new();
+    public List<hkxTextureFile?> _externalTextures = new();
+    public List<hkxSkinBinding?> _skinBindings = new();
+    public List<hkxSpline?> _splines = new();
     public Matrix3x4 _appliedTransform;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
@@ -84,12 +84,10 @@ public class hkxScene : hkReferencedObject, IEquatable<hkxScene?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxScene);
+        return obj is hkxScene other && base.Equals(other) && _modeller == other._modeller && _asset == other._asset && _sceneLength == other._sceneLength && _numFrames == other._numFrames && _rootNode == other._rootNode && _selectionSets.SequenceEqual(other._selectionSets) && _cameras.SequenceEqual(other._cameras) && _lights.SequenceEqual(other._lights) && _meshes.SequenceEqual(other._meshes) && _materials.SequenceEqual(other._materials) && _inplaceTextures.SequenceEqual(other._inplaceTextures) && _externalTextures.SequenceEqual(other._externalTextures) && _skinBindings.SequenceEqual(other._skinBindings) && _splines.SequenceEqual(other._splines) && _appliedTransform == other._appliedTransform && Signature == other.Signature;
     }
-    public bool Equals(hkxScene? other)
-    {
-        return other is not null && _modeller.Equals(other._modeller) && _asset.Equals(other._asset) && _sceneLength.Equals(other._sceneLength) && _numFrames.Equals(other._numFrames) && _rootNode.Equals(other._rootNode) && _selectionSets.Equals(other._selectionSets) && _cameras.Equals(other._cameras) && _lights.Equals(other._lights) && _meshes.Equals(other._meshes) && _materials.Equals(other._materials) && _inplaceTextures.Equals(other._inplaceTextures) && _externalTextures.Equals(other._externalTextures) && _skinBindings.Equals(other._skinBindings) && _splines.Equals(other._splines) && _appliedTransform.Equals(other._appliedTransform) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxScene? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxScene? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

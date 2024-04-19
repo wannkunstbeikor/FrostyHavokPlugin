@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpScaledConvexShapeBase : hknpShape, IEquatable<hknpScaledConvexShapeBase?>
+public class hknpScaledConvexShapeBase : hknpShape
 {
     public override uint Signature => 0;
-    public hknpConvexShape _childShape;
+    public hknpConvexShape? _childShape;
     public int _childShapeSize;
     public Vector4 _scale;
     public Vector4 _translation;
@@ -42,12 +42,10 @@ public class hknpScaledConvexShapeBase : hknpShape, IEquatable<hknpScaledConvexS
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpScaledConvexShapeBase);
+        return obj is hknpScaledConvexShapeBase other && base.Equals(other) && _childShape == other._childShape && _childShapeSize == other._childShapeSize && _scale == other._scale && _translation == other._translation && Signature == other.Signature;
     }
-    public bool Equals(hknpScaledConvexShapeBase? other)
-    {
-        return other is not null && _childShape.Equals(other._childShape) && _childShapeSize.Equals(other._childShapeSize) && _scale.Equals(other._scale) && _translation.Equals(other._translation) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpScaledConvexShapeBase? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpScaledConvexShapeBase? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

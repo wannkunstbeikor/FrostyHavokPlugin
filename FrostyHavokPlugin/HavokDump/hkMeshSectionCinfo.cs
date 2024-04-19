@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMeshSectionCinfo : IHavokObject, IEquatable<hkMeshSectionCinfo?>
+public class hkMeshSectionCinfo : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkMeshVertexBuffer _vertexBuffer;
-    public hkMeshMaterial _material;
+    public hkMeshVertexBuffer? _vertexBuffer;
+    public hkMeshMaterial? _material;
     public hkMeshSection_PrimitiveType _primitiveType;
     public int _numPrimitives;
     public hkMeshSection_MeshSectionIndexType _indexType;
@@ -54,12 +54,10 @@ public class hkMeshSectionCinfo : IHavokObject, IEquatable<hkMeshSectionCinfo?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMeshSectionCinfo);
+        return obj is hkMeshSectionCinfo other && _vertexBuffer == other._vertexBuffer && _material == other._material && _primitiveType == other._primitiveType && _numPrimitives == other._numPrimitives && _indexType == other._indexType && _vertexStartIndex == other._vertexStartIndex && _transformIndex == other._transformIndex && Signature == other.Signature;
     }
-    public bool Equals(hkMeshSectionCinfo? other)
-    {
-        return other is not null && _vertexBuffer.Equals(other._vertexBuffer) && _material.Equals(other._material) && _primitiveType.Equals(other._primitiveType) && _numPrimitives.Equals(other._numPrimitives) && _indexType.Equals(other._indexType) && _vertexStartIndex.Equals(other._vertexStartIndex) && _transformIndex.Equals(other._transformIndex) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMeshSectionCinfo? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMeshSectionCinfo? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleWheelCollide : hkReferencedObject, IEquatable<hknpVehicleWheelCollide?>
+public class hknpVehicleWheelCollide : hkReferencedObject
 {
     public override uint Signature => 0;
     public bool _alreadyUsed;
@@ -31,12 +31,10 @@ public class hknpVehicleWheelCollide : hkReferencedObject, IEquatable<hknpVehicl
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleWheelCollide);
+        return obj is hknpVehicleWheelCollide other && base.Equals(other) && _alreadyUsed == other._alreadyUsed && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleWheelCollide? other)
-    {
-        return other is not null && _alreadyUsed.Equals(other._alreadyUsed) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleWheelCollide? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleWheelCollide? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

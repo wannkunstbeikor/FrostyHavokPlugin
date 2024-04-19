@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdDynamicTreeCodecInt16 : hkcdDynamicTreeAnisotropicMetric, IEquatable<hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdDynamicTreeCodecInt16?>
+public class hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdDynamicTreeCodecInt16 : hkcdDynamicTreeAnisotropicMetric
 {
     public override uint Signature => 0;
-    public List<hkcdDynamicTreeCodecInt16> _nodes;
+    public List<hkcdDynamicTreeCodecInt16?> _nodes = new();
     public uint _firstFree;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
@@ -34,12 +34,10 @@ public class hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdD
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdDynamicTreeCodecInt16);
+        return obj is hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdDynamicTreeCodecInt16 other && base.Equals(other) && _nodes.SequenceEqual(other._nodes) && _firstFree == other._firstFree && Signature == other.Signature;
     }
-    public bool Equals(hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdDynamicTreeCodecInt16? other)
-    {
-        return other is not null && _nodes.Equals(other._nodes) && _firstFree.Equals(other._firstFree) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdDynamicTreeCodecInt16? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdDynamicTreeDynamicStorage0hkcdDynamicTreeAnisotropicMetrichkcdDynamicTreeCodecInt16? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

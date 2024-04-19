@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkSkinnedMeshShapePart : IHavokObject, IEquatable<hkSkinnedMeshShapePart?>
+public class hkSkinnedMeshShapePart : IHavokObject
 {
     public virtual uint Signature => 0;
     public int _startVertex;
@@ -51,12 +51,10 @@ public class hkSkinnedMeshShapePart : IHavokObject, IEquatable<hkSkinnedMeshShap
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkSkinnedMeshShapePart);
+        return obj is hkSkinnedMeshShapePart other && _startVertex == other._startVertex && _numVertices == other._numVertices && _startIndex == other._startIndex && _numIndices == other._numIndices && _boneSetId == other._boneSetId && _meshSectionIndex == other._meshSectionIndex && _boundingSphere == other._boundingSphere && Signature == other.Signature;
     }
-    public bool Equals(hkSkinnedMeshShapePart? other)
-    {
-        return other is not null && _startVertex.Equals(other._startVertex) && _numVertices.Equals(other._numVertices) && _startIndex.Equals(other._startIndex) && _numIndices.Equals(other._numIndices) && _boneSetId.Equals(other._boneSetId) && _meshSectionIndex.Equals(other._meshSectionIndex) && _boundingSphere.Equals(other._boundingSphere) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkSkinnedMeshShapePart? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkSkinnedMeshShapePart? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

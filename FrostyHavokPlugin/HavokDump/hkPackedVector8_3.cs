@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkPackedVector8_3 : IHavokObject, IEquatable<hkPackedVector8_3?>
+public class hkPackedVector8_3 : IHavokObject
 {
     public virtual uint Signature => 0;
     public sbyte[] _values = new sbyte[4];
@@ -25,12 +25,10 @@ public class hkPackedVector8_3 : IHavokObject, IEquatable<hkPackedVector8_3?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkPackedVector8_3);
+        return obj is hkPackedVector8_3 other && _values == other._values && Signature == other.Signature;
     }
-    public bool Equals(hkPackedVector8_3? other)
-    {
-        return other is not null && _values.Equals(other._values) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkPackedVector8_3? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkPackedVector8_3? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

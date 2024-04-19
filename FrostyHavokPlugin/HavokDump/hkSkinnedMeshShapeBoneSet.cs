@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkSkinnedMeshShapeBoneSet : IHavokObject, IEquatable<hkSkinnedMeshShapeBoneSet?>
+public class hkSkinnedMeshShapeBoneSet : IHavokObject
 {
     public virtual uint Signature => 0;
     public ushort _boneBufferOffset;
@@ -29,12 +29,10 @@ public class hkSkinnedMeshShapeBoneSet : IHavokObject, IEquatable<hkSkinnedMeshS
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkSkinnedMeshShapeBoneSet);
+        return obj is hkSkinnedMeshShapeBoneSet other && _boneBufferOffset == other._boneBufferOffset && _numBones == other._numBones && Signature == other.Signature;
     }
-    public bool Equals(hkSkinnedMeshShapeBoneSet? other)
-    {
-        return other is not null && _boneBufferOffset.Equals(other._boneBufferOffset) && _numBones.Equals(other._numBones) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkSkinnedMeshShapeBoneSet? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkSkinnedMeshShapeBoneSet? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

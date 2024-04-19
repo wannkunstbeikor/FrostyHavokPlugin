@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpGroupCollisionFilter : hknpCollisionFilter, IEquatable<hknpGroupCollisionFilter?>
+public class hknpGroupCollisionFilter : hknpCollisionFilter
 {
     public override uint Signature => 0;
     public int _nextFreeSystemGroup;
@@ -36,12 +36,10 @@ public class hknpGroupCollisionFilter : hknpCollisionFilter, IEquatable<hknpGrou
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpGroupCollisionFilter);
+        return obj is hknpGroupCollisionFilter other && base.Equals(other) && _nextFreeSystemGroup == other._nextFreeSystemGroup && _collisionLookupTable == other._collisionLookupTable && Signature == other.Signature;
     }
-    public bool Equals(hknpGroupCollisionFilter? other)
-    {
-        return other is not null && _nextFreeSystemGroup.Equals(other._nextFreeSystemGroup) && _collisionLookupTable.Equals(other._collisionLookupTable) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpGroupCollisionFilter? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpGroupCollisionFilter? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

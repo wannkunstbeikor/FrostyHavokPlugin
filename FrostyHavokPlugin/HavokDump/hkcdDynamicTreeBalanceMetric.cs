@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdDynamicTreeBalanceMetric : IHavokObject, IEquatable<hkcdDynamicTreeBalanceMetric?>
+public class hkcdDynamicTreeBalanceMetric : IHavokObject
 {
     public virtual uint Signature => 0;
     public virtual void Read(PackFileDeserializer des, DataStream br)
@@ -23,12 +23,10 @@ public class hkcdDynamicTreeBalanceMetric : IHavokObject, IEquatable<hkcdDynamic
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdDynamicTreeBalanceMetric);
+        return obj is hkcdDynamicTreeBalanceMetric other && Signature == other.Signature;
     }
-    public bool Equals(hkcdDynamicTreeBalanceMetric? other)
-    {
-        return other is not null && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdDynamicTreeBalanceMetric? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdDynamicTreeBalanceMetric? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

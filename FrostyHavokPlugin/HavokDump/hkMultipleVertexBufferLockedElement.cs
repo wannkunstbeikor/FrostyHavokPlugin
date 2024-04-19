@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkMultipleVertexBufferLockedElement : IHavokObject, IEquatable<hkMultipleVertexBufferLockedElement?>
+public class hkMultipleVertexBufferLockedElement : IHavokObject
 {
     public virtual uint Signature => 0;
     public byte _vertexBufferIndex;
@@ -49,12 +49,10 @@ public class hkMultipleVertexBufferLockedElement : IHavokObject, IEquatable<hkMu
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkMultipleVertexBufferLockedElement);
+        return obj is hkMultipleVertexBufferLockedElement other && _vertexBufferIndex == other._vertexBufferIndex && _elementIndex == other._elementIndex && _lockedBufferIndex == other._lockedBufferIndex && _vertexFormatIndex == other._vertexFormatIndex && _lockFlags == other._lockFlags && _outputBufferIndex == other._outputBufferIndex && _emulatedIndex == other._emulatedIndex && Signature == other.Signature;
     }
-    public bool Equals(hkMultipleVertexBufferLockedElement? other)
-    {
-        return other is not null && _vertexBufferIndex.Equals(other._vertexBufferIndex) && _elementIndex.Equals(other._elementIndex) && _lockedBufferIndex.Equals(other._lockedBufferIndex) && _vertexFormatIndex.Equals(other._vertexFormatIndex) && _lockFlags.Equals(other._lockFlags) && _outputBufferIndex.Equals(other._outputBufferIndex) && _emulatedIndex.Equals(other._emulatedIndex) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkMultipleVertexBufferLockedElement? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkMultipleVertexBufferLockedElement? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

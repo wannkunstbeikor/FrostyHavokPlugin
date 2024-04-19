@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxSparselyAnimatedBool : hkReferencedObject, IEquatable<hkxSparselyAnimatedBool?>
+public class hkxSparselyAnimatedBool : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<bool> _bools;
-    public List<float> _times;
+    public List<bool> _bools = new();
+    public List<float> _times = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -32,12 +32,10 @@ public class hkxSparselyAnimatedBool : hkReferencedObject, IEquatable<hkxSparsel
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxSparselyAnimatedBool);
+        return obj is hkxSparselyAnimatedBool other && base.Equals(other) && _bools.SequenceEqual(other._bools) && _times.SequenceEqual(other._times) && Signature == other.Signature;
     }
-    public bool Equals(hkxSparselyAnimatedBool? other)
-    {
-        return other is not null && _bools.Equals(other._bools) && _times.Equals(other._times) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxSparselyAnimatedBool? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxSparselyAnimatedBool? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

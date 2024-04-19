@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkFourTransposedPointsf : IHavokObject, IEquatable<hkFourTransposedPointsf?>
+public class hkFourTransposedPointsf : IHavokObject
 {
     public virtual uint Signature => 0;
     public Vector4[] _vertices = new Vector4[3];
@@ -25,12 +25,10 @@ public class hkFourTransposedPointsf : IHavokObject, IEquatable<hkFourTransposed
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkFourTransposedPointsf);
+        return obj is hkFourTransposedPointsf other && _vertices == other._vertices && Signature == other.Signature;
     }
-    public bool Equals(hkFourTransposedPointsf? other)
-    {
-        return other is not null && _vertices.Equals(other._vertices) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkFourTransposedPointsf? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkFourTransposedPointsf? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

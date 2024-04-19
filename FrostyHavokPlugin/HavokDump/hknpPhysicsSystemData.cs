@@ -7,16 +7,16 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpPhysicsSystemData : hkReferencedObject, IEquatable<hknpPhysicsSystemData?>
+public class hknpPhysicsSystemData : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<hknpMaterial> _materials;
-    public List<hknpMotionProperties> _motionProperties;
-    public List<hknpMotionCinfo> _motionCinfos;
-    public List<hknpBodyCinfo> _bodyCinfos;
-    public List<hknpConstraintCinfo> _constraintCinfos;
-    public List<hkReferencedObject> _referencedObjects;
-    public string _name;
+    public List<hknpMaterial?> _materials = new();
+    public List<hknpMotionProperties?> _motionProperties = new();
+    public List<hknpMotionCinfo?> _motionCinfos = new();
+    public List<hknpBodyCinfo?> _bodyCinfos = new();
+    public List<hknpConstraintCinfo?> _constraintCinfos = new();
+    public List<hkReferencedObject?> _referencedObjects = new();
+    public string _name = string.Empty;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -52,12 +52,10 @@ public class hknpPhysicsSystemData : hkReferencedObject, IEquatable<hknpPhysicsS
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpPhysicsSystemData);
+        return obj is hknpPhysicsSystemData other && base.Equals(other) && _materials.SequenceEqual(other._materials) && _motionProperties.SequenceEqual(other._motionProperties) && _motionCinfos.SequenceEqual(other._motionCinfos) && _bodyCinfos.SequenceEqual(other._bodyCinfos) && _constraintCinfos.SequenceEqual(other._constraintCinfos) && _referencedObjects.SequenceEqual(other._referencedObjects) && _name == other._name && Signature == other.Signature;
     }
-    public bool Equals(hknpPhysicsSystemData? other)
-    {
-        return other is not null && _materials.Equals(other._materials) && _motionProperties.Equals(other._motionProperties) && _motionCinfos.Equals(other._motionCinfos) && _bodyCinfos.Equals(other._bodyCinfos) && _constraintCinfos.Equals(other._constraintCinfos) && _referencedObjects.Equals(other._referencedObjects) && _name.Equals(other._name) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpPhysicsSystemData? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpPhysicsSystemData? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

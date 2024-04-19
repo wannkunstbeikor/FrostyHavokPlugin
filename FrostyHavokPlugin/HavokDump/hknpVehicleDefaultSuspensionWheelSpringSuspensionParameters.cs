@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters : IHavokObject, IEquatable<hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters?>
+public class hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters : IHavokObject
 {
     public virtual uint Signature => 0;
     public float _strength;
@@ -33,12 +33,10 @@ public class hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters : IHavo
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters);
+        return obj is hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters other && _strength == other._strength && _dampingCompression == other._dampingCompression && _dampingRelaxation == other._dampingRelaxation && Signature == other.Signature;
     }
-    public bool Equals(hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters? other)
-    {
-        return other is not null && _strength.Equals(other._strength) && _dampingCompression.Equals(other._dampingCompression) && _dampingRelaxation.Equals(other._dampingRelaxation) && Signature == other.Signature;
-    }
+    public static bool operator ==(hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hknpVehicleDefaultSuspensionWheelSpringSuspensionParameters? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

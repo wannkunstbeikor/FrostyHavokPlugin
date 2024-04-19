@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxIndexBuffer : hkReferencedObject, IEquatable<hkxIndexBuffer?>
+public class hkxIndexBuffer : hkReferencedObject
 {
     public override uint Signature => 0;
     public hkxIndexBuffer_IndexType _indexType;
-    public List<ushort> _indices16;
-    public List<uint> _indices32;
+    public List<ushort> _indices16 = new();
+    public List<uint> _indices32 = new();
     public uint _vertexBaseOffset;
     public uint _length;
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -46,12 +46,10 @@ public class hkxIndexBuffer : hkReferencedObject, IEquatable<hkxIndexBuffer?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxIndexBuffer);
+        return obj is hkxIndexBuffer other && base.Equals(other) && _indexType == other._indexType && _indices16.SequenceEqual(other._indices16) && _indices32.SequenceEqual(other._indices32) && _vertexBaseOffset == other._vertexBaseOffset && _length == other._length && Signature == other.Signature;
     }
-    public bool Equals(hkxIndexBuffer? other)
-    {
-        return other is not null && _indexType.Equals(other._indexType) && _indices16.Equals(other._indices16) && _indices32.Equals(other._indices32) && _vertexBaseOffset.Equals(other._vertexBaseOffset) && _length.Equals(other._length) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxIndexBuffer? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxIndexBuffer? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

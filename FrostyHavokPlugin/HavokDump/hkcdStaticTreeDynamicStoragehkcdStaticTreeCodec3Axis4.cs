@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4 : IHavokObject, IEquatable<hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4?>
+public class hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4 : IHavokObject
 {
     public virtual uint Signature => 0;
-    public List<hkcdStaticTreeCodec3Axis4> _nodes;
+    public List<hkcdStaticTreeCodec3Axis4?> _nodes = new();
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _nodes = des.ReadClassArray<hkcdStaticTreeCodec3Axis4>(br);
@@ -25,12 +25,10 @@ public class hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4 : IHavokObjec
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4);
+        return obj is hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4 other && _nodes.SequenceEqual(other._nodes) && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4? other)
-    {
-        return other is not null && _nodes.Equals(other._nodes) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

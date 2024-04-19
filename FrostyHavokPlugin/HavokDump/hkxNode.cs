@@ -7,16 +7,16 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxNode : hkxAttributeHolder, IEquatable<hkxNode?>
+public class hkxNode : hkxAttributeHolder
 {
     public override uint Signature => 0;
-    public string _name;
-    public hkReferencedObject _object;
-    public List<Matrix4> _keyFrames;
-    public List<hkxNode> _children;
-    public List<hkxNodeAnnotationData> _annotations;
-    public List<float> _linearKeyFrameHints;
-    public string _userProperties;
+    public string _name = string.Empty;
+    public hkReferencedObject? _object;
+    public List<Matrix4> _keyFrames = new();
+    public List<hkxNode?> _children = new();
+    public List<hkxNodeAnnotationData?> _annotations = new();
+    public List<float> _linearKeyFrameHints = new();
+    public string _userProperties = string.Empty;
     public bool _selected;
     public bool _bone;
     public override void Read(PackFileDeserializer des, DataStream br)
@@ -62,12 +62,10 @@ public class hkxNode : hkxAttributeHolder, IEquatable<hkxNode?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxNode);
+        return obj is hkxNode other && base.Equals(other) && _name == other._name && _object == other._object && _keyFrames.SequenceEqual(other._keyFrames) && _children.SequenceEqual(other._children) && _annotations.SequenceEqual(other._annotations) && _linearKeyFrameHints.SequenceEqual(other._linearKeyFrameHints) && _userProperties == other._userProperties && _selected == other._selected && _bone == other._bone && Signature == other.Signature;
     }
-    public bool Equals(hkxNode? other)
-    {
-        return other is not null && _name.Equals(other._name) && _object.Equals(other._object) && _keyFrames.Equals(other._keyFrames) && _children.Equals(other._children) && _annotations.Equals(other._annotations) && _linearKeyFrameHints.Equals(other._linearKeyFrameHints) && _userProperties.Equals(other._userProperties) && _selected.Equals(other._selected) && _bone.Equals(other._bone) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxNode? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxNode? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

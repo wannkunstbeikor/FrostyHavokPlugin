@@ -7,18 +7,18 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpLinearClearanceConstraintDataAtoms : IHavokObject, IEquatable<hkpLinearClearanceConstraintDataAtoms?>
+public class hkpLinearClearanceConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTransformsConstraintAtom _transforms;
-    public hkpLinMotorConstraintAtom _motor;
-    public hkpLinFrictionConstraintAtom _friction0;
-    public hkpLinFrictionConstraintAtom _friction1;
-    public hkpLinFrictionConstraintAtom _friction2;
-    public hkpAngConstraintAtom _ang;
-    public hkpLinLimitConstraintAtom _linLimit0;
-    public hkpLinLimitConstraintAtom _linLimit1;
-    public hkpLinLimitConstraintAtom _linLimit2;
+    public hkpSetLocalTransformsConstraintAtom? _transforms;
+    public hkpLinMotorConstraintAtom? _motor;
+    public hkpLinFrictionConstraintAtom? _friction0;
+    public hkpLinFrictionConstraintAtom? _friction1;
+    public hkpLinFrictionConstraintAtom? _friction2;
+    public hkpAngConstraintAtom? _ang;
+    public hkpLinLimitConstraintAtom? _linLimit0;
+    public hkpLinLimitConstraintAtom? _linLimit1;
+    public hkpLinLimitConstraintAtom? _linLimit2;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _transforms = new hkpSetLocalTransformsConstraintAtom();
@@ -68,12 +68,10 @@ public class hkpLinearClearanceConstraintDataAtoms : IHavokObject, IEquatable<hk
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpLinearClearanceConstraintDataAtoms);
+        return obj is hkpLinearClearanceConstraintDataAtoms other && _transforms == other._transforms && _motor == other._motor && _friction0 == other._friction0 && _friction1 == other._friction1 && _friction2 == other._friction2 && _ang == other._ang && _linLimit0 == other._linLimit0 && _linLimit1 == other._linLimit1 && _linLimit2 == other._linLimit2 && Signature == other.Signature;
     }
-    public bool Equals(hkpLinearClearanceConstraintDataAtoms? other)
-    {
-        return other is not null && _transforms.Equals(other._transforms) && _motor.Equals(other._motor) && _friction0.Equals(other._friction0) && _friction1.Equals(other._friction1) && _friction2.Equals(other._friction2) && _ang.Equals(other._ang) && _linLimit0.Equals(other._linLimit0) && _linLimit1.Equals(other._linLimit1) && _linLimit2.Equals(other._linLimit2) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpLinearClearanceConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpLinearClearanceConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

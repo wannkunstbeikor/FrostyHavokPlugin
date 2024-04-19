@@ -7,10 +7,10 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxAnimatedQuaternion : hkReferencedObject, IEquatable<hkxAnimatedQuaternion?>
+public class hkxAnimatedQuaternion : hkReferencedObject
 {
     public override uint Signature => 0;
-    public List<float> _quaternions;
+    public List<float> _quaternions = new();
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -28,12 +28,10 @@ public class hkxAnimatedQuaternion : hkReferencedObject, IEquatable<hkxAnimatedQ
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxAnimatedQuaternion);
+        return obj is hkxAnimatedQuaternion other && base.Equals(other) && _quaternions.SequenceEqual(other._quaternions) && Signature == other.Signature;
     }
-    public bool Equals(hkxAnimatedQuaternion? other)
-    {
-        return other is not null && _quaternions.Equals(other._quaternions) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxAnimatedQuaternion? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxAnimatedQuaternion? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkClassMember : IHavokObject, IEquatable<hkClassMember?>
+public class hkClassMember : IHavokObject
 {
     public virtual uint Signature => 0;
-    public string _name;
-    public hkClass _class;
-    public hkClassEnum _enum;
+    public string _name = string.Empty;
+    public hkClass? _class;
+    public hkClassEnum? _enum;
     public hkClassMember_Type _type;
     public hkClassMember_Type _subtype;
     public short _cArraySize;
@@ -56,12 +56,10 @@ public class hkClassMember : IHavokObject, IEquatable<hkClassMember?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkClassMember);
+        return obj is hkClassMember other && _name == other._name && _class == other._class && _enum == other._enum && _type == other._type && _subtype == other._subtype && _cArraySize == other._cArraySize && _flags == other._flags && _offset == other._offset && Signature == other.Signature;
     }
-    public bool Equals(hkClassMember? other)
-    {
-        return other is not null && _name.Equals(other._name) && _class.Equals(other._class) && _enum.Equals(other._enum) && _type.Equals(other._type) && _subtype.Equals(other._subtype) && _cArraySize.Equals(other._cArraySize) && _flags.Equals(other._flags) && _offset.Equals(other._offset) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkClassMember? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkClassMember? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

@@ -7,12 +7,12 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkxTextureFile : hkReferencedObject, IEquatable<hkxTextureFile?>
+public class hkxTextureFile : hkReferencedObject
 {
     public override uint Signature => 0;
-    public string _filename;
-    public string _name;
-    public string _originalFilename;
+    public string _filename = string.Empty;
+    public string _name = string.Empty;
+    public string _originalFilename = string.Empty;
     public override void Read(PackFileDeserializer des, DataStream br)
     {
         base.Read(des, br);
@@ -36,12 +36,10 @@ public class hkxTextureFile : hkReferencedObject, IEquatable<hkxTextureFile?>
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkxTextureFile);
+        return obj is hkxTextureFile other && base.Equals(other) && _filename == other._filename && _name == other._name && _originalFilename == other._originalFilename && Signature == other.Signature;
     }
-    public bool Equals(hkxTextureFile? other)
-    {
-        return other is not null && _filename.Equals(other._filename) && _name.Equals(other._name) && _originalFilename.Equals(other._originalFilename) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkxTextureFile? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkxTextureFile? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

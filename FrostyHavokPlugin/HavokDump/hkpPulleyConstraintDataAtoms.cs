@@ -7,11 +7,11 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkpPulleyConstraintDataAtoms : IHavokObject, IEquatable<hkpPulleyConstraintDataAtoms?>
+public class hkpPulleyConstraintDataAtoms : IHavokObject
 {
     public virtual uint Signature => 0;
-    public hkpSetLocalTranslationsConstraintAtom _translations;
-    public hkpPulleyConstraintAtom _pulley;
+    public hkpSetLocalTranslationsConstraintAtom? _translations;
+    public hkpPulleyConstraintAtom? _pulley;
     public virtual void Read(PackFileDeserializer des, DataStream br)
     {
         _translations = new hkpSetLocalTranslationsConstraintAtom();
@@ -31,12 +31,10 @@ public class hkpPulleyConstraintDataAtoms : IHavokObject, IEquatable<hkpPulleyCo
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkpPulleyConstraintDataAtoms);
+        return obj is hkpPulleyConstraintDataAtoms other && _translations == other._translations && _pulley == other._pulley && Signature == other.Signature;
     }
-    public bool Equals(hkpPulleyConstraintDataAtoms? other)
-    {
-        return other is not null && _translations.Equals(other._translations) && _pulley.Equals(other._pulley) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkpPulleyConstraintDataAtoms? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkpPulleyConstraintDataAtoms? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();

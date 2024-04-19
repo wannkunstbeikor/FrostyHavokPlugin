@@ -7,7 +7,7 @@ using FrostyHavokPlugin.Interfaces;
 using OpenTK.Mathematics;
 using Half = System.Half;
 namespace hk;
-public class hkcdStaticMeshTreeBasePrimitive : IHavokObject, IEquatable<hkcdStaticMeshTreeBasePrimitive?>
+public class hkcdStaticMeshTreeBasePrimitive : IHavokObject
 {
     public virtual uint Signature => 0;
     public byte[] _indices = new byte[4];
@@ -25,12 +25,10 @@ public class hkcdStaticMeshTreeBasePrimitive : IHavokObject, IEquatable<hkcdStat
     }
     public override bool Equals(object? obj)
     {
-        return Equals(obj as hkcdStaticMeshTreeBasePrimitive);
+        return obj is hkcdStaticMeshTreeBasePrimitive other && _indices == other._indices && Signature == other.Signature;
     }
-    public bool Equals(hkcdStaticMeshTreeBasePrimitive? other)
-    {
-        return other is not null && _indices.Equals(other._indices) && Signature == other.Signature;
-    }
+    public static bool operator ==(hkcdStaticMeshTreeBasePrimitive? a, object? b) => a?.Equals(b) ?? b is null;
+    public static bool operator !=(hkcdStaticMeshTreeBasePrimitive? a, object? b) => !(a == b);
     public override int GetHashCode()
     {
         HashCode code = new();
