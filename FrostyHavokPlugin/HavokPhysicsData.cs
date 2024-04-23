@@ -4,8 +4,12 @@ using Frosty.Sdk;
 using Frosty.Sdk.IO;
 using Frosty.Sdk.Resources;
 using Frosty.Sdk.Utils;
+using FrostyDataStreamUtils;
 using FrostyHavokPlugin.CommonTypes;
+using FrostyHavokPlugin.HavokExtensions;
 using FrostyHavokPlugin.Interfaces;
+using FrostyHavokPlugin.Utils;
+using hk;
 using OpenTK.Mathematics;
 
 namespace FrostyHavokPlugin;
@@ -126,27 +130,6 @@ public class HavokPhysicsData : Resource
 
         m_obj = deserializer.Deserialize(inStream, (uint)(fixupTablesOffset + firstFixupTableSize));
         m_header = deserializer.Header;
-
-         /*hkRootLevelContainer? root = m_obj as hkRootLevelContainer;
-
-         HavokPhysicsContainer? container = root!._namedVariants[0]._variant as HavokPhysicsContainer;
-
-         int current = 0;
-
-         ObjWriter writer = new();
-         foreach (hknpShape shape in container!._shapes)
-         {
-             shape.Export(writer, $"{current++}");
-         }
-
-         current = 0;
-         foreach (Box3 aabb in LocalAabbs)
-         {
-             aabb.CreateAabb($"localaabb-{current++}", writer);
-         }
-
-        writer.WriteToFile("/home/jona/havok.obj");*/
-
     }
 
     public override void Serialize(DataStream inStream, Span<byte> inResMeta)
@@ -248,5 +231,28 @@ public class HavokPhysicsData : Resource
         XmlSerializer serializer = new();
         using Stream stream = File.Create(inPath);
         serializer.Serialize(m_obj, m_header, stream);
+    }
+
+    public void ExportObj(string inPath)
+    {
+        hkRootLevelContainer? root = m_obj as hkRootLevelContainer;
+
+        HavokPhysicsContainer? container = root!._namedVariants[0]._variant as HavokPhysicsContainer;
+
+        int current = 0;
+
+        ObjWriter writer = new();
+        foreach (hknpShape shape in container!._shapes)
+        {
+            shape.Export(writer, $"{current++}");
+        }
+
+        current = 0;
+        foreach (Box3 aabb in LocalAabbs)
+        {
+            aabb.CreateAabb($"localaabb-{current++}", writer);
+        }
+
+       writer.WriteToFile(inPath);
     }
 }
